@@ -1,0 +1,10 @@
+{
+  "name": "Raíces de Iztacalco - Gabriel Ramos Millán",
+  "short_name": "Raíces Ramos",
+  "description": "Periódico vecinal, comercio de barrio y tianguis digital de la colonia Gabriel Ramos Millán, Iztacalco.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FBF8F3",
+  "theme_color": "#9B2C2C",
+  "orientation": "portrait-primary"
+}
