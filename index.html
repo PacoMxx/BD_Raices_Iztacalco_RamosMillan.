@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#9B2C2C" />
+  <meta name="description" content="Raíces de Iztacalco — Periódico comunitario, memoria histórica, directorio de negocios tradicionales y tianguis digital de la colonia Gabriel Ramos Millán, CDMX." />
+  <title>Raíces de Iztacalco | Edición Gabriel Ramos Millán</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            papel: '#FBF8F3',
+            crema: '#F3EDE2',
+            tinta: '#1C1917',
+            grafito: '#57534E',
+            terracota: '#9B2C2C',
+            terracotaDark: '#742A2A',
+            maiz: '#D97706',
+            maizLight: '#FEF3C7',
+            chinampa: '#15803D',
+            chinampaLight: '#DCFCE7',
+            alerta: '#DC2626',
+            borde: '#E5DEC9'
+          },
+          fontFamily: {
+            serif: ['Fraunces', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          boxShadow: {
+            editorial: '0 4px 20px -2px rgba(28, 25, 23, 0.07), 0 2px 6px -1px rgba(28, 25, 23, 0.04)',
+            cardHover: '0 12px 28px -4px rgba(155, 44, 44, 0.12), 0 4px 10px -2px rgba(28, 25, 23, 0.06)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FBF8F3;
+      color: #1C1917;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-image: radial-gradient(rgba(155, 44, 44, 0.03) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+
+    .editorial-border-double {
+      border-top: 3px double #1C1917;
+      border-bottom: 1px solid #1C1917;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .sepia-vintage {
+      filter: sepia(0.75) contrast(1.1) brightness(0.92);
+    }
+
+    /* Animación sutil para pulso en vivo */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.85); opacity: 0.9; }
+      70% { transform: scale(1.9); opacity: 0; }
+      100% { transform: scale(1.9); opacity: 0; }
+    }
+    .live-dot::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 9999px;
+      background-color: #EF4444;
+      animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+
+    /* Candado 1: Campo Honeypot estrictamente oculto para humanos pero visible en el DOM para bots */
+    .hp-trap-field {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 0;
+      width: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col pb-24 lg:pb-12 selection:bg-terracota selection:text-white">
+
+  <!-- =====================================================================
+       1. TICKER SUPERIOR DE ALERTA VIAL / CIUDAD DEPORTIVA Y TIANGUIS
+       ===================================================================== -->
+  <div id="top-alert-bar" class="bg-tinta text-papel text-xs sm:text-sm border-b border-stone-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5 overflow-x-auto hide-scrollbar whitespace-nowrap py-0.5">
+        <span class="relative flex h-2.5 w-2.5 shrink-0 live-dot">
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+        </span>
+        <span class="font-mono uppercase tracking-wider text-[11px] bg-red-600/90 text-white px-2 py-0.5 rounded font-semibold shrink-0">
+          RADAR VIAL HOY
+        </span>
+        <span id="ticker-text" class="text-stone-200 font-medium">
+          🎸 Concierto masivo en Estadio GNP (20:30 h): Tráfico pesado en Río Churubusco, Viaducto Piedad y Av. Té • ⛺ Tianguis Hoy: Sur 163 (Mercado Bramadero) hasta las 17:00 h.
+        </span>
+      </div>
+      <div class="hidden md:flex items-center gap-3 shrink-0">
+        <span class="text-[11px] text-amber-300/90 font-mono">
+          Patrocinado por: <strong class="underline cursor-pointer hover:text-white" onclick="switchTab('comercio')">Servicio Mecánico Hnos. Pérez (Sur 157)</strong>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       2. CABECERA EDITORIAL (MASTHEAD DE PERIÓDICO DE BARRIO)
+       ===================================================================== -->
+  <header class="bg-papel/95 backdrop-blur-md border-b border-borde">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-4 pb-3">
+      
+      <!-- Fila Superior Meta: Fecha, Edición, Botones de Herramientas -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde text-xs text-grafito">
+        <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <span class="font-mono uppercase tracking-wider font-semibold text-terracota bg-red-50 border border-red-200 px-2 py-0.5 rounded">
+            ALCALDÍA IZTACALCO • CDMX
+          </span>
+          <span id="current-date-label" class="font-medium">Edición Piloto: Gabriel Ramos Millán</span>
+          <span class="hidden sm:inline text-stone-300">|</span>
+          <span class="hidden sm:inline-flex items-center gap-1 text-chinampa font-semibold">
+            🛡️ Pagos Blindados MP • HTTPS Activo
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="openTechModal()" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-stone-900 text-amber-300 hover:bg-stone-800 font-mono text-[11px] font-medium transition shadow-sm" title="Ver código de Google Apps Script blindado y Manifiesto PWA">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span>Kit Blindado Sheets + PWA</span>
+          </button>
+          <button onclick="installPWA()" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-terracota/10 text-terracota hover:bg-terracota hover:text-white font-semibold text-xs transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Instalar App</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Título Principal del Periódico -->
+      <div class="py-4 sm:py-6 text-center relative">
+        <p class="text-[11px] sm:text-xs font-mono uppercase tracking-[0.25em] text-terracota font-semibold mb-1">
+          « DONDE LA MEMORIA DE NUESTRAS CALLES SE UNE AL COMERCIO DE BARRIO »
+        </p>
+        <h1 class="font-serif text-3xl sm:text-5xl md:text-6xl font-extrabold text-tinta tracking-tight leading-none">
+          Raíces de Iztacalco
+        </h1>
+        <div class="mt-2.5 flex items-center justify-center gap-3 text-xs sm:text-sm text-grafito font-medium">
+          <span>Edición Hiperlocal: <strong class="text-tinta">Col. Gabriel Ramos Millán</strong></span>
+          <span>•</span>
+          <span>Bramadero · Tlacotal · Cuchilla · Av. Té</span>
+        </div>
+      </div>
+
+      <!-- Barra de Filtro Rápido por Sector de la Colonia -->
+      <div class="editorial-border-double py-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+        <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar w-full sm:w-auto py-0.5">
+          <span class="text-xs font-mono uppercase font-bold text-tinta shrink-0 flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 text-terracota" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
+            Sector:
+          </span>
+          <button onclick="setSectorFilter('TODOS')" data-sector="TODOS" class="sector-pill px-3 py-1 rounded-full text-xs font-bold bg-terracota text-white transition shrink-0">
+            Toda la Ramos Millán
+          </button>
+          <button onclick="setSectorFilter('Bramadero')" data-sector="Bramadero" class="sector-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 transition shrink-0">
+            Secc. Bramadero (Sur 157 - 163)
+          </button>
+          <button onclick="setSectorFilter('Tlacotal')" data-sector="Tlacotal" class="sector-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 transition shrink-0">
+            Secc. Tlacotal (Sur 125 / Ote 100)
+          </button>
+          <button onclick="setSectorFilter('Cuchilla')" data-sector="Cuchilla" class="sector-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 transition shrink-0">
+            Secc. Cuchilla
+          </button>
+          <button onclick="setSectorFilter('Av. Té / Alcaldía')" data-sector="Av. Té / Alcaldía" class="sector-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 transition shrink-0">
+            Av. Té / Explanada Alcaldía
+          </button>
+          <button onclick="setSectorFilter('Coyuya / Plutarco')" data-sector="Coyuya / Plutarco" class="sector-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 transition shrink-0">
+            Metro Coyuya / Plutarco
+          </button>
+        </div>
+
+        <!-- Buscador rápido -->
+        <div class="relative w-full sm:w-56 shrink-0">
+          <input id="global-search" oninput="handleGlobalSearch(this.value)" type="search" placeholder="Buscar calle, oficio, carnitas..." class="w-full pl-8 pr-3 py-1 text-xs bg-white border border-borde rounded-full focus:outline-none focus:border-terracota text-tinta placeholder-stone-400" />
+          <svg class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+      </div>
+
+      <!-- Navegación Desktop (5 Pestañas Principales) -->
+      <nav class="hidden lg:flex items-center justify-center gap-2 pt-3" aria-label="Secciones principales">
+        <button onclick="switchTab('cronicas')" data-tab-btn="cronicas" class="nav-tab-btn px-5 py-2.5 rounded-t-lg font-bold text-sm border-b-2 border-terracota text-terracota bg-crema/70 flex items-center gap-2 transition">
+          <span>📰</span> Crónicas y Raíces
+        </button>
+        <button onclick="switchTab('comercio')" data-tab-btn="comercio" class="nav-tab-btn px-5 py-2.5 rounded-t-lg font-semibold text-sm border-b-2 border-transparent text-grafito hover:text-tinta flex items-center gap-2 transition">
+          <span>🏪</span> Comercio de Barrio
+          <span class="text-[10px] font-mono bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded-full font-bold">ofertas hoy</span>
+        </button>
+        <button onclick="switchTab('tianguis')" data-tab-btn="tianguis" class="nav-tab-btn px-5 py-2.5 rounded-t-lg font-semibold text-sm border-b-2 border-transparent text-grafito hover:text-tinta flex items-center gap-2 transition">
+          <span>🛍️</span> El Tianguis Digital
+        </button>
+        <button onclick="switchTab('comunidad')" data-tab-btn="comunidad" class="nav-tab-btn px-5 py-2.5 rounded-t-lg font-semibold text-sm border-b-2 border-transparent text-grafito hover:text-tinta flex items-center gap-2 transition">
+          <span>🚨</span> Servicios y Comunidad
+        </button>
+        <button onclick="switchTab('anunciate')" data-tab-btn="anunciate" class="nav-tab-btn px-5 py-2.5 rounded-t-lg font-semibold text-sm border-b-2 border-transparent text-white bg-terracota hover:bg-terracotaDark rounded-lg ml-3 shadow-sm flex items-center gap-1.5 transition">
+          <span>➕</span> Anúnciate / Publicar
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       CONTENEDOR PRINCIPAL DE LAS 5 PESTAÑAS
+       ===================================================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
+
+    <!-- Indicador de filtro activo -->
+    <div id="active-filter-banner" class="hidden mb-5 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 flex items-center justify-between text-xs sm:text-sm">
+      <div class="flex items-center gap-2 text-amber-950">
+        <span class="font-bold">Filtro vecinal activo:</span>
+        <span id="active-filter-text" class="bg-amber-200/80 px-2.5 py-0.5 rounded-full font-mono font-semibold"></span>
+      </div>
+      <button onclick="setSectorFilter('TODOS'); document.getElementById('global-search').value=''; handleGlobalSearch('');" class="text-terracota font-bold hover:underline">
+        Ver toda la colonia ✕
+      </button>
+    </div>
+
+    <!-- ===================================================================
+         PESTAÑA 1: 📰 CRÓNICAS Y RAÍCES (EL PERIÓDICO VECINAL)
+         =================================================================== -->
+    <section id="tab-cronicas" class="tab-panel space-y-8">
+      
+      <!-- Grid Principal Editorial: Crónica Histórica + Sidebar de Avisos de Hoy -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Columna Izquierda (8 cols): Memoria de Nuestra Calle + Comparador -->
+        <div class="lg:col-span-8 bg-white rounded-2xl border border-borde shadow-editorial overflow-hidden">
+          <div class="p-4 sm:p-6 border-b border-borde bg-gradient-to-r from-amber-50/70 via-papel to-papel flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-md bg-terracota text-white font-mono text-xs uppercase font-bold tracking-wider">
+                MEMORIA DE NUESTRA CALLE
+              </span>
+              <span class="text-xs font-mono text-grafito">• Archivo Histórico Vecinal</span>
+            </div>
+            <div class="inline-flex rounded-lg bg-crema p-1 border border-borde" role="group">
+              <button onclick="toggleTimeCapsule('1955')" id="btn-era-1955" class="px-3 py-1 rounded-md text-xs font-bold bg-terracota text-white transition">
+                📷 Vista 1955 (Chinampas)
+              </button>
+              <button onclick="toggleTimeCapsule('2026')" id="btn-era-2026" class="px-3 py-1 rounded-md text-xs font-semibold text-tinta hover:bg-white/60 transition">
+                🏙️ Vista Hoy (Ramos Millán)
+              </button>
+            </div>
+          </div>
+
+          <!-- Imagen Comparativa Interactiva -->
+          <div class="relative h-64 sm:h-80 w-full overflow-hidden bg-stone-900">
+            <img id="capsule-img" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80" alt="Archivo histórico de Iztacalco y la Ramos Millán" class="w-full h-full object-cover sepia-vintage transition-all duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+            <div class="absolute top-3 left-3">
+              <span id="capsule-badge" class="bg-amber-400 text-stone-950 font-mono text-xs font-bold px-3 py-1 rounded-full shadow">
+                AÑO 1952: Trazo de las calles Sur y Oriente sobre antiguos terrenos maiceros
+              </span>
+            </div>
+            <div class="absolute bottom-4 left-4 right-4 text-white">
+              <p id="capsule-caption" class="text-xs sm:text-sm text-stone-200 leading-relaxed">
+                Antes del asfalto en Avenida Té y Plutarco Elías Calles, las familias fundadoras de la Ramos Millán convivían con zanjas de riego chinampero que conectaban con el antiguo Canal de la Viga y Santa Anita.
+              </p>
+            </div>
+          </div>
+
+          <!-- Cuerpo del Artículo Principal -->
+          <div class="p-5 sm:p-7 space-y-4">
+            <div class="flex items-center gap-2 text-xs text-grafito font-mono">
+              <span>📍 SECCIÓN BRAMADERO Y TLACOTAL</span>
+              <span>•</span>
+              <span>LECTURA DE 3 MIN</span>
+            </div>
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta leading-snug">
+              ¿Por qué nuestra colonia se llama Gabriel Ramos Millán? La historia del «Apóstol del Maíz» y las raíces de nuestras cuadras
+            </h2>
+            <p class="text-grafito text-sm sm:text-base leading-relaxed">
+              Cada mañana caminamos por <strong>Sur 157</strong> rumbo al Mercado Bramadero o cruzamos <strong>Oriente 100-A</strong> en Tlacotal, pero pocos vecinos jóvenes conocen el origen del nombre que nos da identidad. Gabriel Ramos Millán fue el abogado e impulsor de la Comisión Nacional del Maíz que modernizó el campo mexicano a finales de los años 40.
+            </p>
+            <div id="main-story-expanded" class="hidden space-y-3 pt-2 border-t border-borde text-sm sm:text-base text-tinta leading-relaxed">
+              <p>
+                Tras su trágico fallecimiento el 26 de septiembre de 1949 en el accidente aéreo del Pico del Fraile (en el Popocatépetl, donde también viajaba la actriz Blanca Estela Pavón), los terrenos en expansión al sur del pueblo originario de Iztacalco fueron bautizados en su honor.
+              </p>
+              <p>
+                En los años 50 y 60, los primeros habitantes levantaron con esfuerzo propio las escuelas, las panaderías tradicionales y los mercados públicos (como el <strong>Mercado 204 Bramadero</strong> y el <strong>Mercado Tlacotal</strong>), transformando antiguos llanos de humedad en el corazón comercial y administrativo de nuestra alcaldía.
+              </p>
+              <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs sm:text-sm text-amber-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                  <strong>¿Tienes fotos familiares en la Ramos Millán de los años 60, 70 u 80?</strong>
+                  <p class="text-amber-800">Compártelas con la comunidad y obtén una mención especial en la edición del domingo.</p>
+                </div>
+                <button onclick="switchTab('anunciate')" class="px-3.5 py-2 rounded-lg bg-terracota text-white font-bold text-xs shrink-0 hover:bg-terracotaDark transition">
+                  Subir Foto Antigua →
+                </button>
+              </div>
+            </div>
+            <div class="pt-2 flex flex-wrap items-center justify-between gap-3">
+              <button onclick="toggleReadMoreMain()" id="btn-read-more-main" class="inline-flex items-center gap-1.5 text-sm font-bold text-terracota hover:underline">
+                <span>Leer crónica completa de la colonia</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <button onclick="shareOnWhatsApp('¿Sabías por qué nuestra colonia se llama Gabriel Ramos Millán y cómo lucía en 1955? Lee la crónica en el periódico vecinal Raíces de Iztacalco:')" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-chinampaLight text-chinampa font-bold text-xs hover:bg-green-200 transition">
+                <span>📲 Compartir en grupo vecinal</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha (4 cols): Monitor Vecinal de la Semana y Precios del Mandado -->
+        <div class="lg:col-span-4 space-y-5">
+          
+          <!-- Tarjeta 1: Radar de Vialidad, Agua y Explanada -->
+          <div class="bg-white rounded-2xl border border-borde shadow-editorial p-5">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-borde">
+              <h3 class="font-serif font-bold text-lg text-tinta flex items-center gap-2">
+                <span>📢</span> Avisos de Hoy en la Ramos
+              </h3>
+              <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-green-100 text-chinampa font-bold">EN VIVO</span>
+            </div>
+
+            <ul class="space-y-3 text-xs sm:text-sm">
+              <li class="p-3 rounded-xl bg-red-50/80 border border-red-200">
+                <div class="flex items-center justify-between font-bold text-red-900 mb-0.5">
+                  <span>🚗 Vialidad Ciudad Deportiva</span>
+                  <span class="font-mono text-[11px]">18:00 - 23:30 h</span>
+                </div>
+                <p class="text-red-800 text-xs">
+                  Alternativa vial por evento en Estadio GNP: Evita lateral de Río Churubusco; usa <strong>Sur 157</strong> o <strong>Plutarco Elías Calles</strong> para cruzar hacia Coyuya.
+                </p>
+              </li>
+
+              <li class="p-3 rounded-xl bg-blue-50/80 border border-blue-200">
+                <div class="flex items-center justify-between font-bold text-blue-900 mb-0.5">
+                  <span>💧 Presión de Agua SACMEX</span>
+                  <span class="font-mono text-[11px]">Secc. Cuchilla</span>
+                </div>
+                <p class="text-blue-800 text-xs">
+                  Suministro normal en Bramadero y Tlacotal. Ligera baja de presión matutina entre Sur 133 y Oriente 108 por mantenimiento de válvula.
+                </p>
+              </li>
+
+              <li class="p-3 rounded-xl bg-amber-50/90 border border-amber-200">
+                <div class="flex items-center justify-between font-bold text-amber-950 mb-0.5">
+                  <span>🏛️ Explanada Alcaldía Iztacalco</span>
+                  <span class="font-mono text-[11px]">Sáb y Dom</span>
+                </div>
+                <p class="text-amber-900 text-xs">
+                  Jornada gratuita de esterilización canina y feria de productores frente a Ventanilla Única (Av. Té esq. Río Churubusco) de 9:00 a 15:00 h.
+                </p>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Tarjeta 2: ¿A cuánto el kilo hoy en los Mercados de la Ramos? -->
+          <div class="bg-white rounded-2xl border border-borde shadow-editorial p-5">
+            <div class="flex items-center justify-between pb-2 mb-3 border-b border-borde">
+              <div>
+                <span class="text-[10px] font-mono uppercase tracking-wider text-terracota font-bold">MONITOR DEL MANDADO</span>
+                <h3 class="font-serif font-bold text-base text-tinta">Precios Promedio Hoy</h3>
+              </div>
+              <span class="text-[11px] font-mono text-grafito">Bramadero / Tlacotal</span>
+            </div>
+            <div class="space-y-2 text-xs">
+              <div class="flex items-center justify-between py-1.5 border-b border-stone-100">
+                <span class="font-medium text-tinta">🫓 Tortilla recién salida (1 kg)</span>
+                <span class="font-mono font-bold text-chinampa">$22.00 MXN</span>
+              </div>
+              <div class="flex items-center justify-between py-1.5 border-b border-stone-100">
+                <span class="font-medium text-tinta">🥑 Aguacate Hass de primera (1 kg)</span>
+                <span class="font-mono font-bold text-tinta">$58.00 MXN</span>
+              </div>
+              <div class="flex items-center justify-between py-1.5 border-b border-stone-100">
+                <span class="font-medium text-tinta">🍅 Jitomate Saladette (1 kg)</span>
+                <span class="font-mono font-bold text-chinampa">$24.00 MXN</span>
+              </div>
+              <div class="flex items-center justify-between py-1.5">
+                <span class="font-medium text-tinta">🥚 Huevo blanco limpio (1 kg)</span>
+                <span class="font-mono font-bold text-tinta">$44.00 MXN</span>
+              </div>
+            </div>
+            <button onclick="switchTab('comercio')" class="mt-3 w-full py-2 rounded-xl bg-crema hover:bg-amber-100 text-tinta font-bold text-xs transition flex items-center justify-center gap-1">
+              <span>Ver ofertas y cupones de locales de la colonia</span>
+              <span>→</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Grid Secundario de Notas y Publirreportajes Dinámicos -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="font-serif text-xl sm:text-2xl font-bold text-tinta">Crónicas del Barrio y El Rincón de la Ramos</h3>
+            <p class="text-xs sm:text-sm text-grafito">Historias de nuestra gente, avisos culturales y negocios que han alimentado a generaciones.</p>
+          </div>
+        </div>
+        <div id="cronicas-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Renderizado por JS -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===================================================================
+         PESTAÑA 2: 🏪 COMERCIO DE BARRIO (DIRECTORIO MONETIZADO + CARRITO WA)
+         =================================================================== -->
+    <section id="tab-comercio" class="tab-panel hidden space-y-6">
+      
+      <!-- Banner de Valor de la Sección -->
+      <div class="bg-gradient-to-r from-terracota to-terracotaDark text-white rounded-2xl p-5 sm:p-6 shadow-editorial flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-400 text-stone-950 font-mono text-[11px] font-bold">
+            ✨ SELLO DE TRADICIÓN RAMOS MILLÁN • PIDE SIN COMISIONES
+          </div>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold">Directorio Oficial de Comercio de Barrio</h2>
+          <p class="text-xs sm:text-sm text-red-100 max-w-2xl">
+            Apoya a los negocios de nuestras cuadras alrededor del <strong>Mercado Bramadero</strong>, <strong>Mercado Tlacotal</strong> y <strong>Av. Té</strong>. Arma tu pedido aquí y envíalo directo al WhatsApp del dueño sin intermediarios.
+          </p>
+        </div>
+        <button onclick="switchTab('anunciate')" class="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs sm:text-sm shrink-0 shadow transition">
+          ¿Tienes un local en la Ramos? Súbelo por $199/mes →
+        </button>
+      </div>
+
+      <!-- Filtros por Giro Comercial -->
+      <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1">
+        <button onclick="setGiroFilter('TODOS')" data-giro="TODOS" class="giro-pill px-3.5 py-1.5 rounded-xl text-xs font-bold bg-tinta text-white transition shrink-0">
+          Todos los Giros
+        </button>
+        <button onclick="setGiroFilter('Comida y Antojitos')" data-giro="Comida y Antojitos" class="giro-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-borde text-tinta hover:border-terracota transition shrink-0">
+          🌮 Comida, Carnitas y Pan
+        </button>
+        <button onclick="setGiroFilter('Mercados y Abasto')" data-giro="Mercados y Abasto" class="giro-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-borde text-tinta hover:border-terracota transition shrink-0">
+          🥬 Zona Bramadero y Tlacotal
+        </button>
+        <button onclick="setGiroFilter('Salud y Mascotas')" data-giro="Salud y Mascotas" class="giro-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-borde text-tinta hover:border-terracota transition shrink-0">
+          🐾 Veterinarias y Salud
+        </button>
+        <button onclick="setGiroFilter('Talleres y Tlapalerías')" data-giro="Talleres y Tlapalerías" class="giro-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-borde text-tinta hover:border-terracota transition shrink-0">
+          🔧 Talleres y Tlapalerías
+        </button>
+        <button onclick="setGiroFilter('Belleza y Barberías')" data-giro="Belleza y Barberías" class="giro-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-borde text-tinta hover:border-terracota transition shrink-0">
+          💈 Estéticas y Barberías
+        </button>
+      </div>
+
+      <!-- Grid de Negocios (Perfiles PRO arriba + Perfiles Básicos abajo) -->
+      <div id="negocios-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Renderizado por JS -->
+      </div>
+
+    </section>
+
+    <!-- ===================================================================
+         PESTAÑA 3: 🛍️ EL TIANGUIS DIGITAL (CLASIFICADOS CON ENTREGA SEGURA)
+         =================================================================== -->
+    <section id="tab-tianguis" class="tab-panel hidden space-y-6">
+      
+      <!-- Encabezado y Puntos de Entrega Segura -->
+      <div class="bg-white rounded-2xl border border-borde p-5 sm:p-6 shadow-editorial">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-borde">
+          <div>
+            <span class="text-xs font-mono uppercase font-bold text-chinampa bg-chinampaLight px-2.5 py-0.5 rounded-full">
+              🤝 ENTRE VECINOS DE LA RAMOS MILLÁN
+            </span>
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta mt-1">El Tianguis Digital de la Alcaldía</h2>
+            <p class="text-xs sm:text-sm text-grafito">
+              Compra y vende bicicletas, muebles, postres caseros o artículos usados sin cruzar toda la ciudad. Todas las entregas se acuerdan en <strong>Puntos Seguros e Iluminados</strong> de nuestra colonia.
+            </p>
+          </div>
+          <button onclick="switchTab('anunciate')" class="px-4 py-2.5 rounded-xl bg-terracota hover:bg-terracotaDark text-white font-bold text-xs sm:text-sm shrink-0 transition shadow-sm">
+            + Vender un Artículo (1 Gratis / Destacado $39)
+          </button>
+        </div>
+
+        <!-- Filtro por Punto de Entrega Seguro -->
+        <div class="pt-4 flex items-center gap-2 overflow-x-auto hide-scrollbar">
+          <span class="text-xs font-mono font-bold text-grafito shrink-0">📍 Filtrar por Punto de Entrega:</span>
+          <button onclick="setDeliveryPointFilter('TODOS')" data-point="TODOS" class="point-pill px-3 py-1 rounded-full text-xs font-bold bg-tinta text-white shrink-0">
+            Todos los puntos
+          </button>
+          <button onclick="setDeliveryPointFilter('Explanada Alcaldía Iztacalco')" data-point="Explanada Alcaldía Iztacalco" class="point-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 shrink-0">
+            🏛️ Explanada Alcaldía Iztacalco
+          </button>
+          <button onclick="setDeliveryPointFilter('Metro Iztacalco (Línea 8)')" data-point="Metro Iztacalco (Línea 8)" class="point-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 shrink-0">
+            🚇 Metro Iztacalco
+          </button>
+          <button onclick="setDeliveryPointFilter('Metro Coyuya')" data-point="Metro Coyuya" class="point-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 shrink-0">
+            🚇 Metro Coyuya
+          </button>
+          <button onclick="setDeliveryPointFilter('Entrada Mercado Bramadero')" data-point="Entrada Mercado Bramadero" class="point-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 shrink-0">
+            🛒 Mercado Bramadero (Sur 163)
+          </button>
+          <button onclick="setDeliveryPointFilter('Entrada Mercado Tlacotal')" data-point="Entrada Mercado Tlacotal" class="point-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 shrink-0">
+            🛒 Mercado Tlacotal (Sur 125)
+          </button>
+        </div>
+
+        <!-- CANDADO 3: Aviso Legal Vecinal en Tianguis -->
+        <div class="mt-4 p-3 rounded-xl bg-amber-50/90 border border-amber-200 flex items-start gap-2.5 text-[11px] sm:text-xs text-amber-950">
+          <span class="text-base leading-none">🛡️</span>
+          <p>
+            <strong>Candado de Seguridad Vecinal:</strong> <em>Raíces de Iztacalco</em> es un directorio informativo comunitario y no interviene en cobros entre vecinos. Por tu seguridad, <strong>nunca realices depósitos ni transferencias por adelantado a desconocidos</strong>; revisa el producto y paga contra entrega únicamente en los puntos públicos sugeridos (Explanada de la Alcaldía, torniquetes de Metro o entradas de mercados).
+          </p>
+        </div>
+      </div>
+
+      <!-- Grid de Productos del Tianguis -->
+      <div id="tianguis-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Renderizado por JS -->
+      </div>
+
+    </section>
+
+    <!-- ===================================================================
+         PESTAÑA 4: 🚨 SERVICIOS Y COMUNIDAD (MASCOTAS, OFICIOS Y EMPLEO LOCAL)
+         =================================================================== -->
+    <section id="tab-comunidad" class="tab-panel hidden space-y-8">
+      
+      <!-- Sub-navegación rápida de Comunidad -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <a href="#sec-mascotas" class="p-4 rounded-2xl bg-white border border-borde shadow-sm hover:border-terracota transition flex items-center justify-between">
+          <div>
+            <span class="text-xs font-mono font-bold text-red-700 uppercase">RADAR ACTIVO</span>
+            <h3 class="font-serif font-bold text-lg text-tinta">🐾 Mascotas Perdidas y Adopción</h3>
+            <p class="text-xs text-grafito">Alertas por cuadra en la Ramos Millán</p>
+          </div>
+          <span class="text-2xl">🐶</span>
+        </a>
+        <a href="#sec-oficios" class="p-4 rounded-2xl bg-white border border-borde shadow-sm hover:border-terracota transition flex items-center justify-between">
+          <div>
+            <span class="text-xs font-mono font-bold text-amber-800 uppercase">RECOMENDADOS POR VECINOS</span>
+            <h3 class="font-serif font-bold text-lg text-tinta">🛠️ El Oficio Verificado</h3>
+            <p class="text-xs text-grafito">Plomeros, cerrajeros y electricistas</p>
+          </div>
+          <span class="text-2xl">⚡</span>
+        </a>
+        <a href="#sec-empleos" class="p-4 rounded-2xl bg-white border border-borde shadow-sm hover:border-terracota transition flex items-center justify-between">
+          <div>
+            <span class="text-xs font-mono font-bold text-chinampa uppercase">SIN CRUZAR LA CIUDAD</span>
+            <h3 class="font-serif font-bold text-lg text-tinta">💼 Empleo a 15 Minutos</h3>
+            <p class="text-xs text-grafito">Vacantes en comercios de la colonia</p>
+          </div>
+          <span class="text-2xl">🏪</span>
+        </a>
+      </div>
+
+      <!-- 4.1 Radar de Mascotas Perdidas -->
+      <div id="sec-mascotas" class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-borde">
+          <div>
+            <h3 class="font-serif text-2xl font-bold text-tinta flex items-center gap-2">
+              <span>🐾</span> Radar de Mascotas de la Ramos Millán
+            </h3>
+            <p class="text-xs sm:text-sm text-grafito">
+              Publicar una alerta sencilla es <strong>100% gratis</strong>. Puedes activar el <strong>Boost Vecinal ($50 MXN)</strong> para fijar la alerta arriba con borde urgente.
+            </p>
+          </div>
+          <div class="text-xs bg-amber-100 border border-amber-300 text-amber-950 px-3 py-1.5 rounded-xl font-medium shrink-0">
+            Sección patrocinada por: <strong class="underline cursor-pointer" onclick="switchTab('comercio')">Veterinaria y Estética Canina "Huellitas Sur 125"</strong>
+          </div>
+        </div>
+        <div id="mascotas-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Renderizado por JS -->
+        </div>
+      </div>
+
+      <!-- 4.2 El Oficio Verificado (Emergencias del Hogar) -->
+      <div id="sec-oficios" class="space-y-4 pt-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-borde">
+          <div>
+            <h3 class="font-serif text-2xl font-bold text-tinta flex items-center gap-2">
+              <span>🛠️</span> El Oficio Verificado (Urgencias en Casa)
+            </h3>
+            <p class="text-xs sm:text-sm text-grafito">
+              Técnicos de confianza ubicados dentro de la colonia que llegan en menos de 25 minutos a tu domicilio.
+            </p>
+          </div>
+          <button onclick="switchTab('anunciate')" class="text-xs font-bold text-terracota hover:underline">
+            ¿Eres plomero, electricista o cerrajero? Únete al padrón →
+          </button>
+        </div>
+        <div id="oficios-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Renderizado por JS -->
+        </div>
+      </div>
+
+      <!-- 4.3 Bolsa de Trabajo "A 15 Minutos de Casa" -->
+      <div id="sec-empleos" class="space-y-4 pt-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-borde">
+          <div>
+            <h3 class="font-serif text-2xl font-bold text-tinta flex items-center gap-2">
+              <span>💼</span> Bolsa de Trabajo «A 15 Minutos de Casa»
+            </h3>
+            <p class="text-xs sm:text-sm text-grafito">
+              Olvídate de lascartulinas pegadas en postes: vacantes reales en comercios de la Ramos Millán e Iztacalco.
+            </p>
+          </div>
+          <button onclick="switchTab('anunciate')" class="text-xs font-bold text-terracota hover:underline">
+            Publicar vacante de mi negocio ($100 MXN) →
+          </button>
+        </div>
+        <div id="empleos-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Renderizado por JS -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===================================================================
+         PESTAÑA 5: ➕ ANÚNCIATE / PUBLICAR (FLUJO SEGURO EN 3 PASOS + MP)
+         =================================================================== -->
+    <section id="tab-anunciate" class="tab-panel hidden space-y-8">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-mono text-xs font-bold">
+          🛡️ SISTEMA DE AUTOGESTIÓN CON PAGOS ENCRIPTADOS MERCADO PAGO
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-tinta">
+          Haz que toda la Colonia Gabriel Ramos Millán conozca tu negocio
+        </h2>
+        <p class="text-sm sm:text-base text-grafito">
+          Sin comisiones por venta, sin contratos forzosos y sin exponer tus datos bancarios. Elige tu paquete, realiza tu pago en la pasarela oficial de Mercado Pago y activa tu perfil hoy mismo.
+        </p>
+      </div>
+
+      <!-- NUEVO: FLUJO SEGURO PARA ACTIVAR UN CLIENTE NUEVO EN 3 PASOS -->
+      <div class="bg-white rounded-2xl border-2 border-terracota/25 p-5 sm:p-6 shadow-editorial">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 mb-5 border-b border-borde">
+          <div>
+            <span class="text-[11px] font-mono uppercase font-bold text-terracota">PROTOCOLO BLINDADO DE ALTA</span>
+            <h3 class="font-serif text-xl sm:text-2xl font-bold text-tinta">¿Cómo se activa tu negocio o anuncio en 3 pasos seguros?</h3>
+          </div>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-chinampaLight text-chinampa text-xs font-bold">
+            🔒 Cero datos de tarjeta en esta web
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Paso 1 -->
+          <div class="p-4 rounded-xl bg-papel border border-borde relative">
+            <div class="flex items-center gap-2.5 mb-2">
+              <span class="w-7 h-7 rounded-full bg-terracota text-white font-mono font-bold text-xs flex items-center justify-center shrink-0">1</span>
+              <h4 class="font-bold text-sm text-tinta">Registro en Formulario o WhatsApp</h4>
+            </div>
+            <p class="text-xs text-grafito leading-relaxed">
+              Llenas el formulario de abajo con el nombre de tu negocio, calle en la Ramos Millán, productos y el WhatsApp donde recibirás los pedidos. Tu registro entra con estatus <code class="bg-amber-100 text-amber-900 px-1 rounded font-mono">"Pendiente"</code> (nadie ve tus datos internos).
+            </p>
+          </div>
+
+          <!-- Paso 2 -->
+          <div class="p-4 rounded-xl bg-papel border border-borde relative">
+            <div class="flex items-center gap-2.5 mb-2">
+              <span class="w-7 h-7 rounded-full bg-sky-600 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0">2</span>
+              <h4 class="font-bold text-sm text-tinta">Pago Seguro en Mercado Pago</h4>
+            </div>
+            <p class="text-xs text-grafito leading-relaxed">
+              Al enviar tus datos, se abre el <strong>Link Oficial de Mercado Pago</strong> (suscripción automática de $199/mes o pago único de $39/$100). Pagas con tarjeta, saldo MP, SPEI u OXXO bajo encriptación bancaria PCI-DSS.
+            </p>
+          </div>
+
+          <!-- Paso 3 -->
+          <div class="p-4 rounded-xl bg-papel border border-borde relative">
+            <div class="flex items-center gap-2.5 mb-2">
+              <span class="w-7 h-7 rounded-full bg-chinampa text-white font-mono font-bold text-xs flex items-center justify-center shrink-0">3</span>
+              <h4 class="font-bold text-sm text-tinta">Activación en 1 Clic en Vivo</h4>
+            </div>
+            <p class="text-xs text-grafito leading-relaxed">
+              Mercado Pago nos notifica al instante tu pago confirmado -> Cambiamos tu celda <code class="bg-green-100 text-chinampa px-1 rounded font-mono">Estatus_Pago = Activo</code> en nuestra base maestra -> ¡Tu perfil Pro con carrito de pedidos a WhatsApp aparece en vivo!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjetas de Paquetes Comerciales con Botones Directos a Mercado Pago -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        
+        <!-- Paquete 1: Plan Orgullo de Barrio (Negocios) -->
+        <div class="bg-white rounded-2xl border-2 border-terracota shadow-editorial p-5 flex flex-col justify-between relative">
+          <span class="absolute -top-3 left-4 bg-terracota text-white font-mono text-[10px] uppercase font-bold px-3 py-0.5 rounded-full">
+            MÁS POPULAR • SUSCRIPCIÓN
+          </span>
+          <div>
+            <h3 class="font-serif font-bold text-lg text-tinta mt-1">Plan «Orgullo de Barrio»</h3>
+            <p class="text-xs text-grafito mb-3">Para negocios fijos, fondas, consultorios y talleres de la colonia.</p>
+            <div class="flex items-baseline gap-1 my-3">
+              <span class="font-serif text-3xl font-extrabold text-tinta">$199</span>
+              <span class="text-xs text-grafito font-mono">MXN / mes</span>
+            </div>
+            <ul class="space-y-2 text-xs text-tinta mb-5">
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> Aparece hasta arriba en su sector (Bramadero/Tlacotal/Cuchilla)</li>
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> Mini-catálogo con <strong>Carrito de Pedidos a WhatsApp</strong></li>
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> Etiqueta de «La Oferta del Jueves» e insignia de Tradición</li>
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> Cargo automático mensual en Mercado Pago (cancela cuando quieras)</li>
+            </ul>
+          </div>
+          <div class="space-y-2">
+            <button onclick="selectPlanInForm('Plan Pro Negocio ($199/mes)')" class="w-full py-2.5 rounded-xl bg-terracota hover:bg-terracotaDark text-white font-bold text-xs transition">
+              1. Llenar Datos del Negocio ↓
+            </button>
+            <button onclick="openMercadoPagoCheckout('SUSCRIPCION_PRO_199')" class="w-full py-2 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-900 font-bold text-[11px] transition flex items-center justify-center gap-1.5">
+              <span>💳 Ir directo a Suscripción MP ($199)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paquete 2: Tianguis Digital Destacado -->
+        <div class="bg-white rounded-2xl border border-borde shadow-editorial p-5 flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-mono uppercase font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded">CLASIFICADOS VECINALES</span>
+            <h3 class="font-serif font-bold text-lg text-tinta mt-2">Tianguis Destacado</h3>
+            <p class="text-xs text-grafito mb-3">Vende rápido muebles, bicis, electrónicos o postres de fin de semana.</p>
+            <div class="flex items-baseline gap-1 my-3">
+              <span class="font-serif text-3xl font-extrabold text-tinta">$39</span>
+              <span class="text-xs text-grafito font-mono">MXN / 7 días</span>
+            </div>
+            <ul class="space-y-2 text-xs text-tinta mb-5">
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> 1 artículo básico es <strong>Gratis</strong></li>
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> Con Destacado ($39) sales fijado al inicio con etiqueta urgente</li>
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> Insignia de Punto de Entrega Seguro (Metro / Explanada)</li>
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> Botón de compra directo a tu WhatsApp</li>
+            </ul>
+          </div>
+          <div class="space-y-2">
+            <button onclick="selectPlanInForm('Tianguis Destacado ($39 MXN)')" class="w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs transition">
+              1. Subir Producto al Tianguis ↓
+            </button>
+            <button onclick="openMercadoPagoCheckout('TIANGUIS_39')" class="w-full py-2 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-900 font-bold text-[11px] transition flex items-center justify-center gap-1.5">
+              <span>💳 Link de Pago MP ($39)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paquete 3: Vacante de Empleo Local -->
+        <div class="bg-white rounded-2xl border border-borde shadow-editorial p-5 flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-mono uppercase font-bold text-chinampa bg-chinampaLight px-2 py-0.5 rounded">BOLSA DE TRABAJO</span>
+            <h3 class="font-serif font-bold text-lg text-tinta mt-2">Vacante Local</h3>
+            <p class="text-xs text-grafito mb-3">Encuentra ayudantes o personal que viva a menos de 15 minutos.</p>
+            <div class="flex items-baseline gap-1 my-3">
+              <span class="font-serif text-3xl font-extrabold text-tinta">$100</span>
+              <span class="text-xs text-grafito font-mono">MXN / 15 días</span>
+            </div>
+            <ul class="space-y-2 text-xs text-tinta mb-5">
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> Publicación durante 15 días en Bolsa de Trabajo de la colonia</li>
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> Candidatos te escriben directo a WhatsApp con su experiencia</li>
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> Ideal para panaderías, cocinas, mostrador y talleres</li>
+            </ul>
+          </div>
+          <div class="space-y-2">
+            <button onclick="selectPlanInForm('Vacante de Empleo Local ($100 MXN)')" class="w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs transition">
+              1. Publicar Vacante ↓
+            </button>
+            <button onclick="openMercadoPagoCheckout('VACANTE_100')" class="w-full py-2 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-900 font-bold text-[11px] transition flex items-center justify-center gap-1.5">
+              <span>💳 Link de Pago MP ($100)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paquete 4: Boost Vecinal Mascota / Publirreportaje -->
+        <div class="bg-white rounded-2xl border border-borde shadow-editorial p-5 flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-mono uppercase font-bold text-red-800 bg-red-100 px-2 py-0.5 rounded">COMUNIDAD Y RESEÑAS</span>
+            <h3 class="font-serif font-bold text-lg text-tinta mt-2">Boost / Crónica</h3>
+            <p class="text-xs text-grafito mb-3">Alerta urgente de mascota o Publirreportaje «El Rincón de la Ramos».</p>
+            <div class="flex items-baseline gap-1 my-3">
+              <span class="font-serif text-3xl font-extrabold text-tinta">$50</span>
+              <span class="text-xs text-grafito font-mono">a $350 MXN</span>
+            </div>
+            <ul class="space-y-2 text-xs text-tinta mb-5">
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> <strong>Alerta Mascota Sencilla:</strong> $0 (Gratis)</li>
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> <strong>Boost Mascota ($50):</strong> Fijada hasta arriba por 7 días</li>
+              <li class="flex items-start gap-1.5"><span class="text-chinampa font-bold">✓</span> <strong>Crónica Patrocinada ($350):</strong> Nota histórica dedicada a tu local</li>
+            </ul>
+          </div>
+          <div class="space-y-2">
+            <button onclick="selectPlanInForm('Reporte de Mascota / Crónica')" class="w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs transition">
+              1. Enviar Reporte o Solicitud ↓
+            </button>
+            <button onclick="openMercadoPagoCheckout('BOOST_50')" class="w-full py-2 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-900 font-bold text-[11px] transition flex items-center justify-center gap-1.5">
+              <span>💳 Link Boost Mascota ($50)</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Formulario de Autogestión Conectado a Google Sheets con CANDADO 1 (Honeypot + Sanitización) -->
+      <div id="form-container-box" class="bg-white rounded-2xl border border-borde shadow-editorial p-6 sm:p-8 max-w-3xl mx-auto">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-borde">
+          <div>
+            <h3 class="font-serif text-xl sm:text-2xl font-bold text-tinta">Formulario de Registro y Publicación Vecinal</h3>
+            <p class="text-xs text-grafito">
+              Tus datos llegan de forma privada con estatus <span class="font-mono font-semibold text-amber-800">"Pendiente"</span> para validación editorial antes de hacerse públicos.
+            </p>
+          </div>
+          <span class="text-[11px] font-mono bg-green-50 text-chinampa border border-green-200 px-2.5 py-1 rounded-md font-bold">
+            🛡️ Filtro Anti-Spam Activo
+          </span>
+        </div>
+
+        <form id="submission-form" onsubmit="handleFormSubmit(event)" class="space-y-4 relative">
+          
+          <!-- CANDADO 1: Campo Trampa Honeypot (Invisible para vecinos reales; si un bot lo llena, se bloquea el envío) -->
+          <div class="hp-trap-field" aria-hidden="true">
+            <label for="website_url_trap">No llenar este campo si eres humano</label>
+            <input type="text" id="website_url_trap" name="website_url_trap" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-tinta uppercase font-mono mb-1">1. ¿Qué deseas publicar? *</label>
+              <select id="form-tipo" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold text-tinta focus:outline-none focus:border-terracota">
+                <option value="Plan Pro Negocio ($199/mes)">🏪 Negocio en Directorio — Plan Pro ($199/mes)</option>
+                <option value="Registro Básico Negocio (Gratis)">🏪 Negocio en Directorio — Perfil Básico ($0)</option>
+                <option value="Tianguis Destacado ($39 MXN)">🛍️ Artículo en Tianguis — Destacado ($39)</option>
+                <option value="Tianguis Básico (Gratis 1 prod)">🛍️ Artículo en Tianguis — Sencillo ($0)</option>
+                <option value="Vacante de Empleo Local ($100 MXN)">💼 Vacante de Empleo Local ($100)</option>
+                <option value="Reporte de Mascota / Crónica">🐾 Mascota Perdida ($0 o Boost $50)</option>
+                <option value="Foto Histórica de la Ramos Millán">📷 Foto Antigua / Memoria de Nuestra Calle ($0)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-tinta uppercase font-mono mb-1">2. Sector de la Ramos Millán *</label>
+              <select id="form-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold text-tinta focus:outline-none focus:border-terracota">
+                <option value="Bramadero">Sección Bramadero (Sur 157 - Sur 163)</option>
+                <option value="Tlacotal">Sección Tlacotal (Sur 125 - Ote 100)</option>
+                <option value="Cuchilla">Sección Cuchilla</option>
+                <option value="Av. Té / Alcaldía">Av. Té / Explanada Alcaldía Iztacalco</option>
+                <option value="Coyuya / Plutarco">Metro Coyuya / Plutarco Elías Calles</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-tinta uppercase font-mono mb-1">3. Nombre del Negocio, Producto o Título *</label>
+              <input id="form-titulo" type="text" required maxlength="90" placeholder="Ej. Panadería La Espiga o Bicicleta R26" class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-white text-sm text-tinta focus:outline-none focus:border-terracota" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-tinta uppercase font-mono mb-1">4. Calle de Referencia o Punto Seguro *</label>
+              <input id="form-calle" type="text" required maxlength="90" placeholder="Ej. Sur 157 casi esq. Av. Recreo / Explanada Alcaldía" class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-white text-sm text-tinta focus:outline-none focus:border-terracota" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-tinta uppercase font-mono mb-1">5. WhatsApp Público para Pedidos (10 dígitos) *</label>
+              <input id="form-whatsapp" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-white text-sm font-mono text-tinta focus:outline-none focus:border-terracota" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-tinta uppercase font-mono mb-1">6. Precio, Oferta del Jueves o Sueldo</label>
+              <input id="form-precio" type="text" maxlength="70" placeholder="Ej. $250 MXN o 'Jueves 2x1 en conchas rellenas'" class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-white text-sm text-tinta focus:outline-none focus:border-terracota" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-tinta uppercase font-mono mb-1">7. Descripción, Productos con Precio o Historia de tu Local *</label>
+            <textarea id="form-descripcion" rows="3" required maxlength="500" placeholder="Describe tus productos principales con precio (para armar tu carrito de WhatsApp), el año en que abrieron en la colonia o los detalles de tu artículo..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-white text-sm text-tinta focus:outline-none focus:border-terracota"></textarea>
+          </div>
+
+          <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-[11px] text-grafito">
+              🔒 <strong>Privacidad garantizada:</strong> Nunca solicitamos contraseñas ni números de tarjeta en este formulario.
+            </p>
+            <button id="btn-submit-form" type="submit" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-terracota hover:bg-terracotaDark text-white font-extrabold text-sm shadow transition flex items-center justify-center gap-2">
+              <span>Enviar Registro yContinuar</span>
+              <span>→</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Mensaje de Confirmación Post-Envío + Paso 2 (Link a Mercado Pago) -->
+        <div id="form-success-alert" class="hidden mt-5 p-5 rounded-xl bg-chinampaLight border-2 border-chinampa text-chinampa text-xs sm:text-sm space-y-3">
+          <!-- Renderizado dinámicamente -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       PIE DE PÁGINA CON CANDADO 3 (DESLINDE LEGAL VECINAL COMPLETO)
+       ===================================================================== -->
+  <footer class="bg-tinta text-stone-300 border-t border-stone-800 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <span class="font-mono text-[11px] uppercase tracking-widest text-amber-400 font-bold">RAÍCES DE IZTACALCO</span>
+          <h4 class="font-serif text-xl font-bold text-white mt-1">Edición Gabriel Ramos Millán</h4>
+          <p class="text-xs text-stone-400 mt-2 leading-relaxed">
+            Plataforma digital independiente dedicada a rescatar la memoria histórica de los barrios y colonias de Iztacalco e impulsar el comercio local sin comisiones abusivas.
+          </p>
+        </div>
+
+        <div>
+          <h5 class="font-mono text-xs uppercase font-bold text-white mb-2">Puntos Seguros de Entrega Sugeridos</h5>
+          <ul class="text-xs text-stone-400 space-y-1.5">
+            <li>• Explanada de la Alcaldía Iztacalco (Av. Té y Río Churubusco)</li>
+            <li>• Exterior Metro Iztacalco y Metro Coyuya (Línea 8)</li>
+            <li>• Entrada principal Mercado 204 Bramadero (Sur 163)</li>
+            <li>• Entrada principal Mi Mercado Tlacotal (Sur 125 esq. Ote. 100-A)</li>
+          </ul>
+        </div>
+
+        <!-- CANDADO 3: Aviso de Responsabilidad Vecinal -->
+        <div class="p-4 rounded-xl bg-stone-900 border border-stone-700">
+          <h5 class="font-mono text-xs uppercase font-bold text-amber-400 mb-1.5 flex items-center gap-1.5">
+            <span>🛡️</span> Aviso de Responsabilidad y Seguridad
+          </h5>
+          <p class="text-[11px] text-stone-300 leading-relaxed">
+            <strong>Raíces de Iztacalco</strong> es un medio informativo y directorio de contacto comunitario. Los pedidos por WhatsApp y tratos del Tianguis Digital se realizan directamente entre vecinos y comercios. Recomendamos realizar entregas únicamente en puntos públicos seguros y no efectuar depósitos por adelantado a desconocidos. Los cobros de publicidad se procesan exclusivamente mediante enlaces encriptados de <strong>Mercado Pago</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between text-[11px] text-stone-400 gap-2">
+        <span>© 2026 Raíces de Iztacalco — Hecho con orgullo en la Col. Gabriel Ramos Millán, CDMX.</span>
+        <button onclick="openTechModal()" class="text-amber-400 hover:underline font-mono">
+          Ver Código de Conexión Blindado Google Sheets (Code.gs) →
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       BARRA DE NAVEGACIÓN INFERIOR ESTILO APP NATIVA (MÓVIL / TABLET)
+       ===================================================================== -->
+  <nav class="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-borde z-50 px-2 py-1.5 shadow-lg" aria-label="Navegación móvil">
+    <div class="grid grid-cols-5 gap-1 max-w-md mx-auto">
+      <button onclick="switchTab('cronicas')" data-tab-btn="cronicas" class="nav-tab-btn-mobile flex flex-col items-center justify-center py-1 rounded-xl text-terracota font-bold">
+        <span class="text-lg leading-none">📰</span>
+        <span class="text-[10px] mt-1">Crónicas</span>
+      </button>
+      <button onclick="switchTab('comercio')" data-tab-btn="comercio" class="nav-tab-btn-mobile flex flex-col items-center justify-center py-1 rounded-xl text-grafito font-medium">
+        <span class="text-lg leading-none">🏪</span>
+        <span class="text-[10px] mt-1">Comercio</span>
+      </button>
+      <button onclick="switchTab('tianguis')" data-tab-btn="tianguis" class="nav-tab-btn-mobile flex flex-col items-center justify-center py-1 rounded-xl text-grafito font-medium">
+        <span class="text-lg leading-none">🛍️</span>
+        <span class="text-[10px] mt-1">Tianguis</span>
+      </button>
+      <button onclick="switchTab('comunidad')" data-tab-btn="comunidad" class="nav-tab-btn-mobile flex flex-col items-center justify-center py-1 rounded-xl text-grafito font-medium">
+        <span class="text-lg leading-none">🚨</span>
+        <span class="text-[10px] mt-1">Vecinos</span>
+      </button>
+      <button onclick="switchTab('anunciate')" data-tab-btn="anunciate" class="nav-tab-btn-mobile flex flex-col items-center justify-center py-1 rounded-xl bg-terracota text-white font-bold shadow-sm">
+        <span class="text-lg leading-none">➕</span>
+        <span class="text-[10px] mt-1">Publicar</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- =====================================================================
+       MODAL DE CHECKOUT SEGURO MERCADO PAGO (GUÍA + REDIRECCIÓN OFICIAL)
+       ===================================================================== -->
+  <div id="mp-checkout-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-borde rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
+      <div class="bg-sky-600 text-white px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🛡️</span>
+          <div>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-sky-100 block">PASARELA BANCARIA ENCRIPTADA</span>
+            <h3 id="mp-modal-title" class="font-bold text-base">Suscripción Segura Mercado Pago</h3>
+          </div>
+        </div>
+        <button onclick="closeMpModal()" class="text-sky-100 hover:text-white text-lg font-bold">✕</button>
+      </div>
+
+      <div class="p-5 space-y-4 text-xs sm:text-sm text-tinta">
+        <div class="p-3.5 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-between">
+          <div>
+            <span class="text-[11px] font-mono text-sky-800 uppercase block">CONCEPTO SELECCIONADO</span>
+            <strong id="mp-modal-concept" class="text-sm text-sky-950">Plan Pro Orgullo de Barrio</strong>
+          </div>
+          <span id="mp-modal-amount" class="font-serif text-2xl font-extrabold text-sky-700">$199/mes</span>
+        </div>
+
+        <div class="space-y-2 text-xs text-grafito">
+          <p class="font-bold text-tinta">¿Por qué tu pago es 100% seguro?</p>
+          <ul class="space-y-1.5">
+            <li>✅ <strong>Raíces de Iztacalco nunca ve ni guarda los dígitos de tu tarjeta.</strong> El pago se procesa directamente en los servidores bancarios de Mercado Pago (certificación PCI-DSS).</li>
+            <li>✅ Puedes pagar con <strong>Tarjeta de Débito/Crédito, Dinero en Mercado Pago, SPEI o Efectivo en OXXO</strong>.</li>
+            <li>✅ En cuanto Mercado Pago confirma tu pago, activamos la celda <code class="bg-green-100 text-chinampa px-1 rounded font-mono">Estatus_Pago = Activo</code> y tu anuncio aparece en vivo.</li>
+          </ul>
+        </div>
+
+        <div class="pt-2 space-y-2">
+          <a id="mp-modal-external-link" href="https://www.mercadopago.com.mx" target="_blank" rel="noopener noreferrer" onclick="closeMpModal()" class="w-full py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow transition">
+            <span>Abrir Link Oficial de Mercado Pago</span>
+            <span>↗</span>
+          </a>
+          <button onclick="sendPaymentReceiptWhatsApp()" class="w-full py-2.5 rounded-xl bg-chinampaLight hover:bg-green-200 text-chinampa font-bold text-xs flex items-center justify-center gap-1.5 transition">
+            <span>📲 ¿Ya pagaste? Enviar comprobante por WhatsApp para activación inmediata</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL DEL KIT TÉCNICO BLINDADO (CODE.GS CON CANDADOS + MANIFEST.JSON)
+       ===================================================================== -->
+  <div id="tech-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-papel border-2 border-tinta rounded-2xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-4 sm:p-5 bg-tinta text-white flex items-center justify-between">
+        <div>
+          <span class="text-[11px] font-mono uppercase text-amber-300 font-bold">ARQUITECTURA SERVERLESS BLINDADA ($0/MES)</span>
+          <h3 class="font-serif text-lg sm:text-xl font-bold">Kit de Conexión Segura: Google Apps Script (`Code.gs`) + PWA</h3>
+        </div>
+        <button onclick="closeTechModal()" class="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-white flex items-center justify-center font-bold">✕</button>
+      </div>
+
+      <div class="p-5 overflow-y-auto space-y-6 text-xs sm:text-sm">
+        <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 space-y-1">
+          <p class="font-bold">🛡️ Incluye los 3 Candados de Seguridad en el Backend:</p>
+          <ol class="list-decimal list-inside space-y-1 text-xs">
+            <li><strong>Candado 1 en `doPost()`:</strong> Rechaza bots que llenen el campo Honeypot (`website_url_trap`), limpia etiquetas HTML/scripts (`sanitizarTexto()`) y fuerza el estatus inicial a <code>"Pendiente"</code>.</li>
+            <li><strong>Candado 2 en `doGet()`:</strong> Usa una <strong>Lista Blanca de Columnas Públicas</strong> (`limpiarDatosPublicos()`). Solo entrega a la app las filas con estatus <code>"Aprobado"</code> o <code>"Activo"</code>, y <strong>oculta por completo</strong> tus columnas privadas (`Correo_Privado`, `Fecha_De_Cobro`, `Notas_Internas`).</li>
+            <li><strong>Configuración de Links Mercado Pago:</strong> Sustituye en el objeto <code>MP_LINKS</code> tus enlaces reales generados en la sección <em>"Tu Negocio -> Suscripciones"</em> de tu cuenta de Mercado Pago.</li>
+          </ol>
+        </div>
+
+        <!-- Bloque 1: Code.gs Blindado -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-mono font-bold text-xs uppercase text-terracota">1. Archivo: Code.gs (Con Candados 1 y 2 integrados)</span>
+            <button onclick="copyCodeBlock('code-gs-block')" class="px-3 py-1 rounded bg-tinta text-white font-mono text-xs hover:bg-stone-700">
+              Copiar Code.gs Blindado
+            </button>
+          </div>
+          <pre id="code-gs-block" class="p-4 rounded-xl bg-stone-900 text-stone-100 font-mono text-[11px] overflow-x-auto leading-relaxed">/**
+ * BACKEND SERVERLESS BLINDADO: RAÍCES DE IZTACALCO (EDICIÓN GABRIEL RAMOS MILLÁN)
+ * Candado 1: Sanitización Anti-XSS + Honeypot Anti-Bots + Estatus "Pendiente" obligatorio.
+ * Candado 2: Filtrado estricto de filas ("Activo"/"Aprobado") y ocultamiento de columnas privadas.
+ */
+
+// 1. LISTA BLANCA DE COLUMNAS PÚBLICAS (Jamás envía Correo_Privado, Fecha_Cobro ni Notas_Cliente)
+const COLUMNAS_PUBLICAS = {
+  'Config_Alertas': ['Estado_Vial', 'Evento_Deportiva', 'Tianguis_Hoy', 'Aviso_Agua', 'Patrocinador_Alerta'],
+  'Cronicas_Noticias': ['ID', 'Titulo', 'Categoria', 'Sector', 'Resumen', 'Contenido', 'Imagen_URL', 'Fecha'],
+  'Directorio_Negocios': ['ID', 'Nombre', 'Giro', 'Sector', 'Calle', 'Anio_Fundacion', 'Plan', 'Cupon_Activo', 'Catalogo_Rapido', 'WhatsApp'],
+  'Tianguis_Clasificados': ['ID', 'Producto', 'Precio', 'Vendedor', 'Punto_Entrega', 'Destacado', 'Foto_URL', 'WhatsApp'],
+  'Comunidad_Servicios': ['ID', 'Tipo', 'Titulo', 'Calle_Zona', 'Descripcion', 'Destacado_Pagado', 'WhatsApp']
+};
+
+function doGet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const payload = {
+    alertas: limpiarDatosPublicos(ss.getSheetByName('Config_Alertas'), 'Config_Alertas', false),
+    cronicas: limpiarDatosPublicos(ss.getSheetByName('Cronicas_Noticias'), 'Cronicas_Noticias', true),
+    negocios: limpiarDatosPublicos(ss.getSheetByName('Directorio_Negocios'), 'Directorio_Negocios', true),
+    tianguis: limpiarDatosPublicos(ss.getSheetByName('Tianguis_Clasificados'), 'Tianguis_Clasificados', true),
+    comunidad: limpiarDatosPublicos(ss.getSheetByName('Comunidad_Servicios'), 'Comunidad_Servicios', true)
+  };
+  return ContentService.createTextOutput(JSON.stringify(payload))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents || '{}');
+
+    // CANDADO 1.A: Si el bot llenó el campo trampa Honeypot, ignorar silenciosamente
+    if (body.website_url_trap && String(body.website_url_trap).trim() !== '') {
+      return ContentService.createTextOutput(JSON.stringify({ ok: true, blocked: 'honeypot' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName('Solicitudes_Vecinales') || ss.insertSheet('Solicitudes_Vecinales');
+
+    // CANDADO 1.B: Sanitizar texto y forzar estatus inicial a "Pendiente"
+    sheet.appendRow([
+      new Date(),
+      sanitizarTexto(body.tipo),
+      sanitizarTexto(body.sector),
+      sanitizarTexto(body.titulo),
+      sanitizarTexto(body.calle),
+      sanitizarTelefono(body.whatsapp),
+      sanitizarTexto(body.precio),
+      sanitizarTexto(body.descripcion),
+      'Pendiente' // Nada se publica en vivo hasta que tú cambies esta celda desde tu celular
+    ]);
+
+    return ContentService.createTextOutput(JSON.stringify({ ok: true, status: 'Pendiente' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ ok: false }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// CANDADO 2: Filtra filas no aprobadas y elimina columnas sensibles internas
+function limpiarDatosPublicos(sheet, nombreHoja, requiereAprobacion) {
+  if (!sheet) return [];
+  const rows = sheet.getDataRange().getValues();
+  const headers = rows.shift();
+  const permitidas = COLUMNAS_PUBLICAS[nombreHoja] || headers;
+
+  return rows
+    .filter(r => {
+      if (!requiereAprobacion) return true;
+      const idxEstatus = headers.indexOf('Estatus');
+      const idxPago = headers.indexOf('Estatus_Pago');
+      const valorEstatus = idxEstatus > -1 ? String(r[idxEstatus]).trim() : '';
+      const valorPago = idxPago > -1 ? String(r[idxPago]).trim() : '';
+      return valorEstatus === 'Aprobado' || valorPago === 'Activo';
+    })
+    .map(r => {
+      const obj = {};
+      headers.forEach((h, i) => {
+        if (permitidas.indexOf(h) > -1) {
+          obj[h] = r[i];
+        }
+      });
+      return obj;
+    });
+}
+
+function sanitizarTexto(valor) {
+  return String(valor || '')
+    .replace(/[<>]/g, '')
+    .replace(/^[=+\-@]/, "'") // Previene inyección de fórmulas en Google Sheets
+    .trim()
+    .slice(0, 500);
+}
+
+function sanitizarTelefono(tel) {
+  return String(tel || '').replace(/\D/g, '').slice(-10);
+}</pre>
+        </div>
+
+        <!-- Bloque 2: manifest.json -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-mono font-bold text-xs uppercase text-terracota">2. Archivo: manifest.json (Para hacerla App Instalable en Android/iOS)</span>
+            <button onclick="copyCodeBlock('manifest-block')" class="px-3 py-1 rounded bg-tinta text-white font-mono text-xs hover:bg-stone-700">
+              Copiar manifest.json
+            </button>
+          </div>
+          <pre id="manifest-block" class="p-4 rounded-xl bg-stone-900 text-stone-100 font-mono text-[11px] overflow-x-auto leading-relaxed">{
+  "name": "Raíces de Iztacalco - Gabriel Ramos Millán",
+  "short_name": "Raíces Ramos",
+  "description": "Periódico vecinal, comercio de barrio y tianguis digital de la colonia Gabriel Ramos Millán, Iztacalco.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FBF8F3",
+  "theme_color": "#9B2C2C",
+  "orientation": "portrait-primary"
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       LÓGICA JAVASCRIPT COMPLETA + CANDADOS DE SEGURIDAD + PASARELA MP
+       ===================================================================== -->
+  <script>
+    // URL opcional de tu Web App de Google Apps Script cuando lo publiques:
+    const GOOGLE_SHEETS_WEBAPP_URL = ""; 
+
+    // Tu número de WhatsApp de Administrador para recibir comprobantes o dudas de comerciantes:
+    const ADMIN_WHATSAPP = "5512345678";
+
+    // LINKS OFICIALES DE MERCADO PAGO (Reemplaza estos enlaces por los que generes en tu cuenta de Mercado Pago):
+    const MP_LINKS = {
+      SUSCRIPCION_PRO_199: {
+        title: "Suscripción Mensual: Plan Pro Orgullo de Barrio",
+        amount: "$199 MXN / mes",
+        url: "https://www.mercadopago.com.mx/subscriptions" // Pegar aquí tu link mpago.la de suscripción de $199
+      },
+      TIANGUIS_39: {
+        title: "Anuncio Destacado en El Tianguis Digital (7 días)",
+        amount: "$39 MXN (Pago único)",
+        url: "https://www.mercadopago.com.mx/link-de-pago" // Pegar aquí tu link mpago.la de $39
+      },
+      VACANTE_100: {
+        title: "Publicación de Vacante en Bolsa de Trabajo (15 días)",
+        amount: "$100 MXN (Pago único)",
+        url: "https://www.mercadopago.com.mx/link-de-pago" // Pegar aquí tu link mpago.la de $100
+      },
+      BOOST_50: {
+        title: "Boost Vecinal de Mascota Perdida (7 días)",
+        amount: "$50 MXN (Pago único)",
+        url: "https://www.mercadopago.com.mx/link-de-pago" // Pegar aquí tu link mpago.la de $50
+      }
+    };
+
+    // Estado global de filtros y carritos por negocio
+    let currentTab = 'cronicas';
+    let currentSector = 'TODOS';
+    let currentGiro = 'TODOS';
+    let currentDeliveryPoint = 'TODOS';
+    let searchQuery = '';
+    const businessCarts = {}; // { negocioId: { itemIndex: qty } }
+    let lastFormSubmitTimestamp = 0; // Candado 1: Rate-limit anti-spam
+
+    // CANDADO 1 (Frontend): Función sanitizadora contra inyección XSS
+    function sanitizeHTML(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+        .trim();
+    }
+
+    // ---------------------------------------------------------------------
+    // 1. DATOS HIPERLOCALES DE LA COLONIA GABRIEL RAMOS MILLÁN
+    // ---------------------------------------------------------------------
+    const cronicasData = [
+      {
+        id: 'c1',
+        titulo: 'El Mercado 204 Bramadero: Más de medio siglo siendo el corazón del abasto en Sur 163',
+        categoria: 'RAÍCES E HISTORIA',
+        sector: 'Bramadero',
+        fecha: 'Crónica de Fin de Semana',
+        resumen: 'Desde las primeras romerías hasta convertirse en el punto donde convergen tres generaciones de familias iztacalquenses cada domingo.',
+        contenidoCompleto: 'Fundado para abastecer a las familias trabajadoras que poblaron la sección Bramadero, el Mercado 204 conserva locales atendidos por los nietos de sus fundadores originales: desde chiles secos y moles artesanales hasta las tradicionales carnitas de fin de semana.',
+        patrocinado: false
+      },
+      {
+        id: 'c2',
+        titulo: 'El Rincón de la Ramos: "Panadería Tradicional La Espiga de Tlacotal", 38 años horneando en Sur 125',
+        categoria: 'PUBLIRREPORTAJE • SELLO DE TRADICIÓN',
+        sector: 'Tlacotal',
+        fecha: 'Historia de Negocio Vecino',
+        resumen: 'Don Arnulfo llegó a la esquina de Sur 125 y Oriente 100-A en 1988. Hoy sus conchas de mantequilla y bolillos calientes siguen saliendo a las 6:30 AM.',
+        contenidoCompleto: 'Con horno de ladrillo original y recetas sin conservadores, La Espiga de Tlacotal ahora recibe pedidos de charolas familiares y pasteles directamente desde el directorio de Raíces de Iztacalco.',
+        patrocinado: true,
+        negocioTarget: 'Panadería La Espiga de Tlacotal'
+      },
+      {
+        id: 'c3',
+        titulo: 'De Santa Anita a Avenida Recreo: Cuando las canoas de flores cruzaban a unos pasos de nuestra colonia',
+        categoria: 'MEMORIA DE IZTACALCO',
+        sector: 'Coyuya / Plutarco',
+        fecha: 'Archivo Histórico',
+        resumen: 'A pocos minutos de Metro Coyuya y Plutarco Elías Calles estuvo el embarcadero más famoso del México antiguo durante el Viernes de Dolores.',
+        contenidoCompleto: 'El Paseo de la Viga y el pueblo originario de Santa Anita Zacatlamanco marcaron la vocación comerciante y festiva que heredaron las colonias contiguas como la Gabriel Ramos Millán y Viaducto Piedad.',
+        patrocinado: false
+      }
+    ];
+
+    const negociosData = [
+      {
+        id: 'neg1',
+        nombre: 'Carnitas y Chicharrón "El Patrón del Bramadero"',
+        giro: 'Comida y Antojitos',
+        sector: 'Bramadero',
+        calle: 'Sur 163 casi esq. Oriente 108 (A unos pasos del Mercado Bramadero)',
+        anioFundacion: 1994,
+        plan: 'PRO',
+        cupon: '🎁 OFERTA DEL JUEVES Y VIERNES: Medio litro de salsa de habanero y nopales gratis en la compra de 1 kg de carnitas mencionando Raíces de Iztacalco.',
+        historia: 'Más de 30 años preparando carnitas estilo Michoacán en cazo de cobre para las familias de la sección Bramadero.',
+        whatsapp: '5512345678',
+        catalogo: [
+          { nombre: '1 Kg de Carnitas Surtidas (Maciza, Costilla, Cuerito)', precio: 290 },
+          { nombre: '1/2 Kg de Carnitas + Tortillas hechas a mano', precio: 155 },
+          { nombre: 'Orden de 4 Tacos bien servidos con copia', precio: 110 }
+        ]
+      },
+      {
+        id: 'neg2',
+        nombre: 'Panadería Artesanal "La Espiga de Tlacotal"',
+        giro: 'Comida y Antojitos',
+        sector: 'Tlacotal',
+        calle: 'Sur 125 esq. Oriente 100-A (Frente a Mi Mercado Tlacotal)',
+        anioFundacion: 1988,
+        plan: 'PRO',
+        cupon: '🥐 CUPÓN VECINAL: 6 Conchas rellenas de nata o chocolate por $95 MXN pidiendo por la App.',
+        historia: 'Horneando pan tradicional desde 1988 en el corazón de la sección Tlacotal.',
+        whatsapp: '5512345678',
+        catalogo: [
+          { nombre: 'Charola de 10 piezas de pan dulce tradicional', precio: 135 },
+          { nombre: 'Paquete de 6 Conchas rellenas de nata', precio: 95 },
+          { nombre: 'Rosca familiar de mantequilla recién horneada', precio: 180 }
+        ]
+      },
+      {
+        id: 'neg3',
+        nombre: 'Veterinaria y Estética Canina "Huellitas Sur 125"',
+        giro: 'Salud y Mascotas',
+        sector: 'Tlacotal',
+        calle: 'Sur 125 #412 entre Av. Recreo y Oriente 102',
+        anioFundacion: 2009,
+        plan: 'PRO',
+        cupon: '🐾 PROMO VECINAL: Corte de uñas y glándulas sin costo al agendar baño medicado o estética completa.',
+        historia: 'Cuidando a los lomitos y michis de la Ramos Millán con médicos veterinarios titulados de la UNAM.',
+        whatsapp: '5512345678',
+        catalogo: [
+          { nombre: 'Baño y Estética Canina Raza Pequeña/Mediana', precio: 220 },
+          { nombre: 'Consulta Médica General + Desparasitación', precio: 250 },
+          { nombre: 'Paquete Vacunación AnualSéxtuple', precio: 380 }
+        ]
+      },
+      {
+        id: 'neg4',
+        nombre: 'Ferretería y Tlapalería "Casa Morales"',
+        giro: 'Talleres y Tlapalerías',
+        sector: 'Cuchilla',
+        calle: 'Sur 149 esq. Oriente 106, Secc. Cuchilla Ramos Millán',
+        anioFundacion: 1985,
+        plan: 'PRO',
+        cupon: '🔧 ENVÍO SIN COSTO a domicilio dentro de la Ramos Millán en compras mayores a $250 MXN.',
+        historia: '41 años sacando de apuros plomería, electricidad y pintura a los vecinos de la Cuchilla y Bramadero.',
+        whatsapp: '5512345678',
+        catalogo: [
+          { nombre: 'Kit Reparación Fuga de WC Universal', precio: 145 },
+          { nombre: 'Cubeta Impermeabilizante Fibratado 5 Años (19L)', precio: 890 },
+          { nombre: 'Juego de Llaves Mezcladoras para Fregadero', precio: 320 }
+        ]
+      },
+      {
+        id: 'neg5',
+        nombre: 'Cocina Económica "Doña Lupe - Sazón de Casa"',
+        giro: 'Comida y Antojitos',
+        sector: 'Av. Té / Alcaldía',
+        calle: 'Av. Té a media cuadra de la Explanada de la Alcaldía Iztacalco',
+        anioFundacion: 2016,
+        plan: 'BASICO',
+        horario: 'Lunes a Sábado de 12:30 a 17:00 h'
+      },
+      {
+        id: 'neg6',
+        nombre: 'Barbería y Peluquería Clásica "Don Fidel"',
+        giro: 'Belleza y Barberías',
+        sector: 'Coyuya / Plutarco',
+        calle: 'Av. Plutarco Elías Calles cerca de Metro Coyuya',
+        anioFundacion: 1999,
+        plan: 'BASICO',
+        horario: 'Martes a Domingo de 10:00 a 20:00 h'
+      }
+    ];
+
+    const tianguisData = [
+      {
+        id: 't1',
+        producto: 'Bicicleta Urbana Rodada 26 con Canastilla y Luces LED (Seminueva)',
+        precio: '$1,850 MXN',
+        vendedor: 'Vecino: Carlos M. (Sur 157)',
+        sector: 'Bramadero',
+        puntoEntrega: 'Explanada Alcaldía Iztacalco',
+        destacado: true,
+        descripcion: 'Ideal para moverse por la ciclovía o ir al mercado. Frenos recién ajustados, llantas al 90%. Entrego frente a Ventanilla Única de la Alcaldía.',
+        whatsapp: '5512345678'
+      },
+      {
+        id: 't2',
+        producto: 'Charola de Roles de Canela Glaseados Recién Horneados (Sobre Pedido)',
+        precio: '$140 MXN (6 piezas grandes)',
+        vendedor: 'Emprendimiento: Repostería Ceci & Fam',
+        sector: 'Tlacotal',
+        puntoEntrega: 'Entrada Mercado Tlacotal',
+        destacado: true,
+        descripcion: 'Horneamos sábado y domingo por la mañana. Pide hoy por WhatsApp y recoge calientitos en la entrada de Mi Mercado Tlacotal o Metro Iztacalco.',
+        whatsapp: '5512345678'
+      },
+      {
+        id: 't3',
+        producto: 'Escritorio Compacto de Madera para Home Office o Estudiante',
+        precio: '$650 MXN',
+        vendedor: 'Vecina: Laura G.',
+        sector: 'Av. Té / Alcaldía',
+        puntoEntrega: 'Metro Iztacalco (Línea 8)',
+        destacado: false,
+        descripcion: 'Mide 100x50 cm, cabe perfecto en departamento. Sin detalles, lo vendo por mudanza.',
+        whatsapp: '5512345678'
+      },
+      {
+        id: 't4',
+        producto: 'Lote de 4 Sudaderas y Chamarra de Mezclilla Talla M (Excelente Estado)',
+        precio: '$320 MXN por el paquete',
+        vendedor: 'Vecina: Mariana R.',
+        sector: 'Bramadero',
+        puntoEntrega: 'Entrada Mercado Bramadero',
+        destacado: false,
+        descripcion: 'Ropa de segunda mano seleccionada, limpia y sin desgaste. Entrego sábado a mediodía en la entrada principal del Mercado 204.',
+        whatsapp: '5512345678'
+      },
+      {
+        id: 't5',
+        producto: 'Monitor 24 Pulgadas Full HD HDMI para Computadora o Consola',
+        precio: '$1,200 MXN',
+        vendedor: 'Vecino: Ing. Roberto H.',
+        sector: 'Coyuya / Plutarco',
+        puntoEntrega: 'Metro Coyuya',
+        destacado: false,
+        descripcion: 'Incluye cable HDMI y eliminador original. Podemos probarlo antes de entregar.',
+        whatsapp: '5512345678'
+      }
+    ];
+
+    const mascotasData = [
+      {
+        id: 'm1',
+        tipo: 'PERDIDO • BOOST VECINAL ACTIVO',
+        nombre: 'Se busca a "Canelo" (Mestizo miel, collar azul)',
+        sector: 'Bramadero',
+        calle: 'Visto por última vez en Sur 159 esq. Oriente 106',
+        descripcion: 'Se salió asustado por cohetes ayer por la tarde. Es muy noble y lleva placa con teléfono. Se ofrece gratificación.',
+        destacado: true,
+        whatsapp: '5512345678'
+      },
+      {
+        id: 'm2',
+        tipo: 'ENCONTRADO EN RESGUARDO',
+        nombre: 'Perrito Schnauzer gris encontrado cerca de Av. Té',
+        sector: 'Av. Té / Alcaldía',
+        calle: 'Resguardado cerca de la Explanada de la Alcaldía Iztacalco',
+        descripcion: 'Trae pechera roja sin plaquita. Está sano y tranquilo; buscamos a su familia presentando foto de comprobación.',
+        destacado: false,
+        whatsapp: '5512345678'
+      },
+      {
+        id: 'm3',
+        tipo: 'ADOPCIÓN RESPONSABLE',
+        nombre: 'Cachorrita de 3 meses desparasitada busca hogar en la colonia',
+        sector: 'Tlacotal',
+        calle: 'Sección Tlacotal (Sur 125)',
+        descripcion: 'Talla mediana, súper cariñosa y conviviente con niños. Se entrega con cartilla de vacunación.',
+        destacado: false,
+        whatsapp: '5512345678'
+      }
+    ];
+
+    const oficiosData = [
+      {
+        id: 'o1',
+        oficio: 'Plomero y Destapacaños Urgente 24/7',
+        nombre: 'Maestro Jorge Ramírez (22 años en la Ramos)',
+        sector: 'Bramadero',
+        calle: 'Base en Sur 157 • Llega en 15 min',
+        calificacion: '4.9 ★ (42 reseñas vecinales)',
+        garantia: 'Presupuesto sin costo en fugas de agua, bombas, boilers y tinacos.',
+        whatsapp: '5512345678'
+      },
+      {
+        id: 'o2',
+        oficio: 'Cervisio de Cerrajería Residencial y Automotriz',
+        nombre: 'Cerrajería Hnos. Castillo',
+        sector: 'Tlacotal',
+        calle: 'Oriente 100-A junto al Mercado Tlacotal',
+        calificacion: '5.0 ★ (31 reseñas vecinales)',
+        garantia: 'Aperturas sin dañar tu chapa, duplicados y cambio de combinación.',
+        whatsapp: '5512345678'
+      },
+      {
+        id: 'o3',
+        oficio: 'Electricista Doméstico y Cortocircuitos',
+        nombre: 'Téc. Armando Solís',
+        sector: 'Cuchilla',
+        calle: 'Sur 145, Secc. Cuchilla Ramos Millán',
+        calificacion: '4.8 ★ (19 reseñas vecinales)',
+        garantia: 'Revisión de centros de carga, tierras físicas, apagadores y bombas.',
+        whatsapp: '5512345678'
+      }
+    ];
+
+    const empleosData = [
+      {
+        id: 'e1',
+        puesto: 'Ayudante de Mostrador y Atención a Clientes (Medio Tiempo o Completo)',
+        negocio: 'Panadería La Espiga de Tlacotal',
+        sector: 'Tlacotal',
+        calle: 'Sur 125 esq. Oriente 100-A',
+        sueldo: '$1,900 MXN semanales + pan de casa',
+        requisitos: 'Mayor de edad, trato amable con los vecinos, vivir en la Ramos Millán o colonias vecinas.',
+        whatsapp: '5512345678'
+      },
+      {
+        id: 'e2',
+        puesto: 'Repartidor en Bicicleta o Moto Propia (Solo Entregas en Iztacalco)',
+        negocio: 'Ferretería Casa Morales',
+        sector: 'Cuchilla',
+        calle: 'Sur 149, Secc. Cuchilla',
+        sueldo: '$2,100 MXN semanales + propinas íntegras',
+        requisitos: 'Conocer bien las calles Sur y Oriente de la colonia. Horario de 9:00 a 17:30 h.',
+        whatsapp: '5512345678'
+      },
+      {
+        id: 'e3',
+        puesto: 'Auxiliar de Estética Canina con Experiencia en Baño y Corte',
+        negocio: 'Veterinaria Huellitas Sur 125',
+        sector: 'Tlacotal',
+        calle: 'Sur 125 #412',
+        sueldo: 'Sueldo base + comisión por perro atendido',
+        requisitos: 'Amor y paciencia absoluta con las mascotas. Martes a Sábado.',
+        whatsapp: '5512345678'
+      }
+    ];
+
+    // ---------------------------------------------------------------------
+    // 2. FUNCIONES DE RENDERIZADO DINÁMICO
+    // ---------------------------------------------------------------------
+
+    function matchesFilters(itemSector, textBlob) {
+      const sectorOk = (currentSector === 'TODOS') || (itemSector === currentSector);
+      const queryOk = !searchQuery || textBlob.toLowerCase().includes(searchQuery.toLowerCase());
+      return sectorOk && queryOk;
+    }
+
+    function updateFilterBanner() {
+      const banner = document.getElementById('active-filter-banner');
+      const textEl = document.getElementById('active-filter-text');
+      const parts = [];
+      if (currentSector !== 'TODOS') parts.push(`Sector: ${currentSector}`);
+      if (searchQuery) parts.push(`Búsqueda: "${searchQuery}"`);
+      if (parts.length > 0) {
+        banner.classList.remove('hidden');
+        textEl.textContent = parts.join(' • ');
+      } else {
+        banner.classList.add('hidden');
+      }
+    }
+
+    function renderCronicas() {
+      const container = document.getElementById('cronicas-grid');
+      const filtered = cronicasData.filter(c => matchesFilters(c.sector, `${c.titulo} ${c.resumen} ${c.sector}`));
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="col-span-full p-8 text-center bg-white rounded-2xl border border-borde text-grafito text-sm">No hay crónicas en este sector con ese criterio. Prueba ver toda la colonia.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(c => `
+        <article class="bg-white rounded-2xl border ${c.patrocinado ? 'border-amber-400 ring-1 ring-amber-300' : 'border-borde'} shadow-editorial p-5 flex flex-col justify-between hover:shadow-cardHover transition">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2.5">
+              <span class="text-[10px] font-mono uppercase font-bold px-2.5 py-0.5 rounded-full ${c.patrocinado ? 'bg-amber-100 text-amber-900' : 'bg-crema text-terracota'}">
+                ${c.categoria}
+              </span>
+              <span class="text-[11px] font-mono text-grafito">📍 ${c.sector}</span>
+            </div>
+            <h4 class="font-serif font-bold text-lg text-tinta leading-snug mb-2">${c.titulo}</h4>
+            <p class="text-xs sm:text-sm text-grafito leading-relaxed mb-3">${c.resumen}</p>
+            <p class="text-xs text-tinta bg-papel p-3 rounded-xl border border-borde leading-relaxed">${c.contenidoCompleto}</p>
+          </div>
+          <div class="pt-4 mt-4 border-t border-borde flex items-center justify-between">
+            <span class="text-[11px] font-mono text-grafito">${c.fecha}</span>
+            ${c.patrocinado ? `
+              <button onclick="switchTab('comercio')" class="text-xs font-bold text-terracota hover:underline">
+                Ver menú y pedir por WhatsApp →
+              </button>
+            ` : `
+              <button onclick="shareOnWhatsApp('Mira esta crónica de nuestra colonia Gabriel Ramos Millán: ${c.titulo}')" class="text-xs font-bold text-chinampa hover:underline">
+                📲 Compartir nota
+              </button>
+            `}
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function renderNegocios() {
+      const container = document.getElementById('negocios-grid');
+      const filtered = negociosData.filter(n => {
+        const giroOk = (currentGiro === 'TODOS') || (n.giro === currentGiro) || (currentGiro === 'Mercados y Abasto' && (n.sector === 'Bramadero' || n.sector === 'Tlacotal'));
+        return giroOk && matchesFilters(n.sector, `${n.nombre} ${n.calle} ${n.giro} ${n.historia || ''}`);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="col-span-full p-8 text-center bg-white rounded-2xl border border-borde text-grafito text-sm">No encontramos locales con ese filtro.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(n => {
+        const aniosEnColonia = 2026 - n.anioFundacion;
+        const tieneSelloTradicion = aniosEnColonia >= 15;
+
+        if (n.plan === 'PRO') {
+          const cart = businessCarts[n.id] || {};
+          let totalPedido = 0;
+          let totalItems = 0;
+          n.catalogo.forEach((prod, idx) => {
+            const qty = cart[idx] || 0;
+            totalPedido += qty * prod.precio;
+            totalItems += qty;
+          });
+
+          return `
+            <div class="bg-white rounded-2xl border-2 border-amber-400/90 shadow-editorial overflow-hidden flex flex-col justify-between">
+              <div>
+                <!-- Header de Tarjeta PRO -->
+                <div class="bg-gradient-to-r from-stone-900 via-stone-800 to-stone-900 text-white px-4 py-2.5 flex items-center justify-between text-[11px] font-mono">
+                  <span class="text-amber-300 font-bold flex items-center gap-1">
+                    ★ NEGOCIO VERIFICADO PRO
+                  </span>
+                  ${tieneSelloTradicion ? `
+                    <span class="bg-amber-400 text-stone-950 px-2 py-0.5 rounded font-bold">
+                      🏅 ${aniosEnColonia} AÑOS EN LA RAMOS
+                    </span>
+                  ` : `<span class="text-stone-300">Desde ${n.anioFundacion}</span>`}
+                </div>
+
+                <div class="p-5 space-y-3">
+                  <div class="flex items-center justify-between text-xs font-mono text-grafito">
+                    <span class="font-semibold text-terracota">${n.giro}</span>
+                    <span>📍 Secc. ${n.sector}</span>
+                  </div>
+
+                  <h3 class="font-serif text-xl font-bold text-tinta leading-snug">${n.nombre}</h3>
+                  <p class="text-xs text-tinta font-medium flex items-start gap-1.5">
+                    <span>🗺️</span> <span>${n.calle}</span>
+                  </p>
+                  <p class="text-xs text-grafito italic">"${n.historia}"</p>
+
+                  <!-- Cupón Activo -->
+                  <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 font-medium">
+                    ${n.cupon}
+                  </div>
+
+                  <!-- Mini Catálogo Interactivo para armar pedido a WhatsApp -->
+                  <div class="pt-2 border-t border-borde">
+                    <span class="block text-[11px] font-mono uppercase font-bold text-tinta mb-2">
+                      🛒 Arma tu pedido rápido (Sin comisiones):
+                    </span>
+                    <div class="space-y-2">
+                      ${n.catalogo.map((item, idx) => {
+                        const qty = cart[idx] || 0;
+                        return `
+                          <div class="flex items-center justify-between gap-2 p-2 rounded-lg bg-papel border border-borde text-xs">
+                            <div class="leading-tight">
+                              <span class="font-semibold text-tinta block">${item.nombre}</span>
+                              <span class="font-mono text-chinampa font-bold">$${item.precio} MXN</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                              <button onclick="updateCartItem('${n.id}', ${idx}, -1)" class="w-6 h-6 rounded bg-white border border-borde font-bold text-tinta hover:bg-stone-100">-</button>
+                              <span class="font-mono font-bold w-5 text-center">${qty}</span>
+                              <button onclick="updateCartItem('${n.id}', ${idx}, 1)" class="w-6 h-6 rounded bg-terracota text-white font-bold hover:bg-terracotaDark">+</button>
+                            </div>
+                          </div>
+                        `;
+                      }).join('')}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botón de Envío a WhatsApp con Marca de Agua -->
+              <div class="p-4 bg-crema/70 border-t border-borde">
+                <button onclick="sendBusinessOrderWhatsApp('${n.id}')" class="w-full py-2.5 px-4 rounded-xl bg-chinampa hover:bg-green-800 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition">
+                  <span>📲 ${totalItems > 0 ? `Enviar Pedido por WhatsApp ($${totalPedido} MXN)` : 'Pedir o Preguntar por WhatsApp'}</span>
+                </button>
+              </div>
+            </div>
+          `;
+        } else {
+          // Tarjeta de Perfil Básico Gratuito (Gancho para vender el Plan Pro de $199)
+          return `
+            <div class="bg-white/80 rounded-2xl border border-dashed border-stone-300 p-5 flex flex-col justify-between">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between text-[11px] font-mono text-grafito">
+                  <span class="bg-stone-200 text-stone-700 px-2 py-0.5 rounded font-semibold">PERFIL BÁSICO GRATUITO</span>
+                  <span>📍 Secc. ${n.sector}</span>
+                </div>
+                <h3 class="font-serif text-lg font-bold text-tinta">${n.nombre}</h3>
+                <p class="text-xs text-grafito">🗺️ ${n.calle}</p>
+                <p class="text-xs text-grafito">🕒 ${n.horario || 'Horario comercial'} • Fundado en ${n.anioFundacion}</p>
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-stone-200 bg-amber-50/60 -mx-5 -mb-5 p-4 rounded-b-2xl flex items-center justify-between gap-2">
+                <span class="text-[11px] text-amber-950 font-medium">
+                  ¿Eres el dueño de este local? Activa tu menú y pedidos por WhatsApp.
+                </span>
+                <button onclick="selectPlanInForm('Plan Pro Negocio ($199/mes)')" class="px-3 py-1.5 rounded-lg bg-terracota text-white font-bold text-[11px] shrink-0 hover:bg-terracotaDark">
+                  Activar Pro ($199)
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    function renderTianguis() {
+      const container = document.getElementById('tianguis-grid');
+      const filtered = tianguisData.filter(t => {
+        const pointOk = (currentDeliveryPoint === 'TODOS') || (t.puntoEntrega === currentDeliveryPoint);
+        return pointOk && matchesFilters(t.sector, `${t.producto} ${t.descripcion} ${t.puntoEntrega}`);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="col-span-full p-8 text-center bg-white rounded-2xl border border-borde text-grafito text-sm">No hay artículos en este punto de entrega. Prueba ver todos los puntos.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(t => `
+        <div class="bg-white rounded-2xl border ${t.destacado ? 'border-2 border-terracota shadow-editorial' : 'border-borde shadow-sm'} p-5 flex flex-col justify-between">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              ${t.destacado ? `
+                <span class="text-[10px] font-mono uppercase font-bold bg-terracota text-white px-2.5 py-0.5 rounded-full">
+                  🔥 DESTACADO EN LA RAMOS
+                </span>
+              ` : `
+                <span class="text-[10px] font-mono uppercase font-semibold bg-crema text-grafito px-2.5 py-0.5 rounded-full">
+                  CLASIFICADO VECINAL
+                </span>
+              `}
+              <span class="text-[11px] font-mono text-grafito">Secc. ${t.sector}</span>
+            </div>
+
+            <h3 class="font-serif font-bold text-lg text-tinta leading-snug">${t.producto}</h3>
+            <div class="font-mono text-xl font-extrabold text-chinampa">${t.precio}</div>
+            <p class="text-xs text-grafito leading-relaxed">${t.descripcion}</p>
+
+            <div class="p-2.5 rounded-xl bg-papel border border-borde text-xs space-y-1">
+              <div class="font-bold text-tinta flex items-center gap-1.5">
+                <span>🛡️ Punto de Entrega Seguro:</span>
+              </div>
+              <div class="font-mono text-terracota font-semibold">${t.puntoEntrega}</div>
+              <div class="text-[11px] text-grafito">${t.vendedor}</div>
+            </div>
+          </div>
+
+          <button onclick="contactSellerTianguis('${t.id}')" class="mt-4 w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition">
+            <span>📲 Acordar entrega por WhatsApp</span>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function renderComunidad() {
+      // Mascotas
+      const mGrid = document.getElementById('mascotas-grid');
+      mGrid.innerHTML = mascotasData
+        .filter(m => matchesFilters(m.sector, `${m.nombre} ${m.calle} ${m.descripcion}`))
+        .map(m => `
+          <div class="bg-white rounded-2xl border ${m.destacado ? 'border-2 border-red-600 shadow-editorial' : 'border-borde'} p-5 flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="inline-block text-[10px] font-mono font-bold uppercase px-2.5 py-0.5 rounded-full ${m.destacado ? 'bg-red-600 text-white' : 'bg-amber-100 text-amber-900'}">
+                ${m.tipo}
+              </span>
+              <h4 class="font-serif font-bold text-lg text-tinta">${m.nombre}</h4>
+              <p class="text-xs font-bold text-terracota">📍 ${m.calle} (${m.sector})</p>
+              <p class="text-xs text-grafito leading-relaxed">${m.descripcion}</p>
+            </div>
+            <button onclick="openWhatsAppDirect('${m.whatsapp}', 'Hola vecino, vi la alerta de mascota (${m.nombre}) en Raíces de Iztacalco y tengo información:')" class="mt-4 w-full py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-800 font-bold text-xs transition">
+              📲 Contactar a la familia por WhatsApp
+            </button>
+          </div>
+        `).join('');
+
+      // Oficios
+      const oGrid = document.getElementById('oficios-grid');
+      oGrid.innerHTML = oficiosData
+        .filter(o => matchesFilters(o.sector, `${o.oficio} ${o.nombre} ${o.garantia}`))
+        .map(o => `
+          <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between text-[11px] font-mono">
+                <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">✓ OFICIO VERIFICADO</span>
+                <span class="text-amber-700 font-bold">${o.calificacion}</span>
+              </div>
+              <h4 class="font-serif font-bold text-lg text-tinta">${o.oficio}</h4>
+              <p class="text-xs font-semibold text-tinta">${o.nombre}</p>
+              <p class="text-xs text-grafito">📍 ${o.calle}</p>
+              <p class="text-xs text-grafito bg-papel p-2.5 rounded-lg border border-borde">${o.garantia}</p>
+            </div>
+            <button onclick="openWhatsAppDirect('${o.whatsapp}', 'Hola ${o.nombre}, vi su perfil en El Oficio Verificado de Raíces de Iztacalco (Ramos Millán) y necesito una cotización:')" class="mt-4 w-full py-2.5 rounded-xl bg-chinampa hover:bg-green-800 text-white font-bold text-xs transition">
+              📲 Solicitar servicio por WhatsApp
+            </button>
+          </div>
+        `).join('');
+
+      // Empleos
+      const eGrid = document.getElementById('empleos-grid');
+      eGrid.innerHTML = empleosData
+        .filter(e => matchesFilters(e.sector, `${e.puesto} ${e.negocio} ${e.requisitos}`))
+        .map(e => `
+          <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
+            <div class="space-y-2">
+              <span class="text-[10px] font-mono font-bold uppercase bg-chinampaLight text-chinampa px-2.5 py-0.5 rounded-full">
+                📍 A 15 MIN DE CASA • ${e.sector}
+              </span>
+              <h4 class="font-serif font-bold text-lg text-tinta leading-snug">${e.puesto}</h4>
+              <p class="text-xs font-bold text-terracota">🏪 ${e.negocio} (${e.calle})</p>
+              <p class="text-xs font-mono font-bold text-chinampa">💰 ${e.sueldo}</p>
+              <p class="text-xs text-grafito leading-relaxed">${e.requisitos}</p>
+            </div>
+            <button onclick="openWhatsAppDirect('${e.whatsapp}', 'Hola, vi la vacante de ${e.puesto} en ${e.negocio} publicada en Raíces de Iztacalco y me interesa postularme:')" class="mt-4 w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs transition">
+              📲 Postularme por WhatsApp
+            </button>
+          </div>
+        `).join('');
+    }
+
+    function renderAll() {
+      updateFilterBanner();
+      renderCronicas();
+      renderNegocios();
+      renderTianguis();
+      renderComunidad();
+    }
+
+    // ---------------------------------------------------------------------
+    // 3. INTERACCIONES: CARRITO WHATSAPP, CÁPSULA DEL TIEMPO Y NAVEGACIÓN
+    // ---------------------------------------------------------------------
+
+    function switchTab(tabName) {
+      currentTab = tabName;
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.add('hidden');
+      });
+      const activePanel = document.getElementById(`tab-${tabName}`);
+      if (activePanel) activePanel.classList.remove('hidden');
+
+      // Actualizar botones Desktop
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        const isTarget = btn.getAttribute('data-tab-btn') === tabName;
+        if (btn.getAttribute('data-tab-btn') === 'anunciate') return;
+        btn.className = isTarget
+          ? 'nav-tab-btn px-5 py-2.5 rounded-t-lg font-bold text-sm border-b-2 border-terracota text-terracota bg-crema/70 flex items-center gap-2 transition'
+          : 'nav-tab-btn px-5 py-2.5 rounded-t-lg font-semibold text-sm border-b-2 border-transparent text-grafito hover:text-tinta flex items-center gap-2 transition';
+      });
+
+      // Actualizar botones Mobile
+      document.querySelectorAll('.nav-tab-btn-mobile').forEach(btn => {
+        const isTarget = btn.getAttribute('data-tab-btn') === tabName;
+        if (btn.getAttribute('data-tab-btn') === 'anunciate') return;
+        btn.className = isTarget
+          ? 'nav-tab-btn-mobile flex flex-col items-center justify-center py-1 rounded-xl text-terracota font-bold bg-amber-50'
+          : 'nav-tab-btn-mobile flex flex-col items-center justify-center py-1 rounded-xl text-grafito font-medium';
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setSectorFilter(sector) {
+      currentSector = sector;
+      document.querySelectorAll('.sector-pill').forEach(btn => {
+        const active = btn.getAttribute('data-sector') === sector;
+        btn.className = active
+          ? 'sector-pill px-3 py-1 rounded-full text-xs font-bold bg-terracota text-white transition shrink-0'
+          : 'sector-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 transition shrink-0';
+      });
+      renderAll();
+    }
+
+    function setGiroFilter(giro) {
+      currentGiro = giro;
+      document.querySelectorAll('.giro-pill').forEach(btn => {
+        const active = btn.getAttribute('data-giro') === giro;
+        btn.className = active
+          ? 'giro-pill px-3.5 py-1.5 rounded-xl text-xs font-bold bg-tinta text-white transition shrink-0'
+          : 'giro-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-borde text-tinta hover:border-terracota transition shrink-0';
+      });
+      renderNegocios();
+    }
+
+    function setDeliveryPointFilter(point) {
+      currentDeliveryPoint = point;
+      document.querySelectorAll('.point-pill').forEach(btn => {
+        const active = btn.getAttribute('data-point') === point;
+        btn.className = active
+          ? 'point-pill px-3 py-1 rounded-full text-xs font-bold bg-tinta text-white shrink-0'
+          : 'point-pill px-3 py-1 rounded-full text-xs font-semibold bg-crema text-tinta hover:bg-stone-200 shrink-0';
+      });
+      renderTianguis();
+    }
+
+    function handleGlobalSearch(val) {
+      searchQuery = val.trim();
+      renderAll();
+    }
+
+    function toggleTimeCapsule(era) {
+      const img = document.getElementById('capsule-img');
+      const badge = document.getElementById('capsule-badge');
+      const caption = document.getElementById('capsule-caption');
+      const btn1955 = document.getElementById('btn-era-1955');
+      const btn2026 = document.getElementById('btn-era-2026');
+
+      if (era === '1955') {
+        img.classList.add('sepia-vintage');
+        badge.textContent = 'AÑO 1952: Trazo de las calles Sur y Oriente sobre antiguos terrenos maiceros';
+        caption.textContent = 'Antes del asfalto en Avenida Té y Plutarco Elías Calles, las familias fundadoras de la Ramos Millán convivían con zanjas de riego chinampero que conectaban con el antiguo Canal de la Viga y Santa Anita.';
+        btn1955.className = 'px-3 py-1 rounded-md text-xs font-bold bg-terracota text-white transition';
+        btn2026.className = 'px-3 py-1 rounded-md text-xs font-semibold text-tinta hover:bg-white/60 transition';
+      } else {
+        img.classList.remove('sepia-vintage');
+        badge.textContent = 'HOY EN 2026: Corazón comercial de Iztacalco entre Bramadero, Tlacotal y Av. Té';
+        caption.textContent = 'Hoy la colonia Gabriel Ramos Millán es uno de los barrios con mayor vida comercial de la CDMX, rodeada por el Metro Iztacalco, Metro Coyuya, la Explanada de la Alcaldía y cientos de negocios familiares.';
+        btn2026.className = 'px-3 py-1 rounded-md text-xs font-bold bg-terracota text-white transition';
+        btn1955.className = 'px-3 py-1 rounded-md text-xs font-semibold text-tinta hover:bg-white/60 transition';
+      }
+    }
+
+    function toggleReadMoreMain() {
+      const box = document.getElementById('main-story-expanded');
+      const btn = document.getElementById('btn-read-more-main');
+      const isHidden = box.classList.contains('hidden');
+      if (isHidden) {
+        box.classList.remove('hidden');
+        btn.innerHTML = '<span>Mostrar menos</span> ▲';
+      } else {
+        box.classList.add('hidden');
+        btn.innerHTML = '<span>Leer crónica completa de la colonia</span> ▼';
+      }
+    }
+
+    function updateCartItem(negocioId, itemIdx, delta) {
+      if (!businessCarts[negocioId]) businessCarts[negocioId] = {};
+      const current = businessCarts[negocioId][itemIdx] || 0;
+      const next = Math.max(0, current + delta);
+      businessCarts[negocioId][itemIdx] = next;
+      renderNegocios();
+    }
+
+    function sendBusinessOrderWhatsApp(negocioId) {
+      const n = negociosData.find(item => item.id === negocioId);
+      if (!n) return;
+      const cart = businessCarts[negocioId] || {};
+      const lines = [];
+      let total = 0;
+
+      n.catalogo.forEach((prod, idx) => {
+        const qty = cart[idx] || 0;
+        if (qty > 0) {
+          const sub = qty * prod.precio;
+          total += sub;
+          lines.push(`• ${qty}x ${prod.nombre} ($${sub} MXN)`);
+        }
+      });
+
+      let msg = `Hola *${n.nombre}*, soy vecino de la colonia y vi su negocio en el periódico digital *Raíces de Iztacalco (Edición Ramos Millán)*. `;
+      if (lines.length > 0) {
+        msg += `\n\nMe gustaría hacer el siguiente pedido:\n${lines.join('\n')}\n\n*Total estimado: $${total} MXN*\n(También quiero aplicar su cupón vecinal publicado en la app).`;
+      } else {
+        msg += `Me gustaría pedir informes sobre sus productos y aplicar su promoción vecinal de la app.`;
+      }
+
+      openWhatsAppDirect(n.whatsapp, msg);
+    }
+
+    function contactSellerTianguis(itemId) {
+      const t = tianguisData.find(x => x.id === itemId);
+      if (!t) return;
+      const msg = `Hola vecino, vi tu anuncio de *${t.producto}* (${t.precio}) en *El Tianguis Digital de Raíces de Iztacalco*. ¿Sigue disponible para entrega segura en *${t.puntoEntrega}*?`;
+      openWhatsAppDirect(t.whatsapp, msg);
+    }
+
+    function openWhatsAppDirect(phone, text) {
+      const cleanPhone = String(phone).replace(/\D/g, '');
+      const url = `https://wa.me/52${cleanPhone}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    function shareOnWhatsApp(text) {
+      const url = `https://wa.me/?text=${encodeURIComponent(text + ' ' + window.location.href)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    // ---------------------------------------------------------------------
+    // 4. PASARELA SEGURA MERCADO PAGO Y FLUJO DE 3 PASOS
+    // ---------------------------------------------------------------------
+    let currentMpPlanKey = 'SUSCRIPCION_PRO_199';
+
+    function openMercadoPagoCheckout(planKey) {
+      currentMpPlanKey = planKey;
+      const plan = MP_LINKS[planKey] || MP_LINKS.SUSCRIPCION_PRO_199;
+      document.getElementById('mp-modal-concept').textContent = plan.title;
+      document.getElementById('mp-modal-amount').textContent = plan.amount;
+      document.getElementById('mp-modal-external-link').href = plan.url;
+      document.getElementById('mp-checkout-modal').classList.remove('hidden');
+    }
+
+    function closeMpModal() {
+      document.getElementById('mp-checkout-modal').classList.add('hidden');
+    }
+
+    function sendPaymentReceiptWhatsApp() {
+      const plan = MP_LINKS[currentMpPlanKey] || MP_LINKS.SUSCRIPCION_PRO_199;
+      const msg = `Hola Administrador de *Raíces de Iztacalco*, acabo de realizar mi pago seguro en Mercado Pago para el *${plan.title}* (${plan.amount}). Te comparto mi comprobante para activar mi estatus en la app:`;
+      openWhatsAppDirect(ADMIN_WHATSAPP, msg);
+    }
+
+    function selectPlanInForm(planName) {
+      switchTab('anunciate');
+      const select = document.getElementById('form-tipo');
+      if (select) {
+        select.value = planName;
+      }
+      setTimeout(() => {
+        document.getElementById('form-container-box').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('form-titulo').focus();
+      }, 250);
+    }
+
+    // CANDADO 1 EN ENVÍO: Honeypot + Rate Limit + Sanitización + Flujo Paso 2 Mercado Pago
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      // 1. Verificar campo trampa Honeypot
+      const trapVal = document.getElementById('website_url_trap').value;
+      if (trapVal && trapVal.trim() !== '') {
+        return; // Bloqueo silencioso a bots
+      }
+
+      // 2. Verificar Rate Limit (evitar spam repetido en menos de 45 segundos)
+      const now = Date.now();
+      if (now - lastFormSubmitTimestamp < 45000) {
+        alert('Por seguridad anti-spam, espera unos segundos antes de enviar otra solicitud.');
+        return;
+      }
+      lastFormSubmitTimestamp = now;
+
+      // 3. Sanitizar todos los campos contra XSS
+      const payload = {
+        website_url_trap: '',
+        tipo: sanitizeHTML(document.getElementById('form-tipo').value),
+        sector: sanitizeHTML(document.getElementById('form-sector').value),
+        titulo: sanitizeHTML(document.getElementById('form-titulo').value),
+        calle: sanitizeHTML(document.getElementById('form-calle').value),
+        whatsapp: sanitizeHTML(document.getElementById('form-whatsapp').value),
+        precio: sanitizeHTML(document.getElementById('form-precio').value),
+        descripcion: sanitizeHTML(document.getElementById('form-descripcion').value)
+      };
+
+      if (GOOGLE_SHEETS_WEBAPP_URL) {
+        try {
+          await fetch(GOOGLE_SHEETS_WEBAPP_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } catch (err) {
+          console.warn('Guardado en modo local demo:', err);
+        }
+      }
+
+      // Determinar si requiere Link de Mercado Pago (Paso 2 del flujo seguro)
+      let mpKey = null;
+      if (payload.tipo.includes('199')) mpKey = 'SUSCRIPCION_PRO_199';
+      else if (payload.tipo.includes('39')) mpKey = 'TIANGUIS_39';
+      else if (payload.tipo.includes('100')) mpKey = 'VACANTE_100';
+
+      const alertBox = document.getElementById('form-success-alert');
+      alertBox.classList.remove('hidden');
+      alertBox.innerHTML = `
+        <div class="space-y-3">
+          <p class="font-bold text-sm">
+            ✅ PASO 1 COMPLETADO: Recibimos los datos de "${payload.titulo}" (Sector ${payload.sector}) con estatus <span class="font-mono bg-white px-2 py-0.5 rounded">"Pendiente"</span>.
+          </p>
+          ${mpKey ? `
+            <div class="p-3.5 rounded-xl bg-white border border-chinampa text-tinta space-y-2">
+              <p class="font-bold text-xs text-sky-900">💳 PASO 2 SEGURO: Completa tu pago en Mercado Pago para pasar tu anuncio a "Activo":</p>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="openMercadoPagoCheckout('${mpKey}')" class="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow transition">
+                  Ir a Pasarela Segura Mercado Pago →
+                </button>
+                <button type="button" onclick="openWhatsAppDirect('${ADMIN_WHATSAPP}', 'Hola, acabo de registrar mi anuncio (${payload.titulo}) en Raíces de Iztacalco (${payload.tipo}) y quiero confirmar mi activación:')" class="px-3.5 py-2 rounded-lg bg-chinampa text-white font-bold text-xs">
+                  📲 Avisar por WhatsApp al Editor
+                </button>
+              </div>
+            </div>
+          ` : `
+            <p class="text-xs">Tu publicación gratuita será revisada hoy por la noche y aparecerá en vivo tras validar que cumple las normas vecinales.</p>
+          `}
+        </div>
+      `;
+
+      e.target.reset();
+    }
+
+    function openTechModal() {
+      document.getElementById('tech-modal').classList.remove('hidden');
+    }
+
+    function closeTechModal() {
+      document.getElementById('tech-modal').classList.add('hidden');
+    }
+
+    function copyCodeBlock(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text);
+      alert('Código copiado al portapapeles.');
+    }
+
+    function installPWA() {
+      alert('Para instalar Raíces de Iztacalco en tu celular:\n\n• En Android (Chrome): Toca el menú (⋮) arriba a la derecha y selecciona "Agregar a la pantalla principal" o "Instalar aplicación".\n• En iPhone (Safari): Toca el botón Compartir y elige "Agregar a inicio".');
+    }
+
+    // Inicialización al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('current-date-label').textContent = now.toLocaleDateString('es-MX', options);
+      renderAll();
+    });
+  </script>
+</body>
+</html>
