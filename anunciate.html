@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Publicar y Anúnciate | Raíces de Iztacalco</title>
+  <title>Publicar en el Periódico | Raíces de Iztacalco</title>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="app.js"></script>
@@ -15,98 +15,119 @@
 
   <div id="shared-header"></div>
 
-  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 space-y-8">
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 space-y-8">
 
-    <!-- Flujo Seguro en 3 Pasos -->
-    <div class="bg-white rounded-2xl border-2 border-terracota/30 p-6 shadow-sm">
-      <span class="text-[11px] font-mono uppercase font-bold text-terracota">PROTOCOLO BLINDADO DE ALTA</span>
-      <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta mt-1 mb-4">Activa tu negocio, vacante o reporte vecinal en 3 pasos</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-papel border border-borde">
-          <strong class="text-sm text-terracota block mb-1">1. Llena el formulario abajo</strong>
-          Tus datos entran con estatus <code class="bg-amber-100 px-1 rounded font-mono">"Pendiente"</code> para proteger a la comunidad contra spam.
-        </div>
-        <div class="p-4 rounded-xl bg-papel border border-borde">
-          <strong class="text-sm text-sky-700 block mb-1">2. Pago Seguro en Mercado Pago</strong>
-          Si elegiste un plan de pago ($199, $100, $50 o $39), se abrirá el enlace oficial encriptado de Mercado Pago (jamás pedimos tarjetas aquí).
-        </div>
-        <div class="p-4 rounded-xl bg-papel border border-borde">
-          <strong class="text-sm text-chinampa block mb-1">3. Activación en Vivo</strong>
-          Al confirmarse tu pago o revisión editorial, pasamos tu fila a <code class="bg-green-100 px-1 rounded font-mono">"Activo"</code> y aparece en el periódico.
-        </div>
+    <!-- Encabezado y Selector de Categoría -->
+    <div class="bg-white rounded-3xl border border-borde p-6 sm:p-8 shadow-sm space-y-5">
+      <div class="text-center space-y-2">
+        <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-mono text-xs font-bold">
+          ✨ FORMULARIO INTELIGENTE POR SECCIÓN
+        </span>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta">
+          ¿Qué deseas publicar hoy en Raíces de Iztacalco?
+        </h2>
+        <p class="text-xs sm:text-sm text-grafito">
+          Elige una opción abajo y el formulario se adaptará automáticamente para pedirte <strong>únicamente los datos necesarios y tu fotografía</strong>.
+        </p>
+      </div>
+
+      <!-- Botones Selectores de Tipo de Publicación -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-2">
+        <button type="button" onclick="selectCategory('FOTO_CRONICA')" id="tab-cat-FOTO_CRONICA" class="cat-btn p-3 rounded-2xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-2xl">📷</span>
+          <span class="text-xs font-bold leading-tight">Foto Histórica / Crónica</span>
+          <span class="text-[10px] font-mono text-chinampa font-bold">Gratis</span>
+        </button>
+
+        <button type="button" onclick="selectCategory('MASCOTA')" id="tab-cat-MASCOTA" class="cat-btn p-3 rounded-2xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-2xl">🐾</span>
+          <span class="text-xs font-bold leading-tight">Buscar / Reportar Mascota</span>
+          <span class="text-[10px] font-mono text-chinampa font-bold">Gratis o Boost $50</span>
+        </button>
+
+        <button type="button" onclick="selectCategory('TIANGUIS')" id="tab-cat-TIANGUIS" class="cat-btn p-3 rounded-2xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-2xl">🛍️</span>
+          <span class="text-xs font-bold leading-tight">Vender en Tianguis</span>
+          <span class="text-[10px] font-mono text-grafito font-bold">Gratis o $39</span>
+        </button>
+
+        <button type="button" onclick="selectCategory('NEGOCIO')" id="tab-cat-NEGOCIO" class="cat-btn p-3 rounded-2xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-2xl">🏪</span>
+          <span class="text-xs font-bold leading-tight">Anunciar mi Negocio</span>
+          <span class="text-[10px] font-mono text-terracota font-bold">Gratis o Pro $199</span>
+        </button>
+
+        <button type="button" onclick="selectCategory('EMPLEO_OFICIO')" id="tab-cat-EMPLEO_OFICIO" class="cat-btn col-span-2 sm:col-span-1 p-3 rounded-2xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-2xl">💼</span>
+          <span class="text-xs font-bold leading-tight">Empleo u Oficio</span>
+          <span class="text-[10px] font-mono text-grafito font-bold">Vacante $100</span>
+        </button>
       </div>
     </div>
 
-    <!-- Formulario con Candado 1 (Honeypot + Sanitización XSS) -->
-    <div class="bg-white rounded-2xl border border-borde p-6 sm:p-8 shadow-sm max-w-3xl mx-auto">
-      <h3 class="font-serif text-2xl font-bold text-tinta mb-1">Formulario de Publicación Vecinal y Comercial</h3>
-      <p class="text-xs text-grafito mb-6">Selecciona qué deseas subir a Raíces de Iztacalco:</p>
+    <!-- Contenedor del Formulario Adaptable -->
+    <div class="bg-white rounded-3xl border border-borde p-6 sm:p-8 shadow-sm">
+      <div class="pb-4 mb-6 border-b border-borde flex items-center justify-between">
+        <div>
+          <span id="form-badge-title" class="text-[11px] font-mono uppercase font-bold text-terracota">SECCIÓN SELECCIONADA</span>
+          <h3 id="form-main-title" class="font-serif text-xl sm:text-2xl font-bold text-tinta">Subir Foto a Crónicas y Raíces</h3>
+        </div>
+        <span class="text-xs bg-crema px-3 py-1 rounded-full font-mono font-semibold text-grafito">Col. Gabriel Ramos Millán</span>
+      </div>
 
-      <form onsubmit="submitForm(event)" class="space-y-4 relative">
-        <!-- CANDADO 1: Honeypot Anti-Bots -->
+      <form id="dynamic-form" onsubmit="handleSmartSubmit(event)" class="space-y-5 relative">
+        <!-- Honeypot Anti-Spam -->
         <div class="hp-trap" aria-hidden="true">
           <input type="text" id="website_url_trap" tabindex="-1" autocomplete="off" />
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">1. ¿Qué deseas publicar? *</label>
-            <select id="f-tipo" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
-              <option value="Plan Pro Negocio ($199/mes)">🏪 Negocio en Directorio — Plan Pro ($199/mes)</option>
-              <option value="Registro Básico Negocio (Gratis)">🏪 Negocio en Directorio — Básico ($0)</option>
-              <option value="Tianguis Destacado ($39 MXN)">🛍️ Artículo en Tianguis — Destacado ($39)</option>
-              <option value="Tianguis Básico ($0)">🛍️ Artículo en Tianguis — Sencillo ($0)</option>
-              <option value="Vacante de Empleo Local ($100 MXN)">💼 Vacante de Empleo Local ($100)</option>
-              <option value="Mascota Perdida Boost ($50 MXN)">🐾 Mascota Perdida con Boost Urgente ($50)</option>
-              <option value="Mascota Perdida Sencilla ($0)">🐾 Mascota Perdida — Reporte Sencillo ($0)</option>
-              <option value="Foto Antigua de la Colonia ($0)">📷 Foto Antigua / Memoria de Nuestra Calle ($0)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">2. Sector de la Ramos Millán *</label>
-            <select id="f-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
-              <option value="Bramadero">Sección Bramadero (Sur 157 - 163)</option>
-              <option value="Tlacotal">Sección Tlacotal (Sur 125 - Ote 100)</option>
-              <option value="Cuchilla">Sección Cuchilla</option>
-              <option value="Av. Té / Alcaldía">Av. Té / Explanada Alcaldía</option>
-              <option value="Coyuya / Plutarco">Metro Coyuya / Plutarco</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">3. Nombre del Negocio, Artículo o Título *</label>
-            <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Panadería La Espiga / Perrito Canelo" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">4. Calle o Punto Seguro de Entrega *</label>
-            <input id="f-calle" type="text" required maxlength="90" placeholder="Ej. Sur 157 esq. Recreo / Explanada Alcaldía" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">5. WhatsApp de Contacto (10 dígitos) *</label>
-            <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">6. Precio, Sueldo u Oferta del Jueves</label>
-            <input id="f-precio" type="text" maxlength="70" placeholder="Ej. $199, Sueldo $1,900/sem o 2x1 jueves" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
-          </div>
-        </div>
-
+        <!-- Selector de Sector (Común a todas para ubicar en la colonia) -->
         <div>
-          <label class="block text-xs font-bold uppercase font-mono mb-1">7. Descripción completa / Lista de productos / Historia de la foto *</label>
-          <textarea id="f-desc" rows="3" required maxlength="500" placeholder="Escribe aquí los detalles..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+          <label class="block text-xs font-bold uppercase font-mono text-tinta mb-1.5">📍 Sector de la Colonia Gabriel Ramos Millán *</label>
+          <select id="common-sector" required class="w-full px-4 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold text-tinta focus:outline-none focus:border-terracota">
+            <option value="Bramadero">Sección Bramadero (Sur 157 - Sur 163)</option>
+            <option value="Tlacotal">Sección Tlacotal (Sur 125 - Oriente 100)</option>
+            <option value="Cuchilla">Sección Cuchilla</option>
+            <option value="Av. Té / Alcaldía">Av. Té / Explanada Alcaldía Iztacalco</option>
+            <option value="Coyuya / Plutarco">Metro Coyuya / Plutarco Elías Calles</option>
+          </select>
         </div>
 
-        <button type="submit" class="w-full py-3.5 rounded-xl bg-terracota hover:bg-terracotaDark text-white font-extrabold text-sm shadow transition">
-          Enviar Solicitud y Continuar →
+        <!-- ===============================================================
+             CAMPOS DINÁMICOS SEGÚN LA CATEGORÍA ELEGIDA
+             =============================================================== -->
+        <div id="dynamic-fields-container" class="space-y-4"></div>
+
+        <!-- ===============================================================
+             SUBIDA DE FOTOGRAFÍA CON VISTA PREVIA (Para Foto, Mascota, Tianguis y Negocio)
+             =============================================================== -->
+        <div id="photo-upload-section" class="p-5 rounded-2xl bg-papel border-2 border-dashed border-stone-300 text-center space-y-3">
+          <div class="space-y-1">
+            <span class="text-2xl">📸</span>
+            <label for="photo-input" id="photo-label-text" class="block font-bold text-sm text-tinta cursor-pointer">
+              Selecciona o toma la fotografía desde tu celular o computadora *
+            </label>
+            <p class="text-xs text-grafito">Formatos JPG o PNG. Se ajusta automáticamente para cargar rápido en el periódico.</p>
+          </div>
+
+          <input type="file" id="photo-input" accept="image/*" onchange="handlePhotoPreview(event)" class="block w-full text-xs text-stone-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-terracota file:text-white hover:file:bg-terracotaDark cursor-pointer mx-auto max-w-xs" />
+
+          <!-- Vista previa de la foto cargada -->
+          <div id="photo-preview-box" class="hidden pt-3">
+            <img id="photo-preview-img" src="" alt="Vista previa" class="max-h-56 mx-auto rounded-xl border border-borde shadow-sm object-cover" />
+            <button type="button" onclick="clearPhoto()" class="mt-2 text-xs text-red-700 font-bold hover:underline">
+              ✕ Quitar foto y elegir otra
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="submit-btn" class="w-full py-3.5 rounded-xl bg-terracota hover:bg-terracotaDark text-white font-extrabold text-sm shadow-md transition">
+          Publicar en Raíces de Iztacalco →
         </button>
       </form>
 
-      <div id="result-box" class="hidden mt-6 p-5 rounded-xl bg-chinampaLight border-2 border-chinampa text-chinampa text-xs sm:text-sm space-y-3"></div>
+      <!-- Respuesta de confirmación tras enviar -->
+      <div id="submit-response-box" class="hidden mt-6 p-5 rounded-2xl bg-chinampaLight border-2 border-chinampa text-chinampa text-xs sm:text-sm space-y-3"></div>
     </div>
 
   </main>
@@ -114,27 +135,411 @@
   <div id="shared-footer"></div>
 
   <script>
-    async function submitForm(e) {
+    let activeCategory = 'FOTO_CRONICA';
+    let compressedPhotoBase64 = '';
+
+    // Plantillas de campos exclusivos para cada necesidad (Cero campos irrelevantes)
+    function renderCategoryFields(cat) {
+      const box = document.getElementById('dynamic-fields-container');
+      const photoSection = document.getElementById('photo-upload-section');
+      const photoInput = document.getElementById('photo-input');
+      const photoLabel = document.getElementById('photo-label-text');
+      const badgeTitle = document.getElementById('form-badge-title');
+      const mainTitle = document.getElementById('form-main-title');
+      const submitBtn = document.getElementById('submit-btn');
+
+      if (cat === 'FOTO_CRONICA') {
+        badgeTitle.textContent = 'MEMORIA DE NUESTRA CALLE • 100% GRATUITO';
+        mainTitle.textContent = '📷 Subir Fotografía a Crónicas y Raíces';
+        photoSection.classList.remove('hidden');
+        photoInput.required = true;
+        photoLabel.textContent = '1. Sube la fotografía antigua o histórica de la colonia *';
+        submitBtn.textContent = 'Enviar Fotografía e Historia al Periódico →';
+
+        box.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Nombre del Autor o Familia que comparte la foto *</label>
+              <input id="f-autor" type="text" required maxlength="80" placeholder="Ej. Familia Hernández / Foto de Don Roberto" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Calle, lugar o año aproximado de la foto *</label>
+              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Calle Sur 157 en el año 1968" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">4. Historia o recuerdo detrás de esta fotografía *</label>
+            <textarea id="f-historia" rows="4" required maxlength="600" placeholder="Cuéntanos qué se ve en la foto, cómo era la calle antes o quiénes aparecen..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+          </div>
+        `;
+      } else if (cat === 'MASCOTA') {
+        badgeTitle.textContent = 'RADAR DE MASCOTAS DE LA RAMOS MILLÁN';
+        mainTitle.textContent = '🐾 Reportar Mascota Perdida, Encontrada o en Adopción';
+        photoSection.classList.remove('hidden');
+        photoInput.required = true;
+        photoLabel.textContent = 'Sube la foto clara del perrito o gatito *';
+        submitBtn.textContent = 'Publicar Reporte de Mascota →';
+
+        box.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">1. Situación de la mascota *</label>
+              <select id="f-tipo-reporte" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
+                <option value="PERDIDO">🚨 Se perdió mi mascota (Buscándola)</option>
+                <option value="ENCONTRADO">🏠 Encontré una mascota en la calle</option>
+                <option value="ADOPCION">❤️ Busca hogar (Adopción responsable)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Nombre de la mascota y raza/color *</label>
+              <input id="f-nombre-mascota" type="text" required maxlength="80" placeholder="Ej. 'Canelo' - Perrito mestizo color miel" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Última calle o esquina donde se le vio *</label>
+              <input id="f-calle" type="text" required maxlength="90" placeholder="Ej. Sur 159 casi esq. Oriente 106 (Bramadero)" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">4. WhatsApp del dueño para recibir avisos (10 dígitos) *</label>
+              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">5. Señas particulares (collar, tamaño, si ofrece gratificación) *</label>
+            <textarea id="f-desc" rows="3" required maxlength="450" placeholder="Ej. Trae collar azul con plaquita, es muy nervioso, salió ayer a las 6 PM..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+          </div>
+
+          <!-- Elección clara: Gratis vs Boost $50 -->
+          <div class="p-4 rounded-2xl bg-red-50/70 border border-red-200 space-y-2">
+            <label class="block text-xs font-bold uppercase font-mono text-red-950">6. Elige el tipo de visibilidad para tu alerta *</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label class="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-borde cursor-pointer">
+                <input type="radio" name="plan_mascota" value="Gratis ($0)" checked class="mt-1" />
+                <div class="text-xs">
+                  <strong class="block text-tinta">Publicación Sencilla — Gratis ($0)</strong>
+                  <span class="text-grafito">Aparece en el Radar de Mascotas de la colonia sin ningún costo.</span>
+                </div>
+              </label>
+              <label class="flex items-start gap-2.5 p-3 rounded-xl bg-white border-2 border-red-500 cursor-pointer">
+                <input type="radio" name="plan_mascota" value="Boost Urgente ($50 MXN)" class="mt-1" />
+                <div class="text-xs">
+                  <strong class="block text-red-700">🔥 Añadir Boost Vecinal — $50 MXN</strong>
+                  <span class="text-grafito">Fija la alerta hasta arriba por 7 días con etiqueta roja urgente.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        `;
+      } else if (cat === 'TIANGUIS') {
+        badgeTitle.textContent = 'CLASIFICADOS ENTRE VECINOS';
+        mainTitle.textContent = '🛍️ Publicar Artículo en El Tianguis Digital';
+        photoSection.classList.remove('hidden');
+        photoInput.required = true;
+        photoLabel.textContent = 'Sube la foto real del artículo o postre que vendes *';
+        submitBtn.textContent = 'Publicar Producto en el Tianguis →';
+
+        box.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">1. ¿Qué artículo o producto vendes? *</label>
+              <input id="f-producto" type="text" required maxlength="85" placeholder="Ej. Bicicleta R26 / Charola de Roles de Canela" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Precio de venta *</label>
+              <input id="f-precio" type="text" required maxlength="40" placeholder="Ej. $650 MXN" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-bold text-chinampa" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Tu nombre (Vendedor) *</label>
+              <input id="f-vendedor" type="text" required maxlength="50" placeholder="Ej. Vecino Carlos M." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">4. Punto Seguro de Entrega *</label>
+              <select id="f-punto" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
+                <option value="Explanada Alcaldía Iztacalco">🏛️ Explanada Alcaldía Iztacalco</option>
+                <option value="Metro Iztacalco (Línea 8)">🚇 Metro Iztacalco</option>
+                <option value="Metro Coyuya">🚇 Metro Coyuya</option>
+                <option value="Entrada Mercado Bramadero">🛒 Entrada Mercado Bramadero</option>
+                <option value="Entrada Mercado Tlacotal">🛒 Entrada Mercado Tlacotal</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">5. Tu WhatsApp (10 dígitos) *</label>
+              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">6. Estado del artículo y detalles *</label>
+            <textarea id="f-desc" rows="3" required maxlength="400" placeholder="Describe las condiciones, medidas o días de entrega..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-2">
+            <label class="block text-xs font-bold uppercase font-mono text-amber-950">7. Tipo de anuncio en el Tianguis *</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label class="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-borde cursor-pointer">
+                <input type="radio" name="plan_tianguis" value="Gratis ($0)" checked class="mt-1" />
+                <div class="text-xs">
+                  <strong class="block text-tinta">1 Artículo Sencillo — Gratis ($0)</strong>
+                  <span class="text-grafito">Publicación estándar en el listado del tianguis.</span>
+                </div>
+              </label>
+              <label class="flex items-start gap-2.5 p-3 rounded-xl bg-white border-2 border-terracota cursor-pointer">
+                <input type="radio" name="plan_tianguis" value="Destacado ($39 MXN)" class="mt-1" />
+                <div class="text-xs">
+                  <strong class="block text-terracota">🔥 Anuncio Destacado — $39 MXN</strong>
+                  <span class="text-grafito">Aparece hasta arriba por 7 días con etiqueta urgente.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        `;
+      } else if (cat === 'NEGOCIO') {
+        badgeTitle.textContent = 'DIRECTORIO COMERCIAL DE BARRIO';
+        mainTitle.textContent = '🏪 Registrar mi Negocio en el Directorio';
+        photoSection.classList.remove('hidden');
+        photoInput.required = false;
+        photoLabel.textContent = 'Sube una foto de tu fachada, logotipo o platillo principal (Opcional)';
+        submitBtn.textContent = 'Registrar mi Negocio →';
+
+        box.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">1. Nombre de tu Negocio *</label>
+              <input id="f-nombre-negocio" type="text" required maxlength="85" placeholder="Ej. Carnitas El Patrón / Panadería La Espiga" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Giro Comercial *</label>
+              <select id="f-giro" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
+                <option value="Comida y Antojitos">🌮 Comida, Panadería y Antojitos</option>
+                <option value="Salud y Mascotas">🐾 Veterinarias, Consultorios y Salud</option>
+                <option value="Talleres y Tlapalerías">🔧 Talleres, Tlapalerías y Oficios</option>
+                <option value="Belleza y Barberías">💈 Estéticas, Uñas y Barberías</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Calle exacta y entre qué calles estás (Para el Mapa) *</label>
+              <input id="f-calle" type="text" required maxlength="100" placeholder="Ej. Sur 157 #210 casi esq. Av. Recreo" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">4. ¿En qué año abrieron? *</label>
+              <input id="f-anio" type="number" min="1930" max="2026" value="2015" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">5. WhatsApp para recibir pedidos (10 dígitos) *</label>
+              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">6. Promoción u Oferta para vecinos (Opcional)</label>
+              <input id="f-promo" type="text" maxlength="90" placeholder="Ej. Jueves 2x1 o envío sin costo en la colonia" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">7. Tus 3 productos o servicios principales con precio (Para tu carrito de WhatsApp) *</label>
+            <textarea id="f-catalogo" rows="3" required maxlength="450" placeholder="Ej: 1 Kg de Carnitas $290, Orden de 4 tacos $110, Medio kilo $155..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-2">
+            <label class="block text-xs font-bold uppercase font-mono text-amber-950">8. Elige tu Plan en el Directorio *</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label class="flex items-start gap-2.5 p-3 rounded-xl bg-white border-2 border-terracota cursor-pointer">
+                <input type="radio" name="plan_negocio" value="Plan Pro ($199/mes)" checked class="mt-1" />
+                <div class="text-xs">
+                  <strong class="block text-terracota">★ Plan Orgullo de Barrio Pro — $199/mes</strong>
+                  <span class="text-grafito">Carrito de pedidos a WhatsApp, cupón, foto, mapa y aparecer hasta arriba.</span>
+                </div>
+              </label>
+              <label class="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-borde cursor-pointer">
+                <input type="radio" name="plan_negocio" value="Perfil Básico ($0)" class="mt-1" />
+                <div class="text-xs">
+                  <strong class="block text-tinta">Perfil Básico Sencillo — Gratis ($0)</strong>
+                  <span class="text-grafito">Solo aparece el nombre de tu negocio, giro y calle.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        `;
+      } else if (cat === 'EMPLEO_OFICIO') {
+        badgeTitle.textContent = 'BOLSA DE TRABAJO Y PADRÓN DE OFICIOS';
+        mainTitle.textContent = '💼 Publicar Vacante de Empleo u Oficio Verificado';
+        photoSection.classList.add('hidden');
+        photoInput.required = false;
+        submitBtn.textContent = 'Registrar Vacante u Oficio →';
+
+        box.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">1. ¿Qué deseas publicar? *</label>
+              <select id="f-subtipo-empleo" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
+                <option value="VACANTE ($100 MXN)">💼 Vacante de Empleo en mi Negocio ($100 MXN por 15 días)</option>
+                <option value="OFICIO ($199/mes)">🛠️ Anunciarme como Plomero / Electricista / Cerrajero ($199/mes)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Puesto solicitado u Oficio que realizas *</label>
+              <input id="f-puesto" type="text" required maxlength="85" placeholder="Ej. Ayudante de Panadería / Plomero Urgente 24h" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Nombre del Negocio o Técnico *</label>
+              <input id="f-negocio-tec" type="text" required maxlength="70" placeholder="Ej. Panadería La Espiga" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">4. Calle en la Ramos Millán *</label>
+              <input id="f-calle" type="text" required maxlength="80" placeholder="Ej. Sur 125 esq. Ote 100" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">5. Sueldo ofrecido o Tarifa base *</label>
+              <input id="f-sueldo" type="text" required maxlength="60" placeholder="Ej. $1,900 semanales" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">6. WhatsApp para candidatos o clientes (10 dígitos) *</label>
+              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">7. Horario y requisitos o garantía de servicio *</label>
+              <input id="f-req" type="text" required maxlength="250" placeholder="Ej. Martes a domingo de 8 a 4 PM, vivir cerca." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function selectCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.className = 'cat-btn p-3 rounded-2xl border-2 border-borde bg-papel text-tinta hover:border-terracota text-center transition flex flex-col items-center gap-1';
+      });
+      const activeBtn = document.getElementById(`tab-cat-${cat}`);
+      if (activeBtn) {
+        activeBtn.className = 'cat-btn p-3 rounded-2xl border-2 border-terracota bg-amber-50 text-terracota text-center shadow-sm transition flex flex-col items-center gap-1';
+      }
+      clearPhoto();
+      renderCategoryFields(cat);
+      document.getElementById('submit-response-box').classList.add('hidden');
+    }
+
+    // Compresión automática de foto en el navegador para que cargue rápido y quepa en Google Sheets
+    function handlePhotoPreview(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 520;
+          const scale = Math.min(1, MAX_WIDTH / img.width);
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          compressedPhotoBase64 = canvas.toDataURL('image/jpeg', 0.62);
+          document.getElementById('photo-preview-img').src = compressedPhotoBase64;
+          document.getElementById('photo-preview-box').classList.remove('hidden');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearPhoto() {
+      compressedPhotoBase64 = '';
+      const input = document.getElementById('photo-input');
+      if (input) input.value = '';
+      const box = document.getElementById('photo-preview-box');
+      if (box) box.classList.add('hidden');
+    }
+
+    async function handleSmartSubmit(e) {
       e.preventDefault();
       if (document.getElementById('website_url_trap').value.trim() !== '') return;
 
-      const now = Date.now();
-      if (now - lastFormSubmitTimestamp < 30000) {
-        alert('Por seguridad anti-spam, espera unos segundos antes de enviar otro registro.');
-        return;
-      }
-      lastFormSubmitTimestamp = now;
-
+      const sector = sanitizeHTML(document.getElementById('common-sector').value);
       const payload = {
         website_url_trap: '',
-        tipo: sanitizeHTML(document.getElementById('f-tipo').value),
-        sector: sanitizeHTML(document.getElementById('f-sector').value),
-        titulo: sanitizeHTML(document.getElementById('f-titulo').value),
-        calle: sanitizeHTML(document.getElementById('f-calle').value),
-        whatsapp: sanitizeHTML(document.getElementById('f-wa').value),
-        precio: sanitizeHTML(document.getElementById('f-precio').value),
-        descripcion: sanitizeHTML(document.getElementById('f-desc').value)
+        categoria_form: activeCategory,
+        sector: sector,
+        foto_base64: compressedPhotoBase64
       };
+
+      let mpPlan = null;
+      let resumenTitulo = '';
+
+      if (activeCategory === 'FOTO_CRONICA') {
+        payload.autor = sanitizeHTML(document.getElementById('f-autor').value);
+        payload.titulo = sanitizeHTML(document.getElementById('f-titulo').value);
+        payload.historia = sanitizeHTML(document.getElementById('f-historia').value);
+        resumenTitulo = `${payload.titulo} (Por: ${payload.autor})`;
+      } else if (activeCategory === 'MASCOTA') {
+        const planBoost = document.querySelector('input[name="plan_mascota"]:checked').value;
+        payload.tipo_reporte = sanitizeHTML(document.getElementById('f-tipo-reporte').value);
+        payload.nombre_mascota = sanitizeHTML(document.getElementById('f-nombre-mascota').value);
+        payload.calle = sanitizeHTML(document.getElementById('f-calle').value);
+        payload.whatsapp = sanitizeHTML(document.getElementById('f-wa').value);
+        payload.descripcion = sanitizeHTML(document.getElementById('f-desc').value);
+        payload.plan_boost = planBoost;
+        resumenTitulo = payload.nombre_mascota;
+        if (planBoost.includes('50')) mpPlan = MP_LINKS.BOOST_50;
+      } else if (activeCategory === 'TIANGUIS') {
+        const planTianguis = document.querySelector('input[name="plan_tianguis"]:checked').value;
+        payload.producto = sanitizeHTML(document.getElementById('f-producto').value);
+        payload.precio = sanitizeHTML(document.getElementById('f-precio').value);
+        payload.vendedor = sanitizeHTML(document.getElementById('f-vendedor').value);
+        payload.punto_entrega = sanitizeHTML(document.getElementById('f-punto').value);
+        payload.whatsapp = sanitizeHTML(document.getElementById('f-wa').value);
+        payload.descripcion = sanitizeHTML(document.getElementById('f-desc').value);
+        payload.plan_tianguis = planTianguis;
+        resumenTitulo = payload.producto;
+        if (planTianguis.includes('39')) mpPlan = MP_LINKS.TIANGUIS_39;
+      } else if (activeCategory === 'NEGOCIO') {
+        const planNeg = document.querySelector('input[name="plan_negocio"]:checked').value;
+        payload.nombre_negocio = sanitizeHTML(document.getElementById('f-nombre-negocio').value);
+        payload.giro = sanitizeHTML(document.getElementById('f-giro').value);
+        payload.calle = sanitizeHTML(document.getElementById('f-calle').value);
+        payload.anio_fundacion = sanitizeHTML(document.getElementById('f-anio').value);
+        payload.whatsapp = sanitizeHTML(document.getElementById('f-wa').value);
+        payload.promocion = sanitizeHTML(document.getElementById('f-promo').value);
+        payload.catalogo = sanitizeHTML(document.getElementById('f-catalogo').value);
+        payload.plan_negocio = planNeg;
+        resumenTitulo = payload.nombre_negocio;
+        if (planNeg.includes('199')) mpPlan = MP_LINKS.SUSCRIPCION_PRO_199;
+      } else if (activeCategory === 'EMPLEO_OFICIO') {
+        const subtipo = document.getElementById('f-subtipo-empleo').value;
+        payload.subtipo_empleo = sanitizeHTML(subtipo);
+        payload.puesto = sanitizeHTML(document.getElementById('f-puesto').value);
+        payload.negocio_tecnico = sanitizeHTML(document.getElementById('f-negocio-tec').value);
+        payload.calle = sanitizeHTML(document.getElementById('f-calle').value);
+        payload.sueldo = sanitizeHTML(document.getElementById('f-sueldo').value);
+        payload.whatsapp = sanitizeHTML(document.getElementById('f-wa').value);
+        payload.requisitos = sanitizeHTML(document.getElementById('f-req').value);
+        resumenTitulo = payload.puesto;
+        mpPlan = subtipo.includes('100') ? MP_LINKS.VACANTE_100 : MP_LINKS.SUSCRIPCION_PRO_199;
+      }
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Enviando información y foto...';
 
       if (GOOGLE_SHEETS_WEBAPP_URL) {
         try {
@@ -147,39 +552,40 @@
         } catch (err) {}
       }
 
-      let mpPlan = null;
-      if (payload.tipo.includes('199')) mpPlan = MP_LINKS.SUSCRIPCION_PRO_199;
-      else if (payload.tipo.includes('39')) mpPlan = MP_LINKS.TIANGUIS_39;
-      else if (payload.tipo.includes('100')) mpPlan = MP_LINKS.VACANTE_100;
-      else if (payload.tipo.includes('50')) mpPlan = MP_LINKS.BOOST_50;
+      btn.disabled = false;
+      btn.textContent = 'Publicar en Raíces de Iztacalco →';
 
-      const resBox = document.getElementById('result-box');
+      const resBox = document.getElementById('submit-response-box');
       resBox.classList.remove('hidden');
       resBox.innerHTML = `
-        <p class="font-bold">✅ PASO 1 LISTO: Recibimos "${payload.titulo}" con estatus "Pendiente".</p>
+        <p class="font-bold text-sm">✅ ¡Recibido! Guardamos "${resumenTitulo}" con su información lista para aprobación.</p>
         ${mpPlan ? `
           <div class="p-4 rounded-xl bg-white border border-chinampa text-tinta space-y-2">
-            <p class="font-bold text-sky-900">💳 PASO 2 SEGURO: Realiza tu pago de ${mpPlan.amount} en Mercado Pago para activar tu publicación:</p>
+            <p class="font-bold text-sky-900">💳 Paso Final: Completa tu pago de ${mpPlan.amount} en Mercado Pago para activar el paquete elegido:</p>
             <div class="flex flex-wrap gap-2">
-              <a href="${mpPlan.url}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-sky-600 text-white font-bold text-xs">Abrir Link Oficial de Mercado Pago ↗</a>
-              <button type="button" onclick="openWhatsAppDirect(ADMIN_WHATSAPP, 'Hola, acabo de registrar *${payload.titulo}* (${payload.tipo}) y envío mi comprobante para activación:')" class="px-4 py-2 rounded-lg bg-chinampa text-white font-bold text-xs">📲 Enviar comprobante por WhatsApp</button>
+              <a href="${mpPlan.url}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-sky-600 text-white font-bold text-xs">Ir a Mercado Pago (${mpPlan.amount}) ↗</a>
+              <button type="button" onclick="openWhatsAppDirect(ADMIN_WHATSAPP, 'Hola, acabo de registrar *${resumenTitulo}* en Raíces de Iztacalco y envío mi comprobante:')" class="px-4 py-2 rounded-lg bg-chinampa text-white font-bold text-xs">📲 Confirmar por WhatsApp</button>
             </div>
           </div>
-        ` : `<p>Tu publicación gratuita fue registrada y aparecerá en vivo tras la validación vecinal.</p>`}
+        ` : `
+          <p class="text-xs">Tu publicación gratuita ya está en revisión editorial y aparecerá publicada en cuanto el editor cambie su celda a <strong>"Aprobado"</strong>.</p>
+        `}
       `;
+
       e.target.reset();
+      clearPhoto();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       renderSharedLayout('anunciate');
       const params = new URLSearchParams(window.location.search);
       const tipo = params.get('tipo');
-      const sel = document.getElementById('f-tipo');
-      if (tipo === 'foto') sel.value = 'Foto Antigua de la Colonia ($0)';
-      if (tipo === 'mascota') sel.value = 'Mascota Perdida Sencilla ($0)';
-      if (tipo === 'empleo') sel.value = 'Vacante de Empleo Local ($100 MXN)';
-      if (tipo === 'tianguis') sel.value = 'Tianguis Destacado ($39 MXN)';
-      if (tipo === 'negocio') sel.value = 'Plan Pro Negocio ($199/mes)';
+      if (tipo === 'foto') selectCategory('FOTO_CRONICA');
+      else if (tipo === 'mascota') selectCategory('MASCOTA');
+      else if (tipo === 'tianguis') selectCategory('TIANGUIS');
+      else if (tipo === 'negocio') selectCategory('NEGOCIO');
+      else if (tipo === 'empleo') selectCategory('EMPLEO_OFICIO');
+      else selectCategory('FOTO_CRONICA');
     });
   </script>
 </body>
