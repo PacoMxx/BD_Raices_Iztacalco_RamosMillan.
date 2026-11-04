@@ -45,8 +45,13 @@
             Cada mañana caminamos por <strong>Sur 157</strong> rumbo al Mercado Bramadero o cruzamos <strong>Oriente 100-A</strong> en Tlacotal. Gabriel Ramos Millán fue el impulsor de la Comisión Nacional del Maíz que modernizó el campo mexicano en los años 40; tras su fallecimiento en 1949 en el accidente aéreo del Pico del Fraile, nuestras cuadras recibieron su nombre.
           </p>
           <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs sm:text-sm">
-            <span><strong>📷 ¿Tienes fotos antiguas de tu familia en la colonia?</strong> Súbelas gratis para la edición del domingo.</span>
-            <a href="anunciate.html?tipo=foto" class="px-4 py-2 rounded-lg bg-terracota text-white font-bold text-xs shrink-0">Compartir Foto Antigua →</a>
+            <div>
+              <strong class="block text-tinta">📷 ¿Tienes fotos de tu calle, familia o mercados en la Ramos Millán?</strong>
+              <span class="text-amber-900">Sube tu fotografía, tu nombre como autor y la historia detrás de la imagen.</span>
+            </div>
+            <a href="anunciate.html?tipo=foto" class="px-4 py-2.5 rounded-xl bg-terracota hover:bg-terracotaDark text-white font-bold text-xs shrink-0 shadow-sm transition">
+              + Subir Foto e Historia →
+            </a>
           </div>
         </div>
       </div>
@@ -73,10 +78,18 @@
       </div>
     </div>
 
-    <!-- Listado de Crónicas -->
+    <!-- Galería de Crónicas y Fotos Subidas por los Vecinos -->
     <div>
-      <h3 class="font-serif text-2xl font-bold text-tinta mb-4">Crónicas del Barrio y El Rincón de la Ramos</h3>
-      <div id="cronicas-list" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <div>
+          <h3 class="font-serif text-2xl font-bold text-tinta">Álbum Comunitario y Crónicas del Barrio</h3>
+          <p class="text-xs text-grafito">Historias y fotografías enviadas por los vecinos de la Gabriel Ramos Millán.</p>
+        </div>
+        <a href="anunciate.html?tipo=foto" class="px-4 py-2 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs">
+          📷 Subir mi Foto a esta sección →
+        </a>
+      </div>
+      <div id="cronicas-list" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
     </div>
 
   </main>
@@ -101,21 +114,37 @@
 
     window.onPageRender = function() {
       const list = document.getElementById('cronicas-list');
-      const items = DB.cronicas.filter(c => matchesGlobalFilter(c.sector, `${c.titulo} ${c.resumen}`));
+      const items = DB.cronicas.filter(c => matchesGlobalFilter(c.sector, `${c.titulo} ${c.resumen} ${c.contenidoCompleto} ${c.autor || ''}`));
+      
       list.innerHTML = items.map(c => `
         <article class="bg-white rounded-2xl border ${c.patrocinado ? 'border-amber-400' : 'border-borde'} p-5 shadow-sm flex flex-col justify-between">
           <div>
-            <div class="flex justify-between text-[10px] font-mono font-bold mb-2">
-              <span class="px-2 py-0.5 rounded bg-crema text-terracota">${c.categoria}</span>
+            <div class="flex justify-between text-[10px] font-mono font-bold mb-2.5">
+              <span class="px-2.5 py-0.5 rounded bg-crema text-terracota">${c.categoria}</span>
               <span class="text-grafito">📍 ${c.sector}</span>
             </div>
-            <h4 class="font-serif font-bold text-lg text-tinta mb-2">${c.titulo}</h4>
-            <p class="text-xs text-grafito mb-3">${c.resumen}</p>
-            <p class="text-xs bg-papel p-3 rounded-xl border border-borde">${c.contenidoCompleto}</p>
+
+            ${c.foto ? `
+              <div class="relative mb-3 group cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightbox('${c.foto}', '${c.titulo} — Foto por: ${c.autor || 'Vecino'}')">
+                <img src="${c.foto}" alt="${c.titulo}" class="w-full h-52 object-cover group-hover:scale-105 transition duration-300" />
+                <span class="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] font-mono px-2 py-0.5 rounded">🔍 Toca para ampliar</span>
+              </div>
+            ` : ''}
+
+            <h4 class="font-serif font-bold text-lg text-tinta mb-1.5 leading-snug">${c.titulo}</h4>
+            
+            ${c.autor ? `
+              <p class="text-xs font-bold text-terracota mb-2">✍️ Autor de la foto/crónica: ${c.autor}</p>
+            ` : ''}
+
+            <p class="text-xs text-tinta bg-papel p-3 rounded-xl border border-borde leading-relaxed">${c.contenidoCompleto}</p>
           </div>
-          <div class="pt-3 mt-3 border-t border-borde flex justify-between items-center text-xs">
+          <div class="pt-3 mt-4 border-t border-borde flex justify-between items-center text-xs">
             <span class="font-mono text-grafito">${c.fecha}</span>
-            ${c.patrocinado ? `<a href="comercio.html" class="font-bold text-terracota hover:underline">Ver negocio en Directorio →</a>` : `<button onclick="shareOnWhatsApp('${c.titulo}')" class="font-bold text-chinampa">📲 Compartir</button>`}
+            ${c.patrocinado
+              ? `<a href="comercio.html" class="font-bold text-terracota hover:underline">Ver negocio en Directorio →</a>`
+              : `<button onclick="shareOnWhatsApp('Mira esta historia de nuestra colonia Gabriel Ramos Millán: ${c.titulo}')" class="font-bold text-chinampa hover:underline">📲 Compartir</button>`
+            }
           </div>
         </article>
       `).join('');
