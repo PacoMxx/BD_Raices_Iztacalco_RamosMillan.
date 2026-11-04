@@ -16,36 +16,40 @@
 
     <!-- 1. Radar de Mascotas -->
     <section id="sec-mascotas" class="space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-borde">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde">
         <div>
           <h2 class="font-serif text-2xl font-bold text-tinta">🐾 Radar de Mascotas Perdidas y Adopción</h2>
-          <p class="text-xs text-grafito">Alertas por cuadra en la Ramos Millán. Subir un reporte sencillo es gratis.</p>
+          <p class="text-xs text-grafito">Alertas con fotografía por cuadra en la Ramos Millán. Subir un reporte sencillo es gratis o puedes fijarlo con Boost ($50 MXN).</p>
         </div>
-        <a href="anunciate.html?tipo=mascota" class="px-3.5 py-2 rounded-xl bg-red-700 text-white font-bold text-xs">+ Reportar Mascota ($0 o Boost $50)</a>
+        <a href="anunciate.html?tipo=mascota" class="px-4 py-2.5 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs shadow-sm transition">
+          + Subir Mascota con Foto (Gratis o Boost $50) →
+        </a>
       </div>
       <div id="mascotas-box" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
     </section>
 
     <!-- 2. El Oficio Verificado -->
     <section id="sec-oficios" class="space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-borde">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde">
         <div>
           <h2 class="font-serif text-2xl font-bold text-tinta">🛠️ El Oficio Verificado (Emergencias en Casa)</h2>
           <p class="text-xs text-grafito">Plomeros, cerrajeros y electricistas recomendados por vecinos de la colonia.</p>
         </div>
-        <a href="anunciate.html?tipo=negocio" class="text-xs font-bold text-terracota hover:underline">¿Eres técnico? Anúnciate aquí →</a>
+        <a href="anunciate.html?tipo=negocio" class="text-xs font-bold text-terracota hover:underline">¿Eres técnico en la colonia? Anúnciate aquí →</a>
       </div>
       <div id="oficios-box" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
     </section>
 
     <!-- 3. Bolsa de Trabajo a 15 Minutos -->
     <section id="sec-empleos" class="space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-borde">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde">
         <div>
           <h2 class="font-serif text-2xl font-bold text-tinta">💼 Bolsa de Trabajo «A 15 Minutos de Casa»</h2>
           <p class="text-xs text-grafito">Vacantes en comercios de la Ramos Millán para trabajar sin cruzar la ciudad.</p>
         </div>
-        <a href="anunciate.html?tipo=empleo" class="px-3.5 py-2 rounded-xl bg-tinta text-white font-bold text-xs">+ Publicar Vacante ($100 MXN)</a>
+        <a href="anunciate.html?tipo=empleo" class="px-4 py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs">
+          + Publicar Vacante ($100 MXN) →
+        </a>
       </div>
       <div id="empleos-box" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
     </section>
@@ -56,26 +60,41 @@
 
   <script>
     window.onPageRender = function() {
+      // Renderizar Mascotas con su foto
       document.getElementById('mascotas-box').innerHTML = DB.mascotas
-        .filter(m => matchesGlobalFilter(m.sector, `${m.nombre} ${m.calle}`))
+        .filter(m => matchesGlobalFilter(m.sector, `${m.nombre} ${m.calle} ${m.descripcion}`))
         .map(m => `
-          <div class="bg-white rounded-2xl border ${m.destacado ? 'border-2 border-red-600' : 'border-borde'} p-5 flex flex-col justify-between">
-            <div class="space-y-2">
-              <span class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full ${m.destacado ? 'bg-red-600 text-white' : 'bg-amber-100 text-amber-900'}">${m.tipo}</span>
-              <h3 class="font-serif font-bold text-lg">${m.nombre}</h3>
-              <p class="text-xs font-bold text-terracota">📍 ${m.calle}</p>
-              <p class="text-xs text-grafito">${m.descripcion}</p>
+          <div class="bg-white rounded-2xl border ${m.destacado ? 'border-2 border-red-600 shadow-md' : 'border-borde shadow-sm'} p-5 flex flex-col justify-between">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full ${m.destacado ? 'bg-red-600 text-white' : 'bg-amber-100 text-amber-900'}">
+                  ${m.tipo}
+                </span>
+                <span class="text-[11px] font-mono text-grafito">📍 ${m.sector}</span>
+              </div>
+
+              ${m.foto ? `
+                <div class="relative group cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightbox('${m.foto}', '${m.nombre} — ${m.calle}')">
+                  <img src="${m.foto}" alt="${m.nombre}" class="w-full h-52 object-cover group-hover:scale-105 transition duration-300" />
+                  <span class="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] font-mono px-2 py-0.5 rounded">🔍 Ver foto grande</span>
+                </div>
+              ` : ''}
+
+              <h3 class="font-serif font-bold text-lg text-tinta">${m.nombre}</h3>
+              <p class="text-xs font-bold text-terracota">🗺️ Última vez visto en: ${m.calle}</p>
+              <p class="text-xs text-grafito bg-papel p-3 rounded-xl border border-borde leading-relaxed">${m.descripcion}</p>
             </div>
-            <button onclick="openWhatsAppDirect('${m.whatsapp}', 'Hola vecino, vi la alerta de *${m.nombre}* en Raíces de Iztacalco y tengo información:')" class="mt-4 w-full py-2 rounded-xl bg-red-50 text-red-800 font-bold text-xs">
-              📲 Contactar a la familia por WhatsApp
+            <button onclick="openWhatsAppDirect('${m.whatsapp}', 'Hola vecino, vi la alerta de tu mascota (*${m.nombre}*) en Raíces de Iztacalco y tengo información:')" class="mt-4 w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition">
+              📲 Avisar al dueño por WhatsApp
             </button>
           </div>
         `).join('');
 
+      // Renderizar Oficios
       document.getElementById('oficios-box').innerHTML = DB.oficios
         .filter(o => matchesGlobalFilter(o.sector, `${o.oficio} ${o.nombre}`))
         .map(o => `
-          <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between">
+          <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
             <div class="space-y-2">
               <div class="flex justify-between text-[11px] font-mono">
                 <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">✓ VERIFICADO</span>
@@ -86,24 +105,28 @@
               <p class="text-xs text-grafito">📍 ${o.calle}</p>
               <p class="text-xs bg-papel p-2.5 rounded-lg border border-borde">${o.garantia}</p>
             </div>
-            <button onclick="openWhatsAppDirect('${o.whatsapp}', 'Hola ${o.nombre}, vi su contacto en El Oficio Verificado de Raíces de Iztacalco y requiero un servicio:')" class="mt-4 w-full py-2.5 rounded-xl bg-chinampa text-white font-bold text-xs">
+            <button onclick="openWhatsAppDirect('${o.whatsapp}', 'Hola ${o.nombre}, vi su contacto en El Oficio Verificado de Raíces de Iztacalco y requiero un servicio:')" class="mt-4 w-full py-2.5 rounded-xl bg-chinampa hover:bg-green-800 text-white font-bold text-xs">
               📲 Solicitar servicio por WhatsApp
             </button>
           </div>
         `).join('');
 
+      // Renderizar Empleos con foto opcional
       document.getElementById('empleos-box').innerHTML = DB.empleos
-        .filter(e => matchesGlobalFilter(e.sector, `${e.puesto} ${e.negocio}`))
+        .filter(e => matchesGlobalFilter(e.sector, `${e.puesto} ${e.negocio} ${e.requisitos}`))
         .map(e => `
-          <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between">
+          <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
             <div class="space-y-2">
               <span class="text-[10px] font-mono font-bold bg-chinampaLight text-chinampa px-2.5 py-0.5 rounded-full">📍 A 15 MIN DE CASA • ${e.sector}</span>
+              ${e.foto ? `
+                <img src="${e.foto}" alt="${e.puesto}" onclick="openPhotoLightbox('${e.foto}', '${e.puesto}')" class="w-full h-44 object-cover rounded-xl border border-borde cursor-pointer my-2" />
+              ` : ''}
               <h3 class="font-serif font-bold text-lg">${e.puesto}</h3>
-              <p class="text-xs font-bold text-terracota">🏪 ${e.negocio} (${e.calle})</p>
+              <p class="text-xs font-bold text-terracota">🏪 ${e.negocio}</p>
               <p class="text-xs font-mono font-bold text-chinampa">💰 ${e.sueldo}</p>
-              <p class="text-xs text-grafito">${e.requisitos}</p>
+              <p class="text-xs text-grafito bg-papel p-3 rounded-xl border border-borde">${e.requisitos}</p>
             </div>
-            <button onclick="openWhatsAppDirect('${e.whatsapp}', 'Hola, vi la vacante de *${e.puesto}* en Raíces de Iztacalco y me interesa postularme:')" class="mt-4 w-full py-2.5 rounded-xl bg-tinta text-white font-bold text-xs">
+            <button onclick="openWhatsAppDirect('${e.whatsapp}', 'Hola, vi la vacante de *${e.puesto}* en Raíces de Iztacalco y me interesa postularme:')" class="mt-4 w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs">
               📲 Postularme por WhatsApp
             </button>
           </div>
