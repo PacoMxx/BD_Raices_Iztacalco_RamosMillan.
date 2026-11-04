@@ -60,12 +60,12 @@
 
   <script>
     window.onPageRender = function() {
-      // Renderizar Mascotas con su foto
+      // Renderizar Mascotas (Descripción arriba, Calle abajo, sin textos extraños ni Base64)
       document.getElementById('mascotas-box').innerHTML = DB.mascotas
         .filter(m => matchesGlobalFilter(m.sector, `${m.nombre} ${m.calle} ${m.descripcion}`))
         .map(m => `
           <div class="bg-white rounded-2xl border ${m.destacado ? 'border-2 border-red-600 shadow-md' : 'border-borde shadow-sm'} p-5 flex flex-col justify-between">
-            <div class="space-y-2.5">
+            <div class="space-y-3">
               <div class="flex items-center justify-between gap-2">
                 <span class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full ${m.destacado ? 'bg-red-600 text-white' : 'bg-amber-100 text-amber-900'}">
                   ${m.tipo}
@@ -74,16 +74,20 @@
               </div>
 
               ${m.foto ? `
-                <div class="relative group cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightbox('${m.foto}', '${m.nombre} — ${m.calle}')">
-                  <img src="${m.foto}" alt="${m.nombre}" class="w-full h-52 object-cover group-hover:scale-105 transition duration-300" />
-                  <span class="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] font-mono px-2 py-0.5 rounded">🔍 Ver foto grande</span>
+                <div class="overflow-hidden rounded-xl border border-borde bg-stone-100">
+                  <img src="${m.foto}" alt="${m.nombre}" class="w-full h-52 object-cover" />
                 </div>
               ` : ''}
 
               <h3 class="font-serif font-bold text-lg text-tinta">${m.nombre}</h3>
-              <p class="text-xs font-bold text-terracota">🗺️ Última vez visto en: ${m.calle}</p>
+              
+              <!-- Descripción arriba -->
               <p class="text-xs text-grafito bg-papel p-3 rounded-xl border border-borde leading-relaxed">${m.descripcion}</p>
+              
+              <!-- Calle abajo -->
+              <p class="text-xs font-bold text-terracota">🗺️ Última vez visto en: ${m.calle}</p>
             </div>
+
             <button onclick="openWhatsAppDirect('${m.whatsapp}', 'Hola vecino, vi la alerta de tu mascota (*${m.nombre}*) en Raíces de Iztacalco y tengo información:')" class="mt-4 w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition">
               📲 Avisar al dueño por WhatsApp
             </button>
@@ -111,7 +115,7 @@
           </div>
         `).join('');
 
-      // Renderizar Empleos con foto opcional
+      // Renderizar Empleos
       document.getElementById('empleos-box').innerHTML = DB.empleos
         .filter(e => matchesGlobalFilter(e.sector, `${e.puesto} ${e.negocio} ${e.requisitos}`))
         .map(e => `
@@ -119,7 +123,7 @@
             <div class="space-y-2">
               <span class="text-[10px] font-mono font-bold bg-chinampaLight text-chinampa px-2.5 py-0.5 rounded-full">📍 A 15 MIN DE CASA • ${e.sector}</span>
               ${e.foto ? `
-                <img src="${e.foto}" alt="${e.puesto}" onclick="openPhotoLightbox('${e.foto}', '${e.puesto}')" class="w-full h-44 object-cover rounded-xl border border-borde cursor-pointer my-2" />
+                <img src="${e.foto}" alt="${e.puesto}" class="w-full h-44 object-cover rounded-xl border border-borde my-2" />
               ` : ''}
               <h3 class="font-serif font-bold text-lg">${e.puesto}</h3>
               <p class="text-xs font-bold text-terracota">🏪 ${e.negocio}</p>
