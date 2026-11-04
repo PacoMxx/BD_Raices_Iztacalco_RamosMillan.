@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * ARCHIVO CENTRAL: app.js — RAÍCES DE IZTACALCO (EDICIÓN GABRIEL RAMOS MILLÁN)
- * Conecta las 6 páginas independientes, el menú, los candados y Google Sheets
+ * Conecta las páginas independientes, sincroniza fotos de Sheets y visor modal
  * ============================================================================
  */
 
@@ -35,7 +35,6 @@ const MP_LINKS = {
   }
 };
 
-// Configuración visual global de Tailwind para todas las páginas
 if (typeof tailwind !== "undefined") {
   tailwind.config = {
     theme: {
@@ -62,13 +61,12 @@ if (typeof tailwind !== "undefined") {
   };
 }
 
-// Estado global compartido
 let currentSector = localStorage.getItem('raices_sector') || 'TODOS';
 let searchQuery = '';
 const businessCarts = {};
 let lastFormSubmitTimestamp = 0;
+let sheetsAlreadySynced = false;
 
-// CANDADO 1: Sanitizador Anti-XSS
 function sanitizeHTML(str) {
   return String(str || '')
     .replace(/&/g, '&amp;')
@@ -80,7 +78,7 @@ function sanitizeHTML(str) {
 }
 
 // ============================================================================
-// DATOS BASE DE LA COLONIA GABRIEL RAMOS MILLÁN (Se combinan con Google Sheets)
+// DATOS BASE DE LA COLONIA GABRIEL RAMOS MILLÁN
 // ============================================================================
 const DB = {
   ticker: "🎸 Concierto en Estadio GNP (20:30 h): Tráfico pesado en Río Churubusco, Viaducto y Av. Té • ⛺ Tianguis Hoy: Sur 163 (Mercado Bramadero) hasta las 17:00 h.",
@@ -92,8 +90,10 @@ const DB = {
       categoria: 'RAÍCES E HISTORIA',
       sector: 'Bramadero',
       fecha: 'Crónica de la Semana',
+      autor: 'Archivo Histórico Vecinal',
       resumen: 'Desde las primeras romerías hasta convertirse en el punto donde convergen tres generaciones de familias iztacalquenses cada domingo.',
       contenidoCompleto: 'Fundado para abastecer a las familias trabajadoras que poblaron la sección Bramadero, el Mercado 204 conserva locales atendidos por los nietos de sus fundadores originales: desde chiles secos y moles artesanales hasta las tradicionales carnitas.',
+      foto: '',
       patrocinado: false
     },
     {
@@ -102,8 +102,10 @@ const DB = {
       categoria: 'PUBLIRREPORTAJE • SELLO DE TRADICIÓN',
       sector: 'Tlacotal',
       fecha: 'Negocio Fundador',
+      autor: 'Redacción Raíces',
       resumen: 'Don Arnulfo llegó a la esquina de Sur 125 y Oriente 100-A en 1988. Hoy sus conchas de mantequilla y bolillos calientes siguen saliendo a las 6:30 AM.',
       contenidoCompleto: 'Con horno de ladrillo original y recetas sin conservadores, La Espiga de Tlacotal ahora recibe pedidos de charolas familiares y pasteles directamente desde el directorio de Raíces de Iztacalco.',
+      foto: '',
       patrocinado: true
     },
     {
@@ -112,8 +114,10 @@ const DB = {
       categoria: 'MEMORIA DE IZTACALCO',
       sector: 'Coyuya / Plutarco',
       fecha: 'Archivo Histórico',
+      autor: 'Vecinos de Iztacalco',
       resumen: 'A pocos minutos de Metro Coyuya y Plutarco Elías Calles estuvo el embarcadero más famoso del México antiguo durante el Viernes de Dolores.',
       contenidoCompleto: 'El Paseo de la Viga y el pueblo originario de Santa Anita Zacatlamanco marcaron la vocación comerciante y festiva que heredaron las colonias contiguas como la Gabriel Ramos Millán.',
+      foto: '',
       patrocinado: false
     }
   ],
@@ -128,6 +132,7 @@ const DB = {
       plan: 'PRO',
       cupon: '🎁 OFERTA DEL JUEVES Y VIERNES: 1/2 litro de salsa de habanero y nopales gratis al pedir 1 kg de carnitas mencionando Raíces de Iztacalco.',
       historia: 'Más de 30 años preparando carnitas estilo Michoacán en cazo de cobre para las familias de la sección Bramadero.',
+      foto: '',
       whatsapp: '5512345678',
       catalogo: [
         { nombre: '1 Kg de Carnitas Surtidas (Maciza, Costilla, Cuerito)', precio: 290 },
@@ -145,6 +150,7 @@ const DB = {
       plan: 'PRO',
       cupon: '🥐 CUPÓN VECINAL: 6 Conchas rellenas de nata o chocolate por $95 MXN pidiendo desde la página.',
       historia: 'Horneando pan tradicional desde 1988 en el corazón de la sección Tlacotal.',
+      foto: '',
       whatsapp: '5512345678',
       catalogo: [
         { nombre: 'Charola de 10 piezas de pan dulce tradicional', precio: 135 },
@@ -162,6 +168,7 @@ const DB = {
       plan: 'PRO',
       cupon: '🐾 PROMO VECINAL: Corte de uñas y revisión dental gratis al agendar baño o estética.',
       historia: 'Cuidando a las mascotas de la Ramos Millán con médicos veterinarios titulados.',
+      foto: '',
       whatsapp: '5512345678',
       catalogo: [
         { nombre: 'Baño y Estética Canina Raza Pequeña/Mediana', precio: 220 },
@@ -179,6 +186,7 @@ const DB = {
       plan: 'PRO',
       cupon: '🔧 ENVÍO GRATIS a domicilio dentro de la Ramos Millán en compras mayores a $250 MXN.',
       historia: '41 años resolviendo emergencias de plomería, electricidad y pintura en la colonia.',
+      foto: '',
       whatsapp: '5512345678',
       catalogo: [
         { nombre: 'Kit Reparación Fuga de WC Universal', precio: 145 },
@@ -194,6 +202,7 @@ const DB = {
       calle: 'Av. Té a media cuadra de la Explanada de la Alcaldía Iztacalco',
       anioFundacion: 2016,
       plan: 'BASICO',
+      foto: '',
       horario: 'Lunes a Sábado de 12:30 a 17:00 h'
     },
     {
@@ -204,6 +213,7 @@ const DB = {
       calle: 'Av. Plutarco Elías Calles cerca de Metro Coyuya',
       anioFundacion: 1999,
       plan: 'BASICO',
+      foto: '',
       horario: 'Martes a Domingo de 10:00 a 20:00 h'
     }
   ],
@@ -217,6 +227,7 @@ const DB = {
       puntoEntrega: 'Explanada Alcaldía Iztacalco',
       destacado: true,
       descripcion: 'Ideal para moverse por la ciclovía o ir al mercado. Frenos recién ajustados, llantas al 90%. Entrego frente a Ventanilla Única de la Alcaldía.',
+      foto: '',
       whatsapp: '5512345678'
     },
     {
@@ -228,6 +239,7 @@ const DB = {
       puntoEntrega: 'Entrada Mercado Tlacotal',
       destacado: true,
       descripcion: 'Horneamos sábado y domingo por la mañana. Pide por WhatsApp y recoge calientitos en la entrada de Mi Mercado Tlacotal o Metro Iztacalco.',
+      foto: '',
       whatsapp: '5512345678'
     },
     {
@@ -239,6 +251,7 @@ const DB = {
       puntoEntrega: 'Metro Iztacalco (Línea 8)',
       destacado: false,
       descripcion: 'Mide 100x50 cm, cabe perfecto en departamento. Sin detalles, lo vendo por mudanza.',
+      foto: '',
       whatsapp: '5512345678'
     },
     {
@@ -250,6 +263,7 @@ const DB = {
       puntoEntrega: 'Entrada Mercado Bramadero',
       destacado: false,
       descripcion: 'Ropa de segunda mano seleccionada, limpia y sin desgaste. Entrego sábado a mediodía en la entrada principal del Mercado 204.',
+      foto: '',
       whatsapp: '5512345678'
     }
   ],
@@ -261,6 +275,7 @@ const DB = {
       sector: 'Bramadero',
       calle: 'Visto por última vez en Sur 159 esq. Oriente 106',
       descripcion: 'Se salió asustado ayer por la tarde. Es muy noble y lleva placa con teléfono. Se ofrece gratificación.',
+      foto: '',
       destacado: true,
       whatsapp: '5512345678'
     },
@@ -271,6 +286,7 @@ const DB = {
       sector: 'Av. Té / Alcaldía',
       calle: 'Resguardado cerca de la Explanada de la Alcaldía Iztacalco',
       descripcion: 'Trae pechera roja sin plaquita. Buscamos a su familia presentando foto de comprobación.',
+      foto: '',
       destacado: false,
       whatsapp: '5512345678'
     },
@@ -281,6 +297,7 @@ const DB = {
       sector: 'Tlacotal',
       calle: 'Sección Tlacotal (Sur 125)',
       descripcion: 'Talla mediana, súper cariñosa y conviviente con niños. Se entrega con cartilla.',
+      foto: '',
       destacado: false,
       whatsapp: '5512345678'
     }
@@ -326,6 +343,7 @@ const DB = {
       calle: 'Sur 125 esq. Oriente 100-A',
       sueldo: '$1,900 MXN semanales + pan de casa',
       requisitos: 'Mayor de edad, trato amable con los vecinos, vivir en la Ramos Millán o cerca.',
+      foto: '',
       whatsapp: '5512345678'
     },
     {
@@ -336,39 +354,21 @@ const DB = {
       calle: 'Sur 149, Secc. Cuchilla',
       sueldo: '$2,100 MXN semanales + propinas íntegras',
       requisitos: 'Conocer bien las calles Sur y Oriente de la colonia. Horario de 9:00 a 17:30 h.',
+      foto: '',
       whatsapp: '5512345678'
     }
   ]
 };
 
 // ============================================================================
-// SINCRONIZACIÓN AUTOMÁTICA CON GOOGLE SHEETS (Cuando GOOGLE_SHEETS_WEBAPP_URL está activo)
+// SINCRONIZACIÓN AUTOMÁTICA CON GOOGLE SHEETS (Fotos + Registros Aprobados)
 // ============================================================================
 async function syncWithGoogleSheets() {
-  if (!GOOGLE_SHEETS_WEBAPP_URL) return;
+  if (!GOOGLE_SHEETS_WEBAPP_URL || sheetsAlreadySynced) return;
   try {
     const res = await fetch(GOOGLE_SHEETS_WEBAPP_URL);
     const data = await res.json();
-
-    // 1. Alertas Viales
-    if (data.alertas && data.alertas.length > 0) {
-      const a = data.alertas[0];
-      DB.ticker = `🚗 Vialidad: ${a.Estado_Vial || ''} • 🎸 Evento: ${a.Evento_Deportiva || ''} • ⛺ Tianguis Hoy: ${a.Tianguis_Hoy || ''}`;
-      const tickerEl = document.getElementById('ticker-text');
-      if (tickerEl) tickerEl.textContent = DB.ticker;
-    }
-
-    // 2. Fotos e Historias Aprobadas en Crónicas y Raíces
-    if (data.cronicas && data.cronicas.length > 0) {
-      const nuevasCronicas = data.cronicas.map((c, idx) => ({
-        id: `sh_c_${idx}`,
-        titulo: c.Titulo_Lugar || 'Memoria de la Ramos Millán',
-        categoria
-async function syncWithGoogleSheets() {
-  if (!GOOGLE_SHEETS_WEBAPP_URL) return;
-  try {
-    const res = await fetch(GOOGLE_SHEETS_WEBAPP_URL);
-    const data = await res.json();
+    sheetsAlreadySynced = true;
 
     if (data.ticker && data.ticker.mensaje) {
       DB.ticker = data.ticker.mensaje;
@@ -383,23 +383,24 @@ async function syncWithGoogleSheets() {
           DB.cronicas.unshift({
             id: pub.id,
             titulo: pub.titulo,
-            categoria: 'FOTO VECINAL • POR: ' + (pub.subdato || 'VECINO'),
+            categoria: '📷 MEMORIA VECINAL',
             sector: pub.sector,
             fecha: pub.fecha,
-            resumen: `Fotografía compartida por: ${pub.subdato}`,
+            autor: pub.subdato || 'Vecino de la Ramos Millán',
+            resumen: `Fotografía histórica compartida por: ${pub.subdato || 'Vecino de la colonia'}`,
             contenidoCompleto: pub.detalles,
-            foto: pub.foto,
+            foto: pub.foto || '',
             patrocinado: false
           });
         } else if (pub.categoria === 'MASCOTA') {
           DB.mascotas.unshift({
             id: pub.id,
-            tipo: pub.modalidad.includes('Boost') ? 'PERDIDO • BOOST VECINAL ACTIVO' : 'REPORTE VECINAL DE MASCOTA',
+            tipo: pub.modalidad.includes('Boost') ? '🔥 PERDIDO • BOOST URGENTE ACTIVO' : '🐾 REPORTE VECINAL DE MASCOTA',
             nombre: pub.titulo,
             sector: pub.sector,
             calle: pub.subdato,
             descripcion: pub.detalles,
-            foto: pub.foto,
+            foto: pub.foto || '',
             destacado: pub.modalidad.includes('Boost'),
             whatsapp: pub.whatsapp || ADMIN_WHATSAPP
           });
@@ -407,13 +408,13 @@ async function syncWithGoogleSheets() {
           DB.tianguis.unshift({
             id: pub.id,
             producto: pub.titulo,
-            precio: 'Ver detalle',
+            precio: 'Consultar en descripción',
             vendedor: 'Vecino verificado (' + pub.sector + ')',
             sector: pub.sector,
-            puntoEntrega: pub.subdato,
+            puntoEntrega: pub.subdato || 'Explanada Alcaldía Iztacalco',
             destacado: pub.modalidad.includes('Destacado'),
             descripcion: pub.detalles,
-            foto: pub.foto,
+            foto: pub.foto || '',
             whatsapp: pub.whatsapp || ADMIN_WHATSAPP
           });
         } else if (pub.categoria === 'EMPLEO') {
@@ -422,26 +423,27 @@ async function syncWithGoogleSheets() {
             puesto: pub.titulo,
             negocio: pub.subdato,
             sector: pub.sector,
-            calle: pub.sector,
-            sueldo: 'Consultar en descripción',
+            calle: pub.subdato,
+            sueldo: 'Ver condiciones abajo',
             requisitos: pub.detalles,
+            foto: pub.foto || '',
             whatsapp: pub.whatsapp || ADMIN_WHATSAPP
           });
         } else if (pub.categoria === 'NEGOCIO') {
           DB.negocios.unshift({
             id: pub.id,
             nombre: pub.titulo,
-            giro: 'Comercio y Servicios',
+            giro: 'Comida y Antojitos',
             sector: pub.sector,
             calle: pub.subdato,
             anioFundacion: 2020,
             plan: pub.modalidad.includes('Pro') ? 'PRO' : 'BASICO',
             cupon: pub.detalles,
-            historia: 'Negocio local de la Colonia Gabriel Ramos Millán.',
-            foto: pub.foto,
+            historia: 'Comercio local de la Colonia Gabriel Ramos Millán.',
+            foto: pub.foto || '',
             whatsapp: pub.whatsapp || ADMIN_WHATSAPP,
             catalogo: [
-              { nombre: 'Pedido o Cotización General', precio: 100 }
+              { nombre: 'Pedido o Promoción Vecinal', precio: 100 }
             ]
           });
         }
@@ -452,9 +454,38 @@ async function syncWithGoogleSheets() {
       window.onPageRender();
     }
   } catch (err) {
-    console.log('Usando datos locales de respaldo:', err);
+    console.log('Modo local activo:', err);
   }
 }
+
+// ============================================================================
+// VISOR DE FOTOS A PANTALLA COMPLETA (Al tocar cualquier foto subida)
+// ============================================================================
+function openPhotoLightbox(src, caption) {
+  if (!src) return;
+  let modal = document.getElementById('global-photo-lightbox');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'global-photo-lightbox';
+    modal.className = 'fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4';
+    modal.onclick = () => modal.classList.add('hidden');
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = `
+    <div class="max-w-2xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+      <div class="relative bg-stone-950 flex items-center justify-center max-h-[75vh]">
+        <img src="${src}" alt="${sanitizeHTML(caption)}" class="max-h-[75vh] w-auto object-contain" />
+        <button onclick="document.getElementById('global-photo-lightbox').classList.add('hidden')" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/70 text-white font-bold text-base flex items-center justify-center hover:bg-black">✕</button>
+      </div>
+      <div class="p-4 bg-papel flex items-center justify-between gap-2">
+        <p class="text-xs sm:text-sm font-bold text-tinta">${sanitizeHTML(caption || 'Fotografía vecinal — Raíces de Iztacalco')}</p>
+        <button onclick="document.getElementById('global-photo-lightbox').classList.add('hidden')" class="px-3 py-1 rounded-lg bg-tinta text-white text-xs font-bold shrink-0">Cerrar</button>
+      </div>
+    </div>
+  `;
+  modal.classList.remove('hidden');
+}
+
 // ============================================================================
 // CABECERA, MENÚ MULTIPÁGINA Y PIE DE PÁGINA AUTOMÁTICOS
 // ============================================================================
@@ -466,7 +497,7 @@ function renderSharedLayout(activePage) {
     { id: 'comercio', label: '🏪 Comercio de Barrio', href: 'comercio.html', badge: 'Ofertas' },
     { id: 'tianguis', label: '🛍️ Tianguis Digital', href: 'tianguis.html' },
     { id: 'comunidad', label: '🚨 Mascotas, Oficios y Empleo', href: 'comunidad.html' },
-    { id: 'anunciate', label: '➕ Publicar / Anúnciate', href: 'anunciate.html', cta: true }
+    { id: 'anunciate', label: '➕ Publicar / Subir Foto', href: 'anunciate.html', cta: true }
   ];
 
   const nowStr = new Date().toLocaleDateString('es-MX', {
@@ -476,8 +507,7 @@ function renderSharedLayout(activePage) {
   const headerContainer = document.getElementById('shared-header');
   if (headerContainer) {
     headerContainer.innerHTML = `
-      <!-- Ticker Vial Superior -->
-      <div class="bg-tinta text-papel text-xs border-b border-stone-800 sticky top-0 z-50">
+      <div class="bg-tinta text-papel text-xs border-b border-stone-800 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-2 overflow-x-auto whitespace-nowrap">
             <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shrink-0"></span>
@@ -490,7 +520,6 @@ function renderSharedLayout(activePage) {
         </div>
       </div>
 
-      <!-- Masthead del Periódico -->
       <header class="bg-papel/95 backdrop-blur-md border-b border-borde">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-3 pb-2">
           <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-borde text-xs text-grafito">
@@ -524,7 +553,6 @@ function renderSharedLayout(activePage) {
             </p>
           </div>
 
-          <!-- Filtro Global por Sector -->
           <div class="border-t-2 border-b border-tinta py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto py-0.5">
               <span class="text-xs font-mono uppercase font-bold text-tinta shrink-0 mr-1">📍 Sector:</span>
@@ -540,7 +568,6 @@ function renderSharedLayout(activePage) {
             </div>
           </div>
 
-          <!-- Barra de Navegación Multipágina (Desktop) -->
           <nav class="hidden lg:flex items-center justify-center flex-wrap gap-1.5 pt-3" aria-label="Páginas del periódico">
             ${navItems.map(item => {
               const isActive = activePage === item.id;
@@ -560,7 +587,6 @@ function renderSharedLayout(activePage) {
     `;
   }
 
-  // Footer compartido con Candado 3 (Deslinde Legal Vecinal) y Navegación Móvil
   const footerContainer = document.getElementById('shared-footer');
   if (footerContainer) {
     footerContainer.innerHTML = `
@@ -576,7 +602,7 @@ function renderSharedLayout(activePage) {
               <div class="mt-3 flex flex-wrap gap-2 text-xs">
                 <a href="guia.html" class="text-amber-300 underline font-semibold">📖 Manual de Uso Vecinal</a>
                 <span>•</span>
-                <a href="anunciate.html" class="text-amber-300 underline font-semibold">➕ Anunciar mi Negocio</a>
+                <a href="anunciate.html" class="text-amber-300 underline font-semibold">➕ Subir Foto o Anuncio</a>
               </div>
             </div>
 
@@ -585,14 +611,13 @@ function renderSharedLayout(activePage) {
               <ul class="text-xs text-stone-300 space-y-1.5">
                 <li><a href="index.html" class="hover:text-amber-300">🏠 Portada Principal y Selector de Secciones</a></li>
                 <li><a href="guia.html" class="hover:text-amber-300">📖 Guía Paso a Paso: ¿Cómo usar la página?</a></li>
-                <li><a href="cronicas.html" class="hover:text-amber-300">📰 Crónicas, Historia y Avisos Viales</a></li>
-                <li><a href="comercio.html" class="hover:text-amber-300">🏪 Directorio de Comercio con Pedidos WhatsApp</a></li>
+                <li><a href="cronicas.html" class="hover:text-amber-300">📰 Crónicas, Historia y Fotos Antiguas</a></li>
+                <li><a href="comercio.html" class="hover:text-amber-300">🏪 Directorio de Comercio con Mapa y WhatsApp</a></li>
                 <li><a href="tianguis.html" class="hover:text-amber-300">🛍️ El Tianguis Digital (Entregas Seguras)</a></li>
                 <li><a href="comunidad.html" class="hover:text-amber-300">🚨 Mascotas Perdidas, Oficios y Empleo Local</a></li>
               </ul>
             </div>
 
-            <!-- CANDADO 3: Aviso Legal Vecinal -->
             <div class="p-4 rounded-xl bg-stone-900 border border-stone-700">
               <h5 class="font-mono text-xs uppercase font-bold text-amber-400 mb-1.5">🛡️ Candado de Seguridad Vecinal</h5>
               <p class="text-[11px] text-stone-300 leading-relaxed">
@@ -606,8 +631,7 @@ function renderSharedLayout(activePage) {
         </div>
       </footer>
 
-      <!-- Barra Inferior Fija para Celulares (Multipágina) -->
-      <nav class="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-borde z-50 px-1.5 py-1.5 shadow-lg">
+      <nav class="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-borde z-40 px-1.5 py-1.5 shadow-lg">
         <div class="grid grid-cols-6 gap-1 max-w-lg mx-auto text-center">
           <a href="index.html" class="flex flex-col items-center py-1 rounded-lg ${activePage === 'inicio' ? 'text-terracota font-extrabold bg-amber-50' : 'text-grafito'}">
             <span class="text-base leading-none">🏠</span>
