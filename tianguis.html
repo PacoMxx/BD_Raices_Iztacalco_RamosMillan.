@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Tianguis Digital | Raíces de Iztacalco</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="app.js"></script>
+</head>
+<body data-page="tianguis" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
+
+  <div id="shared-header"></div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <div class="bg-white rounded-2xl border border-borde p-6 shadow-sm space-y-4">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-mono font-bold text-chinampa bg-chinampaLight px-2.5 py-0.5 rounded-full">🤝 CLASIFICADOS ENTRE VECINOS</span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta mt-1">El Tianguis Digital de la Ramos Millán</h2>
+          <p class="text-xs sm:text-sm text-grafito">Compra y vende con entrega en puntos públicos seguros de nuestra alcaldía.</p>
+        </div>
+        <a href="anunciate.html?tipo=tianguis" class="px-4 py-2.5 rounded-xl bg-terracota text-white font-bold text-xs shrink-0">
+          + Vender un Artículo (1 Gratis / Destacado $39)
+        </a>
+      </div>
+
+      <!-- CANDADO 3: Aviso de Seguridad en Entregas -->
+      <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-950">
+        🛡️ <strong>Regla de Seguridad Vecinal:</strong> Nunca realices depósitos ni transferencias por adelantado a desconocidos. Acuerda la entrega exclusivamente en lugares públicos concurridos (Explanada de la Alcaldía Iztacalco, torniquetes de Metro Iztacalco/Coyuya o entradas principales de los mercados Bramadero y Tlacotal).
+      </div>
+    </div>
+
+    <div id="tianguis-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+  </main>
+
+  <div id="shared-footer"></div>
+
+  <script>
+    window.onPageRender = function() {
+      const box = document.getElementById('tianguis-container');
+      const items = DB.tianguis.filter(t => matchesGlobalFilter(t.sector, `${t.producto} ${t.descripcion} ${t.puntoEntrega}`));
+      box.innerHTML = items.map(t => `
+        <div class="bg-white rounded-2xl border ${t.destacado ? 'border-2 border-terracota' : 'border-borde'} p-5 shadow-sm flex flex-col justify-between">
+          <div class="space-y-2.5">
+            <div class="flex justify-between text-[10px] font-mono">
+              <span class="px-2.5 py-0.5 rounded-full font-bold ${t.destacado ? 'bg-terracota text-white' : 'bg-crema text-grafito'}">
+                ${t.destacado ? '🔥 DESTACADO EN LA RAMOS' : 'CLASIFICADO VECINAL'}
+              </span>
+              <span>📍 ${t.sector}</span>
+            </div>
+            <h3 class="font-serif font-bold text-lg text-tinta">${t.producto}</h3>
+            <div class="font-mono text-xl font-extrabold text-chinampa">${t.precio}</div>
+            <p class="text-xs text-grafito">${t.descripcion}</p>
+            <div class="p-3 rounded-xl bg-papel border border-borde text-xs">
+              <span class="font-bold block">🛡️ Punto de Entrega Seguro:</span>
+              <span class="font-mono text-terracota font-bold">${t.puntoEntrega}</span>
+              <span class="block text-[11px] text-grafito mt-0.5">${t.vendedor}</span>
+            </div>
+          </div>
+          <button onclick="openWhatsAppDirect('${t.whatsapp}', 'Hola vecino, vi tu anuncio de *${t.producto}* (${t.precio}) en El Tianguis Digital de Raíces de Iztacalco. ¿Sigue disponible para entrega en *${t.puntoEntrega}*?')" class="mt-4 w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs">
+            📲 Acordar entrega por WhatsApp
+          </button>
+        </div>
+      `).join('');
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSharedLayout('tianguis');
+      window.onPageRender();
+    });
+  </script>
+</body>
+</html>
