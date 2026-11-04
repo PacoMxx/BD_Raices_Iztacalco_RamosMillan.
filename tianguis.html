@@ -17,16 +17,15 @@
     <div class="bg-white rounded-2xl border border-borde p-6 shadow-sm space-y-4">
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <span class="text-xs font-mono font-bold text-chinampa bg-chinampaLight px-2.5 py-0.5 rounded-full">🤝 CLASIFICADOS ENTRE VECINOS</span>
+          <span class="text-xs font-mono font-bold text-chinampa bg-chinampaLight px-2.5 py-0.5 rounded-full">🤝 CLASIFICADOS CON FOTO ENTRE VECINOS</span>
           <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta mt-1">El Tianguis Digital de la Ramos Millán</h2>
           <p class="text-xs sm:text-sm text-grafito">Compra y vende con entrega en puntos públicos seguros de nuestra alcaldía.</p>
         </div>
-        <a href="anunciate.html?tipo=tianguis" class="px-4 py-2.5 rounded-xl bg-terracota text-white font-bold text-xs shrink-0">
-          + Vender un Artículo (1 Gratis / Destacado $39)
+        <a href="anunciate.html?tipo=tianguis" class="px-4 py-2.5 rounded-xl bg-terracota hover:bg-terracotaDark text-white font-bold text-xs shrink-0 shadow-sm transition">
+          + Subir Producto con Foto (1 Gratis / Destacado $39) →
         </a>
       </div>
 
-      <!-- CANDADO 3: Aviso de Seguridad en Entregas -->
       <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-950">
         🛡️ <strong>Regla de Seguridad Vecinal:</strong> Nunca realices depósitos ni transferencias por adelantado a desconocidos. Acuerda la entrega exclusivamente en lugares públicos concurridos (Explanada de la Alcaldía Iztacalco, torniquetes de Metro Iztacalco/Coyuya o entradas principales de los mercados Bramadero y Tlacotal).
       </div>
@@ -42,8 +41,9 @@
     window.onPageRender = function() {
       const box = document.getElementById('tianguis-container');
       const items = DB.tianguis.filter(t => matchesGlobalFilter(t.sector, `${t.producto} ${t.descripcion} ${t.puntoEntrega}`));
+      
       box.innerHTML = items.map(t => `
-        <div class="bg-white rounded-2xl border ${t.destacado ? 'border-2 border-terracota' : 'border-borde'} p-5 shadow-sm flex flex-col justify-between">
+        <div class="bg-white rounded-2xl border ${t.destacado ? 'border-2 border-terracota shadow-md' : 'border-borde shadow-sm'} p-5 flex flex-col justify-between">
           <div class="space-y-2.5">
             <div class="flex justify-between text-[10px] font-mono">
               <span class="px-2.5 py-0.5 rounded-full font-bold ${t.destacado ? 'bg-terracota text-white' : 'bg-crema text-grafito'}">
@@ -51,16 +51,24 @@
               </span>
               <span>📍 ${t.sector}</span>
             </div>
+
+            ${t.foto ? `
+              <div class="relative group cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightbox('${t.foto}', '${t.producto}')">
+                <img src="${t.foto}" alt="${t.producto}" class="w-full h-52 object-cover group-hover:scale-105 transition duration-300" />
+                <span class="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] font-mono px-2 py-0.5 rounded">🔍 Ver foto</span>
+              </div>
+            ` : ''}
+
             <h3 class="font-serif font-bold text-lg text-tinta">${t.producto}</h3>
-            <div class="font-mono text-xl font-extrabold text-chinampa">${t.precio}</div>
-            <p class="text-xs text-grafito">${t.descripcion}</p>
+            <div class="font-mono text-lg font-extrabold text-chinampa">${t.precio}</div>
+            <p class="text-xs text-grafito leading-relaxed">${t.descripcion}</p>
             <div class="p-3 rounded-xl bg-papel border border-borde text-xs">
               <span class="font-bold block">🛡️ Punto de Entrega Seguro:</span>
               <span class="font-mono text-terracota font-bold">${t.puntoEntrega}</span>
               <span class="block text-[11px] text-grafito mt-0.5">${t.vendedor}</span>
             </div>
           </div>
-          <button onclick="openWhatsAppDirect('${t.whatsapp}', 'Hola vecino, vi tu anuncio de *${t.producto}* (${t.precio}) en El Tianguis Digital de Raíces de Iztacalco. ¿Sigue disponible para entrega en *${t.puntoEntrega}*?')" class="mt-4 w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs">
+          <button onclick="openWhatsAppDirect('${t.whatsapp}', 'Hola vecino, vi tu anuncio de *${t.producto}* en El Tianguis Digital de Raíces de Iztacalco. ¿Sigue disponible para entrega en *${t.puntoEntrega}*?')" class="mt-4 w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs transition">
             📲 Acordar entrega por WhatsApp
           </button>
         </div>
