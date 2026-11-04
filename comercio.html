@@ -358,7 +358,7 @@
                     <span>📍 ${n.sector}</span>
                   </div>
                   <h3 class="font-serif text-xl font-bold text-tinta">${n.nombre}</h3>
-                  
+                  ${n.foto ? `<img src="${n.foto}" alt="${n.nombre}" onclick="openPhotoLightbox('${n.foto}', '${n.nombre}')" class="w-full h-44 object-cover rounded-xl border border-borde cursor-pointer" />` : ''}
                   ${locationBlock}
 
                   <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 font-medium">
