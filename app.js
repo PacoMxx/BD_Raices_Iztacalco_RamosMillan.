@@ -349,19 +349,21 @@ async function syncWithGoogleSheets() {
   try {
     const res = await fetch(GOOGLE_SHEETS_WEBAPP_URL);
     const data = await res.json();
+
+    // 1. Alertas Viales
     if (data.alertas && data.alertas.length > 0) {
       const a = data.alertas[0];
       DB.ticker = `🚗 Vialidad: ${a.Estado_Vial || ''} • 🎸 Evento: ${a.Evento_Deportiva || ''} • ⛺ Tianguis Hoy: ${a.Tianguis_Hoy || ''}`;
       const tickerEl = document.getElementById('ticker-text');
       if (tickerEl) tickerEl.textContent = DB.ticker;
     }
-    if (typeof window.onPageRender === 'function') {
-      window.onPageRender();
-    }
-  } catch (err) {
-    console.log('Usando datos locales de respaldo:', err);
-  }
-}
+
+    // 2. Fotos e Historias Aprobadas en Crónicas y Raíces
+    if (data.cronicas && data.cronicas.length > 0) {
+      const nuevasCronicas = data.cronicas.map((c, idx) => ({
+        id: `sh_c_${idx}`,
+        titulo: c.Titulo_Lugar || 'Memoria de la Ramos Millán',
+        categoria
 
 // ============================================================================
 // CABECERA, MENÚ MULTIPÁGINA Y PIE DE PÁGINA AUTOMÁTICOS
