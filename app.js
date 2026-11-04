@@ -6,32 +6,32 @@
  */
 
 // 1. PEGA AQUÍ TU URL DE GOOGLE APPS SCRIPT (termina en /exec):
-const GOOGLE_SHEETS_WEBAPP_URL = "";
+const GOOGLE_SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz_yuI8WhbZFM79eoLqJhRfB5C9fAAMRb896IVKb9nHHKzX_AIK4u2RUR9k6jvm6Je7dA/exec";
 
 // 2. PON AQUÍ TU WHATSAPP DE ADMINISTRADOR (10 dígitos):
-const ADMIN_WHATSAPP = "5512345678";
+const ADMIN_WHATSAPP = "5510803153";
 
 // 3. PEGA AQUÍ TUS LINKS REALES DE MERCADO PAGO:
 const MP_LINKS = {
   SUSCRIPCION_PRO_199: {
     title: "Suscripción Mensual: Plan Pro Orgullo de Barrio",
     amount: "$199 MXN / mes",
-    url: "https://www.mercadopago.com.mx/subscriptions"
+    url: "https://mpago.la/259su4B"
   },
   TIANGUIS_39: {
     title: "Anuncio Destacado en El Tianguis Digital (7 días)",
     amount: "$39 MXN (Pago único)",
-    url: "https://www.mercadopago.com.mx/link-de-pago"
+    url: "https://mpago.la/1AWbVzE"
   },
   VACANTE_100: {
     title: "Publicación de Vacante en Bolsa de Trabajo (15 días)",
     amount: "$100 MXN (Pago único)",
-    url: "https://www.mercadopago.com.mx/link-de-pago"
+    url: "https://mpago.la/32DNrnt"
   },
   BOOST_50: {
     title: "Boost Vecinal de Mascota Perdida (7 días)",
     amount: "$50 MXN (Pago único)",
-    url: "https://www.mercadopago.com.mx/link-de-pago"
+    url: "https://mpago.la/2UZYU9q"
   }
 };
 
