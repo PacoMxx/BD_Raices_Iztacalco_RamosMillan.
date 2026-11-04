@@ -364,7 +364,97 @@ async function syncWithGoogleSheets() {
         id: `sh_c_${idx}`,
         titulo: c.Titulo_Lugar || 'Memoria de la Ramos Millán',
         categoria
+async function syncWithGoogleSheets() {
+  if (!GOOGLE_SHEETS_WEBAPP_URL) return;
+  try {
+    const res = await fetch(GOOGLE_SHEETS_WEBAPP_URL);
+    const data = await res.json();
 
+    if (data.ticker && data.ticker.mensaje) {
+      DB.ticker = data.ticker.mensaje;
+      DB.patrocinadorTicker = data.ticker.patrocinador || DB.patrocinadorTicker;
+      const tickerEl = document.getElementById('ticker-text');
+      if (tickerEl) tickerEl.textContent = DB.ticker;
+    }
+
+    if (Array.isArray(data.publicaciones)) {
+      data.publicaciones.forEach(pub => {
+        if (pub.categoria === 'FOTO_HISTORIA') {
+          DB.cronicas.unshift({
+            id: pub.id,
+            titulo: pub.titulo,
+            categoria: 'FOTO VECINAL • POR: ' + (pub.subdato || 'VECINO'),
+            sector: pub.sector,
+            fecha: pub.fecha,
+            resumen: `Fotografía compartida por: ${pub.subdato}`,
+            contenidoCompleto: pub.detalles,
+            foto: pub.foto,
+            patrocinado: false
+          });
+        } else if (pub.categoria === 'MASCOTA') {
+          DB.mascotas.unshift({
+            id: pub.id,
+            tipo: pub.modalidad.includes('Boost') ? 'PERDIDO • BOOST VECINAL ACTIVO' : 'REPORTE VECINAL DE MASCOTA',
+            nombre: pub.titulo,
+            sector: pub.sector,
+            calle: pub.subdato,
+            descripcion: pub.detalles,
+            foto: pub.foto,
+            destacado: pub.modalidad.includes('Boost'),
+            whatsapp: pub.whatsapp || ADMIN_WHATSAPP
+          });
+        } else if (pub.categoria === 'TIANGUIS') {
+          DB.tianguis.unshift({
+            id: pub.id,
+            producto: pub.titulo,
+            precio: 'Ver detalle',
+            vendedor: 'Vecino verificado (' + pub.sector + ')',
+            sector: pub.sector,
+            puntoEntrega: pub.subdato,
+            destacado: pub.modalidad.includes('Destacado'),
+            descripcion: pub.detalles,
+            foto: pub.foto,
+            whatsapp: pub.whatsapp || ADMIN_WHATSAPP
+          });
+        } else if (pub.categoria === 'EMPLEO') {
+          DB.empleos.unshift({
+            id: pub.id,
+            puesto: pub.titulo,
+            negocio: pub.subdato,
+            sector: pub.sector,
+            calle: pub.sector,
+            sueldo: 'Consultar en descripción',
+            requisitos: pub.detalles,
+            whatsapp: pub.whatsapp || ADMIN_WHATSAPP
+          });
+        } else if (pub.categoria === 'NEGOCIO') {
+          DB.negocios.unshift({
+            id: pub.id,
+            nombre: pub.titulo,
+            giro: 'Comercio y Servicios',
+            sector: pub.sector,
+            calle: pub.subdato,
+            anioFundacion: 2020,
+            plan: pub.modalidad.includes('Pro') ? 'PRO' : 'BASICO',
+            cupon: pub.detalles,
+            historia: 'Negocio local de la Colonia Gabriel Ramos Millán.',
+            foto: pub.foto,
+            whatsapp: pub.whatsapp || ADMIN_WHATSAPP,
+            catalogo: [
+              { nombre: 'Pedido o Cotización General', precio: 100 }
+            ]
+          });
+        }
+      });
+    }
+
+    if (typeof window.onPageRender === 'function') {
+      window.onPageRender();
+    }
+  } catch (err) {
+    console.log('Usando datos locales de respaldo:', err);
+  }
+}
 // ============================================================================
 // CABECERA, MENÚ MULTIPÁGINA Y PIE DE PÁGINA AUTOMÁTICOS
 // ============================================================================
