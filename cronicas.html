@@ -11,7 +11,10 @@
 </head>
 <body data-page="cronicas" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
   <div id="shared-header"></div>
+  
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-8 pb-20">
+    
+    <!-- Encabezado con el Botón de Subir Foto Grande y de Alto Contraste -->
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white rounded-2xl border border-borde p-6 shadow-sm">
       <div>
         <span class="text-xs font-mono font-bold text-terracota bg-red-50 border border-red-200 px-2.5 py-1 rounded-md">
@@ -20,15 +23,20 @@
         <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-2">Crónicas y Álbum Comunitario</h2>
         <p class="text-xs sm:text-sm text-stone-700 font-medium mt-1">Comparte fotografías antiguas de tu familia o de cómo eran las calles de la Ramos Millán.</p>
       </div>
-      <a href="anunciate.html?tipo=foto" class="px-5 py-3 rounded-xl bg-terracota hover:bg-terracotaDark text-white font-extrabold text-xs sm:text-sm shrink-0 shadow-md transition flex items-center gap-2">
-        <span>📷 Subir Foto Antigua</span>
-        <span>→</span>
+      
+      <!-- Botón mejorado: más grande, color terracota oscuro de alto contraste y letras blancas -->
+      <a href="anunciate.html?tipo=foto" class="px-6 py-3.5 rounded-xl bg-terracotaDark hover:bg-stone-900 text-white font-extrabold text-sm shrink-0 shadow-lg transition flex items-center gap-2.5">
+        <span class="text-lg">📷</span>
+        <span>Subir mi Foto a esta sección</span>
+        <span class="text-base">→</span>
       </a>
     </div>
 
     <div id="cronicas-list" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
   </main>
+
   <div id="shared-footer"></div>
+
   <script>
     window.onPageRender = function() {
       const list = document.getElementById('cronicas-list');
@@ -56,7 +64,11 @@
         </article>
       `).join('');
     };
-    document.addEventListener('DOMContentLoaded', () => { renderSharedLayout('cronicas'); window.onPageRender(); });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSharedLayout('cronicas');
+      window.onPageRender();
+    });
   </script>
 </body>
 </html>
