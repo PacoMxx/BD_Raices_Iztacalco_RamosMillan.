@@ -52,7 +52,7 @@
         <button type="button" onclick="setFormCategory('TIANGUIS')" data-cat-btn="TIANGUIS" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
           <span class="text-xl">🛍️</span>
           <span class="text-[11px] font-extrabold leading-tight">Tianguis</span>
-          <span class="text-[9px] font-mono text-grafito font-bold">Gratis / $39</span>
+          <span class="text-[9px] font-mono text-grafito font-bold">$39 MXN</span>
         </button>
 
         <button type="button" onclick="setFormCategory('EMPLEO')" data-cat-btn="EMPLEO" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
@@ -110,7 +110,7 @@
           </div>
         </div>
 
-        <!-- Botón universal de envío con colores de alto contraste visibles en cualquier pantalla -->
+        <!-- Botón universal de envío de alto contraste -->
         <div class="pt-4">
           <button id="btn-submit-dynamic" type="submit" class="w-full py-4 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 border-2 border-amber-400 font-extrabold text-base shadow-xl transition flex items-center justify-center gap-2">
             <span>✅ Terminar y Enviar Publicación</span>
@@ -243,25 +243,15 @@
         `
       },
       TIANGUIS: {
-        badge: 'SECCIÓN: TIANGUIS DIGITAL',
-        heading: '🛍️ Vender en Tianguis',
+        badge: 'SECCIÓN: TIANGUIS DIGITAL (COMPRAS GRATIS PARA VECINOS)',
+        heading: '🛍️ Publicar Artículo en el Tianguis ($39 MXN)',
         photoLabel: '📸 Foto del producto *',
         photoRequired: true,
-        btnText: 'Publicar en Tianguis →',
+        btnText: 'Pagar $39 y Publicar en Tianguis →',
         renderFields: () => `
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-2">Modalidad de Anuncio *</label>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <label class="p-3 rounded-xl border-2 border-borde bg-papel cursor-pointer">
-                <input type="radio" name="t_plan" value="Gratis" checked onchange="document.getElementById('f-modalidad').value=this.value" />
-                <span class="text-xs font-bold">1 Artículo Gratis ($0)</span>
-              </label>
-              <label class="p-3 rounded-xl border-2 border-amber-300 bg-amber-50 cursor-pointer">
-                <input type="radio" name="t_plan" value="Destacado $39" onchange="document.getElementById('f-modalidad').value=this.value" />
-                <span class="text-xs font-bold text-amber-950">🔥 Destacado ($39 MXN)</span>
-              </label>
-            </div>
-            <input type="hidden" id="f-modalidad" value="Gratis" />
+          <input type="hidden" id="f-modalidad" value="Destacado $39" />
+          <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 mb-2 font-medium">
+            💡 <strong>Nota:</strong> Publicar tu artículo tiene un costo único de <strong>$39 MXN</strong> para el vendedor. Para los vecinos que deseen comprar, la exploración y contacto es 100% gratis.
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
