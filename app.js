@@ -1,13 +1,4 @@
-/**
- * ============================================================================
- * ARCHIVO CENTRAL: app.js — RAÍCES DE IZTACALCO (EDICIÓN GABRIEL RAMOS MILLÁN)
- * ============================================================================
- */
-
-// 1. TU URL DE GOOGLE APPS SCRIPT:
 const GOOGLE_SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz_yuI8WhbZFM79eoLqJhRfB5C9fAAMRb896IVKb9nHHKzX_AIK4u2RUR9k6jvm6Je7dA/exec";
-
-// 2. TU WHATSAPP DE ADMINISTRADOR:
 const ADMIN_WHATSAPP = "5510803153";
 
 const MP_LINKS = {
@@ -16,25 +7,6 @@ const MP_LINKS = {
   VACANTE_100: { title: "Publicación de Vacante", amount: "$100 MXN", url: "https://mpago.la/32DNrnt" },
   BOOST_50: { title: "Boost Mascota Perdida", amount: "$50 MXN", url: "https://mpago.la/2UZYU9q" }
 };
-
-if (typeof tailwind !== "undefined") {
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          papel: '#FBF8F3', crema: '#F3EDE2', tinta: '#1C1917', grafito: '#57534E',
-          terracota: '#9B2C2C', terracotaDark: '#742A2A', maiz: '#D97706',
-          chinampa: '#15803D', chinampaLight: '#DCFCE7', borde: '#E5DEC9'
-        },
-        fontFamily: {
-          serif: ['Fraunces', 'Georgia', 'serif'],
-          sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-          mono: ['JetBrains Mono', 'monospace']
-        }
-      }
-    }
-  };
-}
 
 let currentSector = localStorage.getItem('raices_sector') || 'TODOS';
 let searchQuery = '';
@@ -56,25 +28,7 @@ const DB = {
   patrocinadorTicker: "Servicio Mecánico Hnos. Pérez (Sur 157)",
   noticias: [],
   cronicas: [],
-  negocios: [
-    {
-      id: 'neg1',
-      nombre: 'Carnitas y Chicharrón "El Patrón del Bramadero"',
-      giro: 'Comida y Antojitos',
-      sector: 'Bramadero',
-      calle: 'Sur 163 casi esq. Oriente 108 (Junto al Mercado Bramadero)',
-      anioFundacion: 1994,
-      plan: 'PRO',
-      cupon: '🎁 OFERTA DEL JUEVES Y VIERNES: 1/2 litro de salsa de habanero y nopales gratis al pedir 1 kg de carnitas.',
-      historia: 'Más de 30 años preparando carnitas estilo Michoacán en cazo de cobre.',
-      foto: '',
-      whatsapp: '5512345678',
-      catalogo: [
-        { nombre: '1 Kg de Carnitas Surtidas', precio: 290 },
-        { nombre: '1/2 Kg de Carnitas + Tortillas', precio: 155 }
-      ]
-    }
-  ],
+  negocios: [],
   tianguis: [],
   mascotas: [],
   oficios: [],
@@ -103,7 +57,7 @@ async function syncWithGoogleSheets() {
           DB.cronicas.unshift({ id: pub.id, titulo: tituloOk, categoria: '📷 MEMORIA VECINAL', sector: pub.sector || 'Bramadero', fecha: pub.fecha || 'Reciente', autor: subdatoOk, contenidoCompleto: detallesOk, foto: fotoOk, patrocinado: false });
         } else if (cat === 'MASCOTA') {
           const esBoost = String(pub.modalidad).includes('Boost');
-          DB.mascotas.unshift({ id: pub.id, tipo: esBoost ? '🔥 PERDIDO • BOOST URGENTE ACTIVO' : '🐾 REPORTE VECINAL', nombre: tituloOk, sector: pub.sector || 'Bramadero', calle: subdatoOk, descripcion: detallesOk, foto: fotoOk, destacado: esBoost, whatsapp: pub.whatsapp || ADMIN_WHATSAPP });
+          DB.mascotas.unshift({ id: pub.id, tipo: esBoost ? '🔥 PERDIDO • BOOST URGENTE' : '🐾 REPORTE VECINAL', nombre: tituloOk, sector: pub.sector || 'Bramadero', calle: subdatoOk, descripcion: detallesOk, foto: fotoOk, destacado: esBoost, whatsapp: pub.whatsapp || ADMIN_WHATSAPP });
         } else if (cat === 'OFICIO') {
           DB.oficios.unshift({ id: pub.id, oficio: tituloOk, sector: pub.sector || 'Bramadero', calle: subdatoOk, garantia: detallesOk, foto: fotoOk, whatsapp: pub.whatsapp || ADMIN_WHATSAPP });
         } else if (cat === 'EMPLEO') {
@@ -148,7 +102,6 @@ function openPhotoLightbox(src, caption) {
 }
 
 function renderSharedLayout(activePage) {
-  // Barra de navegación idéntica a tu captura para todas las páginas independientes
   const navItems = [
     { id: 'inicio', label: '🏠 Portada', href: 'index.html' },
     { id: 'noticias', label: '🗞️ Noticias', href: 'noticias.html' },
@@ -166,7 +119,6 @@ function renderSharedLayout(activePage) {
 
   if (headerContainer) {
     headerContainer.innerHTML = `
-      <!-- Monitor Vial Exclusivo en la Portada -->
       ${activePage === 'inicio' ? `
         <div class="bg-tinta text-papel text-xs border-b border-stone-800 sticky top-0 z-40">
           <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2">
@@ -197,7 +149,6 @@ function renderSharedLayout(activePage) {
             </div>
           </div>
 
-          <!-- TÍTULO Y ENCABEZADOS FIJOS EN TODAS LAS PÁGINAS -->
           <div class="py-4 text-center">
             <a href="index.html" class="inline-block group">
               <p class="text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-terracota font-bold mb-1">
@@ -212,7 +163,6 @@ function renderSharedLayout(activePage) {
             </p>
           </div>
 
-          <!-- Filtro Global por Sector -->
           <div class="border-t-2 border-b border-tinta py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto py-0.5">
               <span class="text-xs font-mono uppercase font-bold text-tinta shrink-0 mr-1">📍 Sector:</span>
@@ -228,7 +178,6 @@ function renderSharedLayout(activePage) {
             </div>
           </div>
 
-          <!-- Barra de Navegación Estilo Imagen con Botón Rojo de Publicar -->
           <nav class="hidden lg:flex items-center justify-center flex-wrap gap-1 pt-3 pb-1" aria-label="Páginas del periódico">
             ${navItems.map(item => {
               const isActive = activePage === item.id;
@@ -246,59 +195,6 @@ function renderSharedLayout(activePage) {
       </header>
     `;
   }
-
-  const footerContainer = document.getElementById('shared-footer');
-  if (footerContainer) {
-    footerContainer.innerHTML = `
-      <footer class="bg-tinta text-stone-300 border-t border-stone-800 mt-14 pb-20 lg:pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <span class="font-mono text-[11px] uppercase tracking-widest text-amber-400 font-bold">RAÍCES DE IZTACALCO</span>
-              <h4 class="font-serif text-xl font-bold text-white mt-1">Edición Gabriel Ramos Millán</h4>
-              <p class="text-xs text-stone-400 mt-2 leading-relaxed">
-                Periódico digital comunitario y directorio de comercio local sin comisiones.
-              </p>
-            </div>
-            <div>
-              <h5 class="font-mono text-xs uppercase font-bold text-white mb-2">Secciones Independientes</h5>
-              <ul class="text-xs text-stone-300 space-y-1.5">
-                <li><a href="noticias.html" class="hover:text-amber-300">🗞️ Noticias Vecinales</a></li>
-                <li><a href="cronicas.html" class="hover:text-amber-300">📷 Crónicas y Raíces</a></li>
-                <li><a href="comercio.html" class="hover:text-amber-300">🏪 Comercio de Barrio</a></li>
-                <li><a href="tianguis.html" class="hover:text-amber-300">🛍️ Tianguis Digital</a></li>
-                <li><a href="mascotas.html" class="hover:text-amber-300">🐾 Radar de Mascotas</a></li>
-                <li><a href="oficios.html" class="hover:text-amber-300">🛠️ El Oficio Verificado</a></li>
-                <li><a href="empleos.html" class="hover:text-amber-300">💼 Bolsa de Trabajo</a></li>
-              </ul>
-            </div>
-            <div class="p-4 rounded-xl bg-stone-900 border border-stone-700">
-              <h5 class="font-mono text-xs uppercase font-bold text-amber-400 mb-1.5">🛡️ Seguridad Vecinal</h5>
-              <p class="text-[11px] text-stone-300 leading-relaxed">
-                Acuerda tratos únicamente en puntos públicos seguros. Nunca deposites por adelantado a desconocidos.
-              </p>
-            </div>
-          </div>
-          <div class="pt-4 border-t border-stone-800 text-center text-[11px] text-stone-400">
-            © 2026 Raíces de Iztacalco — Col. Gabriel Ramos Millán, CDMX.
-          </div>
-        </div>
-      </footer>
-
-      <!-- Barra Inferior Móvil -->
-      <nav class="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-borde z-40 px-1 py-1 shadow-lg">
-        <div class="grid grid-cols-5 gap-1 max-w-lg mx-auto text-center text-[10px]">
-          <a href="index.html" class="py-1 ${activePage === 'inicio' ? 'text-terracota font-extrabold' : 'text-grafito'}">🏠 Inicio</a>
-          <a href="noticias.html" class="py-1 ${activePage === 'noticias' ? 'text-terracota font-extrabold' : 'text-grafito'}">🗞️ Noticias</a>
-          <a href="comercio.html" class="py-1 ${activePage === 'comercio' ? 'text-terracota font-extrabold' : 'text-grafito'}">🏪 Comercio</a>
-          <a href="mascotas.html" class="py-1 ${activePage === 'mascotas' ? 'text-terracota font-extrabold' : 'text-grafito'}">🐾 Mascotas</a>
-          <a href="anunciate.html" class="py-1 ${activePage === 'anunciate' ? 'text-terracota font-extrabold' : 'text-grafito'}">➕ Publicar</a>
-        </div>
-      </nav>
-    `;
-  }
-
-  syncWithGoogleSheets();
 }
 
 function changeGlobalSector(sec) {
