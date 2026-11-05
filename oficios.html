@@ -10,13 +10,17 @@
 </head>
 <body data-page="oficios" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
   <div id="shared-header"></div>
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
-    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6 pb-20">
+    <!-- Encabezado con texto de contraste legible y botón de publicación destacado -->
+    <div class="flex flex-wrap items-center justify-between gap-4 bg-stone-900 border-2 border-green-600 text-stone-100 p-6 rounded-2xl shadow-md">
       <div>
-        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta">🛠️ El Oficio Verificado (Emergencias en Casa)</h2>
-        <p class="text-xs sm:text-sm text-grafito">Plomeros, cerrajeros y electricistas recomendados por vecinos de la colonia.</p>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white">🛠️ El Oficio Verificado (Emergencias en Casa)</h2>
+        <p class="text-xs sm:text-sm text-stone-300 font-medium mt-1">Plomeros, cerrajeros y electricistas recomendados por vecinos de la colonia.</p>
       </div>
-      <a href="anunciate.html?tipo=negocio" class="text-xs font-bold text-terracota hover:underline">¿Eres técnico en la colonia? Anúnciate aquí →</a>
+      <a href="anunciate.html?tipo=negocio" class="px-5 py-3 rounded-xl bg-chinampa hover:bg-green-700 text-white font-extrabold text-xs sm:text-sm shrink-0 shadow-lg transition flex items-center gap-2">
+        <span>🛠️ Anunciar mi Oficio</span>
+        <span>→</span>
+      </a>
     </div>
     <div id="oficios-box" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
   </main>
@@ -33,11 +37,11 @@
                 <span class="text-amber-700 font-bold">4.9 ★</span>
               </div>
               ${o.foto ? `<div class="cursor-pointer overflow-hidden rounded-xl border border-borde my-2" onclick="openPhotoLightbox('${o.foto}', '${o.oficio}')"><img src="${o.foto}" class="w-full h-44 object-cover" /></div>` : ''}
-              <h3 class="font-serif font-bold text-lg">${o.oficio}</h3>
-              <p class="text-xs text-grafito">📍 ${o.calle}</p>
-              <p class="text-xs bg-papel p-2.5 rounded-lg border border-borde">${o.garantia}</p>
+              <h3 class="font-serif font-bold text-lg text-stone-900">${o.oficio}</h3>
+              <p class="text-xs text-stone-700 font-medium">📍 ${o.calle}</p>
+              <p class="text-xs text-stone-700 font-medium bg-papel p-2.5 rounded-lg border border-borde">${o.garantia}</p>
             </div>
-            <button onclick="openWhatsAppDirect('${o.whatsapp}', 'Hola, vi su contacto en El Oficio Verificado de Raíces de Iztacalco y requiero un servicio:')" class="mt-4 w-full py-2.5 rounded-xl bg-chinampa hover:bg-green-800 text-white font-bold text-xs">
+            <button onclick="openWhatsAppDirect('${o.whatsapp}', 'Hola, requiero un servicio de su oficio:')" class="mt-4 w-full py-2.5 rounded-xl bg-chinampa hover:bg-green-800 text-white font-bold text-xs transition">
               📲 Solicitar servicio por WhatsApp
             </button>
           </div>
