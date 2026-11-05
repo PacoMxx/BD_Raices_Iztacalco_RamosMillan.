@@ -24,13 +24,13 @@
   <script>
     window.onPageRender = function() {
       document.getElementById('oficios-box').innerHTML = DB.oficios
-        .filter(o => matchesGlobalFilter(o.sector, `${o.oficio} ${o.nombre}`))
+        .filter(o => matchesGlobalFilter(o.sector, `${o.oficio} ${o.calle}`))
         .map(o => `
           <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
             <div class="space-y-2">
               <div class="flex justify-between text-[11px] font-mono">
                 <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">✓ VERIFICADO</span>
-                <span class="text-amber-700 font-bold">${o.calificacion || '4.9 ★'}</span>
+                <span class="text-amber-700 font-bold">4.9 ★</span>
               </div>
               ${o.foto ? `<div class="cursor-pointer overflow-hidden rounded-xl border border-borde my-2" onclick="openPhotoLightbox('${o.foto}', '${o.oficio}')"><img src="${o.foto}" class="w-full h-44 object-cover" /></div>` : ''}
               <h3 class="font-serif font-bold text-lg">${o.oficio}</h3>
