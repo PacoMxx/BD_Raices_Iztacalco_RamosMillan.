@@ -110,9 +110,11 @@
           </div>
         </div>
 
+        <!-- Botón universal de envío con colores de alto contraste visibles en cualquier pantalla -->
         <div class="pt-4">
-          <button id="btn-submit-dynamic" type="submit" class="w-full py-4 rounded-xl bg-terracota hover:bg-terracotaDark text-white font-extrabold text-base shadow-lg transition">
-            Enviar Publicación →
+          <button id="btn-submit-dynamic" type="submit" class="w-full py-4 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 border-2 border-amber-400 font-extrabold text-base shadow-xl transition flex items-center justify-center gap-2">
+            <span>✅ Terminar y Enviar Publicación</span>
+            <span>→</span>
           </button>
         </div>
       </form>
@@ -456,7 +458,7 @@
             <a href="${mpPlan.url}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs">
               Pagar ${mpPlan.amount} en Mercado Pago ↗
             </a>
-            <button type="button" onclick="enviarRegistroPostPago(${encodeURIComponent(JSON.stringify(payload))})" class="px-4 py-2 rounded-lg bg-chinampa text-white font-bold text-xs">
+            <button type="button" onclick='enviarRegistroPostPago(${JSON.stringify(payload)})' class="px-4 py-2 rounded-lg bg-chinampa text-white font-bold text-xs">
               Ya pagué, enviar registro a revisión ✓
             </button>
           </div>
@@ -464,7 +466,6 @@
         return;
       }
 
-      // Si es gratuito, se envía directo
       const btn = document.getElementById('btn-submit-dynamic');
       btn.disabled = true;
       btn.textContent = 'Enviando...';
