@@ -15,10 +15,10 @@
     <div class="flex flex-wrap items-center justify-between gap-4 bg-stone-900 border-2 border-green-600 text-stone-100 p-6 rounded-2xl shadow-md">
       <div>
         <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white">🛠️ El Oficio Verificado (Emergencias en Casa)</h2>
-        <p class="text-xs sm:text-sm text-stone-300 font-medium mt-1">Plomeros, cerrajeros y electricistas recomendados por vecinos de la colonia.</p>
+        <p class="text-xs sm:text-sm text-stone-300 font-medium mt-1">Plomeros, cerrajeros y electricistas recomendados por vecinos de la colonia ($50 MXN por anunciar).</p>
       </div>
-      <a href="anunciate.html?tipo=negocio" class="px-5 py-3 rounded-xl bg-chinampa hover:bg-green-700 text-white font-extrabold text-xs sm:text-sm shrink-0 shadow-lg transition flex items-center gap-2">
-        <span>🛠️ Anunciar mi Oficio</span>
+      <a href="anunciate.html?tipo=oficio" class="px-5 py-3 rounded-xl bg-chinampa hover:bg-green-700 text-white font-extrabold text-xs sm:text-sm shrink-0 shadow-lg transition flex items-center gap-2">
+        <span>🛠️ Anunciar mi Oficio ($50)</span>
         <span>→</span>
       </a>
     </div>
@@ -33,7 +33,7 @@
           <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
             <div class="space-y-2">
               <div class="flex justify-between text-[11px] font-mono">
-                <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">✓ VERIFICADO</span>
+                <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">✓ OFICIO VERIFICADO</span>
                 <span class="text-amber-700 font-bold">4.9 ★</span>
               </div>
               ${o.foto ? `<div class="cursor-pointer overflow-hidden rounded-xl border border-borde my-2" onclick="openPhotoLightbox('${o.foto}', '${o.oficio}')"><img src="${o.foto}" class="w-full h-44 object-cover" /></div>` : ''}
