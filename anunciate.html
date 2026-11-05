@@ -30,7 +30,7 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 pt-2">
+      <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 pt-2">
         <button type="button" onclick="setFormCategory('NOTICIA')" data-cat-btn="NOTICIA" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
           <span class="text-xl">🗞️</span>
           <span class="text-[11px] font-extrabold leading-tight">Noticia</span>
@@ -39,14 +39,14 @@
 
         <button type="button" onclick="setFormCategory('FOTO_HISTORIA')" data-cat-btn="FOTO_HISTORIA" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
           <span class="text-xl">📷</span>
-          <span class="text-[11px] font-extrabold leading-tight">Foto Antigua</span>
+          <span class="text-[11px] font-extrabold leading-tight">Foto</span>
           <span class="text-[9px] font-mono text-chinampa font-bold">Gratis</span>
         </button>
 
         <button type="button" onclick="setFormCategory('MASCOTA')" data-cat-btn="MASCOTA" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
           <span class="text-xl">🐾</span>
           <span class="text-[11px] font-extrabold leading-tight">Mascota</span>
-          <span class="text-[9px] font-mono text-chinampa font-bold">Gratis / $50</span>
+          <span class="text-[9px] font-mono text-chinampa font-bold">$0 / $50</span>
         </button>
 
         <button type="button" onclick="setFormCategory('TIANGUIS')" data-cat-btn="TIANGUIS" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
@@ -55,10 +55,16 @@
           <span class="text-[9px] font-mono text-grafito font-bold">$39 MXN</span>
         </button>
 
+        <button type="button" onclick="setFormCategory('OFICIO')" data-cat-btn="OFICIO" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-xl">🛠️</span>
+          <span class="text-[11px] font-extrabold leading-tight">Oficio</span>
+          <span class="text-[9px] font-mono text-chinampa font-bold">$50 MXN</span>
+        </button>
+
         <button type="button" onclick="setFormCategory('EMPLEO')" data-cat-btn="EMPLEO" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
           <span class="text-xl">💼</span>
           <span class="text-[11px] font-extrabold leading-tight">Empleo</span>
-          <span class="text-[9px] font-mono text-grafito font-bold">$100 / 15d</span>
+          <span class="text-[9px] font-mono text-grafito font-bold">$100 MXN</span>
         </button>
 
         <button type="button" onclick="setFormCategory('NEGOCIO')" data-cat-btn="NEGOCIO" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
@@ -243,7 +249,7 @@
         `
       },
       TIANGUIS: {
-        badge: 'SECCIÓN: TIANGUIS DIGITAL (COMPRAS GRATIS PARA VECINOS)',
+        badge: 'SECCIÓN: TIANGUIS DIGITAL',
         heading: '🛍️ Publicar Artículo en el Tianguis ($39 MXN)',
         photoLabel: '📸 Foto del producto *',
         photoRequired: true,
@@ -251,7 +257,7 @@
         renderFields: () => `
           <input type="hidden" id="f-modalidad" value="Destacado $39" />
           <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 mb-2 font-medium">
-            💡 <strong>Nota:</strong> Publicar tu artículo tiene un costo único de <strong>$39 MXN</strong> para el vendedor. Para los vecinos que deseen comprar, la exploración y contacto es 100% gratis.
+            💡 <strong>Nota:</strong> Publicar tu artículo tiene un costo único de <strong>$39 MXN</strong> para el vendedor.
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -280,6 +286,42 @@
           <div>
             <label class="block text-xs font-bold uppercase font-mono mb-1">5. Descripción *</label>
             <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Condiciones..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+          </div>
+        `
+      },
+      OFICIO: {
+        badge: 'SECCIÓN: EL OFICIO VERIFICADO',
+        heading: '🛠️ Anunciar Oficio ($50 MXN Obligatorios)',
+        photoLabel: '📸 Foto de herramientas o trabajo (Opcional)',
+        photoRequired: false,
+        btnText: 'Pagar $50 y Registrar Oficio Verificado →',
+        renderFields: () => `
+          <input type="hidden" id="f-modalidad" value="Oficio $50" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">1. Oficio y Nombre (Ej. Plomero Juan) *</label>
+              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Plomero y Destapacaños Juan" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Calle base o zona de servicio *</label>
+              <input id="f-subdato" type="text" required maxlength="100" placeholder="Ej. Base en Sur 157 (Llega en 15 min)" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Sector *</label>
+              <select id="f-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
+                <option value="Bramadero">Bramadero</option><option value="Tlacotal">Tlacotal</option><option value="Cuchilla">Cuchilla</option><option value="Av. Té / Alcaldía">Av. Té / Alcaldía</option><option value="Coyuya / Plutarco">Coyuya / Plutarco</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">4. WhatsApp de contacto *</label>
+              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">5. Experiencia y Garantía *</label>
+            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="20 años de experiencia, reparaciones garantizadas..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
       },
@@ -350,7 +392,7 @@
             </div>
           </div>
           <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">5. Productos y Promoción (Pon la promoción el día que prefieras) *</label>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">5. Productos y Promoción *</label>
             <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Productos, precios y promoción especial..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
@@ -413,15 +455,17 @@
         return;
       }
 
-      const modalidadVal = document.getElementById('f-modalidad') ? document.getElementById('f-modalidad').value : 'Gratis';
+      const modalidadVal = document.getElementById('f-modalidad') ? document.getElementById('f-modalidad'].value : 'Gratis';
       const isBoost = modalidadVal.includes('Boost');
       const isTianguisDestacado = modalidadVal.includes('Destacado');
       const isVacante = modalidadVal.includes('Vacante');
+      const isOficio = modalidadVal.includes('Oficio');
       const isPro = modalidadVal.includes('Pro');
 
       let mpPlan = null;
       if (isPro) mpPlan = MP_LINKS.SUSCRIPCION_PRO_199;
       else if (isTianguisDestacado) mpPlan = MP_LINKS.TIANGUIS_39;
+      else if (isOficio) mpPlan = { title: "Anuncio de Oficio Verificado", amount: "$50 MXN", url: "https://mpago.la/2UZYU9q" }; // Link de pago configurado
       else if (isVacante) mpPlan = MP_LINKS.VACANTE_100;
       else if (isBoost) mpPlan = MP_LINKS.BOOST_50;
 
@@ -508,6 +552,7 @@
       else if (tipo === 'foto') setFormCategory('FOTO_HISTORIA');
       else if (tipo === 'mascota') setFormCategory('MASCOTA');
       else if (tipo === 'tianguis') setFormCategory('TIANGUIS');
+      else if (tipo === 'oficio') setFormCategory('OFICIO');
       else if (tipo === 'empleo') setFormCategory('EMPLEO');
       else if (tipo === 'negocio') setFormCategory('NEGOCIO');
       else setFormCategory('NOTICIA');
