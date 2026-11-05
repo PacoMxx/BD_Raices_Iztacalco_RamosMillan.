@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radar de Mascotas | Raíces de Iztacalco</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="app.js"></script>
+</head>
+<body data-page="mascotas" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
+  <div id="shared-header"></div>
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde">
+      <div>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta">🐾 Radar de Mascotas Perdidas y Adopción</h2>
+        <p class="text-xs sm:text-sm text-grafito">Alertas por cuadra en la Ramos Millán. Reportar es gratis o con Boost Urgente de $50 MXN.</p>
+      </div>
+      <a href="anunciate.html?tipo=mascota" class="px-4 py-2.5 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs shadow-sm transition">
+        + Reportar Mascota Perdida →
+      </a>
+    </div>
+    <div id="mascotas-box" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
+  </main>
+  <div id="shared-footer"></div>
+  <script>
+    window.onPageRender = function() {
+      document.getElementById('mascotas-box').innerHTML = DB.mascotas
+        .filter(m => matchesGlobalFilter(m.sector, `${m.nombre} ${m.calle} ${m.descripcion}`))
+        .map(m => `
+          <div class="bg-white rounded-2xl border ${m.destacado ? 'border-2 border-red-600 shadow-md' : 'border-borde shadow-sm'} p-5 flex flex-col justify-between">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full ${m.destacado ? 'bg-red-600 text-white' : 'bg-amber-100 text-amber-900'}">${m.tipo}</span>
+                <span class="text-[11px] font-mono text-grafito">📍 ${m.sector}</span>
+              </div>
+              ${m.foto ? `
+                <div class="relative group cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightbox('${m.foto}', '${m.nombre}')">
+                  <img src="${m.foto}" alt="${m.nombre}" class="w-full h-52 object-cover group-hover:scale-105 transition duration-300" />
+                  <span class="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] font-mono px-2 py-0.5 rounded">🔍 Ver foto grande</span>
+                </div>
+              ` : ''}
+              <h3 class="font-serif font-bold text-lg text-tinta">${m.nombre}</h3>
+              <p class="text-xs font-bold text-terracota">🗺️ Visto en: ${m.calle}</p>
+              <p class="text-xs text-grafito bg-papel p-3 rounded-xl border border-borde leading-relaxed">${m.descripcion}</p>
+            </div>
+            <button onclick="openWhatsAppDirect('${m.whatsapp}', 'Hola vecino, vi la alerta de tu mascota (*${m.nombre}*) en Raíces de Iztacalco y tengo información:')" class="mt-4 w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition">
+              📲 Avisar al dueño por WhatsApp
+            </button>
+          </div>
+        `).join('');
+    };
+    document.addEventListener('DOMContentLoaded', () => { renderSharedLayout('mascotas'); window.onPageRender(); });
+  </script>
+</body>
+</html>
