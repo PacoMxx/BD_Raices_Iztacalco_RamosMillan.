@@ -10,14 +10,16 @@
 </head>
 <body data-page="empleos" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
   <div id="shared-header"></div>
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
-    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6 pb-20">
+    <!-- Encabezado con texto de contraste legible y botón de publicación destacado -->
+    <div class="flex flex-wrap items-center justify-between gap-4 bg-stone-900 border-2 border-amber-300 text-stone-100 p-6 rounded-2xl shadow-md">
       <div>
-        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta">💼 Bolsa de Trabajo «A 15 Minutos de Casa»</h2>
-        <p class="text-xs sm:text-sm text-grafito">Vacantes en comercios de la Ramos Millán para trabajar sin cruzar la ciudad.</p>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white">💼 Bolsa de Trabajo «A 15 Minutos de Casa»</h2>
+        <p class="text-xs sm:text-sm text-stone-300 font-medium mt-1">Vacantes en comercios locales para trabajar sin cruzar la ciudad.</p>
       </div>
-      <a href="anunciate.html?tipo=empleo" class="px-4 py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs shadow-sm">
-        + Publicar Vacante ($100 MXN) →
+      <a href="anunciate.html?tipo=empleo" class="px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs sm:text-sm shrink-0 shadow-lg transition flex items-center gap-2">
+        <span>💼 Publicar Vacante de Empleo</span>
+        <span>→</span>
       </a>
     </div>
     <div id="empleos-box" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
@@ -32,12 +34,12 @@
             <div class="space-y-2">
               <span class="text-[10px] font-mono font-bold bg-chinampaLight text-chinampa px-2.5 py-0.5 rounded-full">📍 A 15 MIN DE CASA • ${e.sector}</span>
               ${e.foto ? `<div class="cursor-pointer overflow-hidden rounded-xl border border-borde my-2" onclick="openPhotoLightbox('${e.foto}', '${e.puesto}')"><img src="${e.foto}" class="w-full h-44 object-cover" /></div>` : ''}
-              <h3 class="font-serif font-bold text-lg">${e.puesto}</h3>
+              <h3 class="font-serif font-bold text-lg text-stone-900">${e.puesto}</h3>
               <p class="text-xs font-bold text-terracota">🏪 ${e.negocio}</p>
               <p class="text-xs font-mono font-bold text-chinampa">💰 ${e.sueldo || 'Consultar detalles'}</p>
-              <p class="text-xs text-grafito bg-papel p-3 rounded-xl border border-borde">${e.requisitos}</p>
+              <p class="text-xs text-stone-700 font-medium bg-papel p-3 rounded-xl border border-borde">${e.requisitos}</p>
             </div>
-            <button onclick="openWhatsAppDirect('${e.whatsapp}', 'Hola, vi la vacante de *${e.puesto}* en Raíces de Iztacalco y me interesa postularme:')" class="mt-4 w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs">
+            <button onclick="openWhatsAppDirect('${e.whatsapp}', 'Hola, me interesa la vacante de *${e.puesto}*:')" class="mt-4 w-full py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs transition">
               📲 Postularme por WhatsApp
             </button>
           </div>
