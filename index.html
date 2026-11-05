@@ -15,7 +15,7 @@
 
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-10">
 
-    <!-- Banner de Bienvenida y Acceso a la Guía de Uso -->
+    <!-- Banner de Bienvenida -->
     <section class="bg-gradient-to-r from-stone-900 via-stone-800 to-terracotaDark text-white rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
       <div class="space-y-2 max-w-2xl">
         <span class="inline-block bg-amber-400 text-stone-950 font-mono text-xs font-extrabold px-3 py-1 rounded-full">
@@ -25,131 +25,149 @@
           Elige la sección a la que deseas entrar hoy
         </h2>
         <p class="text-xs sm:text-sm text-stone-200 leading-relaxed">
-          Hemos organizado el periódico comunitario en <strong>páginas independientes</strong> para que entres directo a lo que buscas: leer la historia de nuestras calles, pedir por WhatsApp a los locales del Bramadero y Tlacotal, buscar mascotas o encontrar trabajo a 15 minutos de tu casa.
+          Cada servicio e historia cuenta con su propia página independiente: noticias vecinales moderadas, directorio de comercio local con pedidos por WhatsApp, mascotas perdidas, bolsa de trabajo y oficios.
         </p>
       </div>
       <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto shrink-0">
         <a href="guia.html" class="px-5 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs sm:text-sm text-center shadow-lg transition">
-          📖 ¿Primera vez aquí? Ver Guía de Uso →
+          📖 Manual de Uso Vecinal →
         </a>
         <a href="anunciate.html" class="px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold text-xs sm:text-sm text-center transition">
-          ➕ Subir Anuncio / Foto / Negocio
+          ➕ Enviar Anuncio / Noticia
         </a>
       </div>
     </section>
 
-    <!-- SELECTOR DE LAS 6 PÁGINAS INDEPENDIENTES -->
+    <!-- TARJETAS DE SECCIONES INDEPENDIENTES -->
     <section>
       <div class="flex items-center justify-between mb-4">
-        <h3 class="font-serif text-xl sm:text-2xl font-bold text-tinta">Secciones del Periódico (Toca una tarjeta para abrir su página)</h3>
+        <h3 class="font-serif text-xl sm:text-2xl font-bold text-tinta">Secciones Independientes del Periódico</h3>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <!-- Tarjeta 1: Crónicas y Raíces -->
+        <!-- 1. Noticias Vecinales -->
+        <a href="noticias.html" class="group bg-white rounded-2xl border-2 border-red-200 hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-3xl">🗞️</span>
+              <span class="font-mono text-[11px] uppercase bg-red-50 text-terracota font-bold px-2.5 py-1 rounded-full">NUEVA SECCIÓN</span>
+            </div>
+            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Noticias Vecinales</h4>
+            <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
+              Entérate de los avisos comunitarios y mejoras urbanas de la colonia con previa autorización y bajo un espacio de estricto respeto vecinal.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
+            <span>Abrir Noticias Vecinales</span>
+            <span class="group-hover:translate-x-1 transition">→</span>
+          </div>
+        </a>
+
+        <!-- 2. Crónicas y Raíces -->
         <a href="cronicas.html" class="group bg-white rounded-2xl border-2 border-borde hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl">📰</span>
-              <span class="font-mono text-[11px] uppercase bg-red-50 text-terracota font-bold px-2.5 py-1 rounded-full">PÁGINA 1 • HISTORIA Y AVISOS</span>
+              <span class="text-3xl">📷</span>
+              <span class="font-mono text-[11px] uppercase bg-crema text-tinta font-bold px-2.5 py-1 rounded-full">HISTORIA Y FOTOS</span>
             </div>
             <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Crónicas y Raíces</h4>
             <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Viaja en el tiempo a la Ramos Millán de 1955, conoce la historia de nuestros mercados, revisa los cierres viales por conciertos en el Estadio GNP y consulta a cómo está el kilo hoy.
+              Fotografías antiguas de nuestra colonia, relatos de los mercados tradicionales y monitor vial de la alcaldía.
             </p>
           </div>
           <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Entrar a Crónicas y Raíces</span>
+            <span>Abrir Crónicas y Raíces</span>
             <span class="group-hover:translate-x-1 transition">→</span>
           </div>
         </a>
 
-        <!-- Tarjeta 2: Comercio de Barrio -->
-        <a href="comercio.html" class="group bg-white rounded-2xl border-2 border-amber-400 hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
+        <!-- 3. Comercio de Barrio -->
+        <a href="comercio.html" class="group bg-white rounded-2xl border-2 border-amber-300 hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-3">
               <span class="text-3xl">🏪</span>
-              <span class="font-mono text-[11px] uppercase bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-full">PÁGINA 2 • PEDIDOS WHATSAPP</span>
+              <span class="font-mono text-[11px] uppercase bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-full">OFERTAS Y PEDIDOS</span>
             </div>
             <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Comercio de Barrio</h4>
             <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Directorio de negocios de Bramadero, Tlacotal y Cuchilla con «Sello de Tradición». Arma tu carrito de carnitas, pan, tlapalería o veterinaria y mándalo directo al WhatsApp del dueño sin comisiones.
+              Directorio de negocios locales de Bramadero, Tlacotal y Cuchilla con carrito directo al WhatsApp del comerciante.
             </p>
           </div>
           <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Entrar al Directorio y Ofertas del Jueves</span>
+            <span>Abrir Directorio de Comercio</span>
             <span class="group-hover:translate-x-1 transition">→</span>
           </div>
         </a>
 
-        <!-- Tarjeta 3: El Tianguis Digital -->
+        <!-- 4. El Tianguis Digital -->
         <a href="tianguis.html" class="group bg-white rounded-2xl border-2 border-borde hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-3">
               <span class="text-3xl">🛍️</span>
-              <span class="font-mono text-[11px] uppercase bg-chinampaLight text-chinampa font-bold px-2.5 py-1 rounded-full">PÁGINA 3 • COMPRA-VENTA SEGURA</span>
+              <span class="font-mono text-[11px] uppercase bg-chinampaLight text-chinampa font-bold px-2.5 py-1 rounded-full">ENTREGAS SEGURAS</span>
             </div>
             <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">El Tianguis Digital</h4>
             <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Clasificados entre vecinos para vender bicis, muebles, postres o ropa. Todos los productos se filtran por <strong>Puntos Seguros de Entrega</strong> (Explanada de la Alcaldía, Metro Iztacalco y Coyuya).
+              Compra y venta de artículos de segunda mano entre vecinos utilizando puntos públicos seguros en Iztacalco.
             </p>
           </div>
           <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Entrar al Tianguis Digital</span>
+            <span>Abrir Tianguis Digital</span>
             <span class="group-hover:translate-x-1 transition">→</span>
           </div>
         </a>
 
-        <!-- Tarjeta 4: Servicios y Comunidad -->
-        <a href="comunidad.html" class="group bg-white rounded-2xl border-2 border-borde hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
+        <!-- 5. Radar de Mascotas (Independiente) -->
+        <a href="mascotas.html" class="group bg-white rounded-2xl border-2 border-red-300 hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl">🚨</span>
-              <span class="font-mono text-[11px] uppercase bg-red-100 text-red-900 font-bold px-2.5 py-1 rounded-full">PÁGINA 4 • UTILIDAD DIARIA</span>
+              <span class="text-3xl">🐾</span>
+              <span class="font-mono text-[11px] uppercase bg-red-100 text-red-900 font-bold px-2.5 py-1 rounded-full">PÁGINA INDEPENDIENTE</span>
             </div>
-            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Mascotas, Oficios y Empleo</h4>
+            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Radar de Mascotas</h4>
             <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Tres herramientas clave: <strong>Radar de Mascotas Perdidas</strong> por cuadra, <strong>El Oficio Verificado</strong> (plomeros, cerrajeros y electricistas a domicilio) y <strong>Bolsa de Trabajo a 15 minutos de casa</strong>.
+              Reportes de perritos o gatitos perdidos, encontrados o en adopción con fotos y contacto directo por WhatsApp.
             </p>
           </div>
           <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Entrar a Servicios y Comunidad</span>
+            <span>Abrir Radar de Mascotas</span>
             <span class="group-hover:translate-x-1 transition">→</span>
           </div>
         </a>
 
-        <!-- Tarjeta 5: Guía de Uso Vecinal (NUEVA) -->
-        <a href="guia.html" class="group bg-amber-50/90 rounded-2xl border-2 border-amber-300 hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
+        <!-- 6. El Oficio Verificado (Independiente) -->
+        <a href="oficios.html" class="group bg-white rounded-2xl border-2 border-borde hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl">📖</span>
-              <span class="font-mono text-[11px] uppercase bg-amber-300 text-stone-950 font-extrabold px-2.5 py-1 rounded-full">NUEVO • PASO A PASO</span>
+              <span class="text-3xl">🛠️</span>
+              <span class="font-mono text-[11px] uppercase bg-stone-200 text-tinta font-bold px-2.5 py-1 rounded-full">PÁGINA INDEPENDIENTE</span>
             </div>
-            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Guía: ¿Cómo usar la página?</h4>
+            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">El Oficio Verificado</h4>
             <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Explicación sencilla para todas las edades sobre cómo compartir fotos antiguas de tu calle, cómo reportar o buscar una mascota, cómo postularte a un empleo local y cómo anunciar tu negocio.
+              Plomeros, cerrajeros y electricistas de confianza que atienden de inmediato en las cuadras de la Ramos Millán.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-amber-200 flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Abrir el Manual del Vecino</span>
+          <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
+            <span>Abrir Directorio de Oficios</span>
             <span class="group-hover:translate-x-1 transition">→</span>
           </div>
         </a>
 
-        <!-- Tarjeta 6: Publicar / Anúnciate -->
-        <a href="anunciate.html" class="group bg-terracota text-white rounded-2xl border-2 border-terracotaDark p-6 shadow-md hover:shadow-xl transition flex flex-col justify-between">
+        <!-- 7. Bolsa de Trabajo (Independiente) -->
+        <a href="empleos.html" class="group bg-white rounded-2xl border-2 border-chinampa/40 hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl">➕</span>
-              <span class="font-mono text-[11px] uppercase bg-white/20 text-white font-bold px-2.5 py-1 rounded-full">AUTOGESTIÓN 24/7</span>
+              <span class="text-3xl">💼</span>
+              <span class="font-mono text-[11px] uppercase bg-chinampaLight text-chinampa font-bold px-2.5 py-1 rounded-full">PÁGINA INDEPENDIENTE</span>
             </div>
-            <h4 class="font-serif text-2xl font-bold">Publicar y Anunciarme</h4>
-            <p class="text-xs sm:text-sm text-red-100 mt-2 leading-relaxed">
-              Sube gratis una foto antigua, una mascota perdida o tu primer artículo al tianguis, o contrata el <strong>Plan Orgullo de Barrio ($199/mes)</strong> con pagos 100% blindados por Mercado Pago.
+            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Bolsa de Trabajo Local</h4>
+            <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
+              Vacantes en comercios y talleres locales para trabajar a menos de 15 minutos de casa sin cruzar la ciudad.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-white/20 flex items-center justify-between text-xs font-extrabold text-amber-300">
-            <span>Ir al Formulario y Paquetes</span>
+          <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
+            <span>Abrir Bolsa de Trabajo</span>
             <span class="group-hover:translate-x-1 transition">→</span>
           </div>
         </a>
