@@ -55,19 +55,7 @@ const DB = {
   ticker: "🎸 Concierto en Estadio GNP (20:30 h): Tráfico pesado en Río Churubusco y Viaducto • ⛺ Tianguis Hoy: Sur 163 (Mercado Bramadero).",
   patrocinadorTicker: "Servicio Mecánico Hnos. Pérez (Sur 157)",
   noticias: [],
-  cronicas: [
-    {
-      id: 'c1',
-      titulo: 'El Mercado 204 Bramadero: Más de medio siglo siendo el corazón del abasto en Sur 163',
-      categoria: 'RAÍCES E HISTORIA',
-      sector: 'Bramadero',
-      fecha: 'Crónica de la Semana',
-      autor: 'Archivo Histórico Vecinal',
-      contenidoCompleto: 'Fundado para abastecer a las familias trabajadoras que poblaron la sección Bramadero, el Mercado 204 conserva locales atendidos por los nietos de sus fundadores originales: desde chiles secos y moles artesanales hasta las tradicionales carnitas.',
-      foto: '',
-      patrocinado: false
-    }
-  ],
+  cronicas: [],
   negocios: [
     {
       id: 'neg1',
@@ -160,7 +148,7 @@ function openPhotoLightbox(src, caption) {
 }
 
 function renderSharedLayout(activePage) {
-  // Menú con páginas 100% independientes
+  // Barra de navegación idéntica a tu captura para todas las páginas independientes
   const navItems = [
     { id: 'inicio', label: '🏠 Portada', href: 'index.html' },
     { id: 'noticias', label: '🗞️ Noticias', href: 'noticias.html' },
@@ -170,8 +158,7 @@ function renderSharedLayout(activePage) {
     { id: 'mascotas', label: '🐾 Mascotas', href: 'mascotas.html' },
     { id: 'oficios', label: '🛠️ Oficios', href: 'oficios.html' },
     { id: 'empleos', label: '💼 Empleos', href: 'empleos.html' },
-    { id: 'guia', label: '📖 Guía', href: 'guia.html' },
-    { id: 'anunciate', label: '➕ Publicar', href: 'anunciate.html', cta: true }
+    { id: 'guia', label: '📖 Guía', href: 'guia.html' }
   ];
 
   const nowStr = new Date().toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -179,7 +166,7 @@ function renderSharedLayout(activePage) {
 
   if (headerContainer) {
     headerContainer.innerHTML = `
-      <!-- Monitor Vial Exclusivo en la Portada (En las demás pantallas no sale para dar espacio) -->
+      <!-- Monitor Vial Exclusivo en la Portada -->
       ${activePage === 'inicio' ? `
         <div class="bg-tinta text-papel text-xs border-b border-stone-800 sticky top-0 z-40">
           <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2">
@@ -206,11 +193,11 @@ function renderSharedLayout(activePage) {
             </div>
             <div class="flex items-center gap-2">
               <a href="guia.html" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-amber-100 text-amber-950 font-bold text-xs transition">📖 Guía Vecinal</a>
-              <a href="anunciate.html" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-terracota text-white font-bold text-xs transition">➕ Publicar</a>
+              <a href="anunciate.html" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-terracota hover:bg-terracotaDark text-white font-bold text-xs shadow transition">➕ Publicar</a>
             </div>
           </div>
 
-          <!-- TÍTULO Y ENCABEZADOS FIJOS EN TODAS LAS PÁGINAS (No se quitan al entrar) -->
+          <!-- TÍTULO Y ENCABEZADOS FIJOS EN TODAS LAS PÁGINAS -->
           <div class="py-4 text-center">
             <a href="index.html" class="inline-block group">
               <p class="text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-terracota font-bold mb-1">
@@ -241,19 +228,19 @@ function renderSharedLayout(activePage) {
             </div>
           </div>
 
-          <!-- Barra de Navegación Multipágina (Desktop) -->
-          <nav class="hidden lg:flex items-center justify-center flex-wrap gap-1.5 pt-3" aria-label="Páginas del periódico">
+          <!-- Barra de Navegación Estilo Imagen con Botón Rojo de Publicar -->
+          <nav class="hidden lg:flex items-center justify-center flex-wrap gap-1 pt-3 pb-1" aria-label="Páginas del periódico">
             ${navItems.map(item => {
               const isActive = activePage === item.id;
-              if (item.cta) {
-                return `<a href="${item.href}" class="px-4 py-2 rounded-lg font-bold text-xs sm:text-sm text-white bg-terracota hover:bg-terracotaDark shadow-sm transition ml-2">${item.label}</a>`;
-              }
               return `
-                <a href="${item.href}" class="px-3 py-2 rounded-t-lg text-xs sm:text-sm flex items-center gap-1 border-b-2 transition ${isActive ? 'border-terracota text-terracota font-extrabold bg-crema/70' : 'border-transparent text-grafito hover:text-tinta font-semibold'}">
+                <a href="${item.href}" class="px-3 py-2 rounded-lg text-xs sm:text-sm flex items-center gap-1.5 transition ${isActive ? 'text-terracota font-extrabold bg-crema/70' : 'text-grafito hover:text-tinta font-semibold'}">
                   <span>${item.label}</span>
                 </a>
               `;
             }).join('')}
+            <a href="anunciate.html" class="ml-2 px-4 py-2 rounded-lg bg-terracota hover:bg-terracotaDark text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shadow transition">
+              <span>➕ Publicar</span>
+            </a>
           </nav>
         </div>
       </header>
