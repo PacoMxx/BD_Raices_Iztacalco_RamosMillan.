@@ -297,14 +297,17 @@
         btnText: 'Pagar $50 y Registrar Oficio Verificado →',
         renderFields: () => `
           <input type="hidden" id="f-modalidad" value="Oficio $50" />
+          <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 mb-2 font-medium">
+            💡 <strong>Registro de Oficio:</strong> Ingresa la información solicitada. Tiene un costo de recuperación de <strong>$50 MXN</strong>.
+          </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">1. Oficio y Nombre (Ej. Plomero Juan) *</label>
-              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Plomero y Destapacaños Juan" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <label class="block text-xs font-bold uppercase font-mono mb-1">1. Nombre del Oficio *</label>
+              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Plomero y Gasista" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Calle base o zona de servicio *</label>
-              <input id="f-subdato" type="text" required maxlength="100" placeholder="Ej. Base en Sur 157 (Llega en 15 min)" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Nombre de la persona que ejerce *</label>
+              <input id="f-subdato" type="text" required maxlength="90" placeholder="Ej. Maestro Juan Pérez" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -315,13 +318,13 @@
               </select>
             </div>
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">4. WhatsApp de contacto *</label>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">4. Teléfono (WhatsApp) *</label>
               <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
             </div>
           </div>
           <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">5. Experiencia y Garantía *</label>
-            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="20 años de experiencia, reparaciones garantizadas..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">5. Descripción de lo que hace *</label>
+            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Reparación de fugas, destapado con máquina, instalaciones de gas..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
       },
@@ -455,17 +458,17 @@
         return;
       }
 
-      const modalidadVal = document.getElementById('f-modalidad') ? document.getElementById('f-modalidad'].value : 'Gratis';
+      const modalidadVal = document.getElementById('f-modalidad') ? document.getElementById('f-modalidad').value : 'Gratis';
       const isBoost = modalidadVal.includes('Boost');
       const isTianguisDestacado = modalidadVal.includes('Destacado');
-      const isVacante = modalidadVal.includes('Vacante');
       const isOficio = modalidadVal.includes('Oficio');
+      const isVacante = modalidadVal.includes('Vacante');
       const isPro = modalidadVal.includes('Pro');
 
       let mpPlan = null;
       if (isPro) mpPlan = MP_LINKS.SUSCRIPCION_PRO_199;
       else if (isTianguisDestacado) mpPlan = MP_LINKS.TIANGUIS_39;
-      else if (isOficio) mpPlan = { title: "Anuncio de Oficio Verificado", amount: "$50 MXN", url: "https://mpago.la/2UZYU9q" }; // Link de pago configurado
+      else if (isOficio) mpPlan = { title: "Anuncio de Oficio Verificado", amount: "$50 MXN", url: "https://mpago.la/2UZYU9q" };
       else if (isVacante) mpPlan = MP_LINKS.VACANTE_100;
       else if (isBoost) mpPlan = MP_LINKS.BOOST_50;
 
