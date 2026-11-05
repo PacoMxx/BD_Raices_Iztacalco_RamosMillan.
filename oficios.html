@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Oficio Verificado | Raíces de Iztacalco</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="app.js"></script>
+</head>
+<body data-page="oficios" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
+  <div id="shared-header"></div>
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde">
+      <div>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta">🛠️ El Oficio Verificado (Emergencias en Casa)</h2>
+        <p class="text-xs sm:text-sm text-grafito">Plomeros, cerrajeros y electricistas recomendados por vecinos de la colonia.</p>
+      </div>
+      <a href="anunciate.html?tipo=negocio" class="text-xs font-bold text-terracota hover:underline">¿Eres técnico en la colonia? Anúnciate aquí →</a>
+    </div>
+    <div id="oficios-box" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
+  </main>
+  <div id="shared-footer"></div>
+  <script>
+    window.onPageRender = function() {
+      document.getElementById('oficios-box').innerHTML = DB.oficios
+        .filter(o => matchesGlobalFilter(o.sector, `${o.oficio} ${o.nombre}`))
+        .map(o => `
+          <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
+            <div class="space-y-2">
+              <div class="flex justify-between text-[11px] font-mono">
+                <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">✓ VERIFICADO</span>
+                <span class="text-amber-700 font-bold">${o.calificacion || '4.9 ★'}</span>
+              </div>
+              ${o.foto ? `<div class="cursor-pointer overflow-hidden rounded-xl border border-borde my-2" onclick="openPhotoLightbox('${o.foto}', '${o.oficio}')"><img src="${o.foto}" class="w-full h-44 object-cover" /></div>` : ''}
+              <h3 class="font-serif font-bold text-lg">${o.oficio}</h3>
+              <p class="text-xs text-grafito">📍 ${o.calle}</p>
+              <p class="text-xs bg-papel p-2.5 rounded-lg border border-borde">${o.garantia}</p>
+            </div>
+            <button onclick="openWhatsAppDirect('${o.whatsapp}', 'Hola, vi su contacto en El Oficio Verificado de Raíces de Iztacalco y requiero un servicio:')" class="mt-4 w-full py-2.5 rounded-xl bg-chinampa hover:bg-green-800 text-white font-bold text-xs">
+              📲 Solicitar servicio por WhatsApp
+            </button>
+          </div>
+        `).join('');
+    };
+    document.addEventListener('DOMContentLoaded', () => { renderSharedLayout('oficios'); window.onPageRender(); });
+  </script>
+</body>
+</html>
