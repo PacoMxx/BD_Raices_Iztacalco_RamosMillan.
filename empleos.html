@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bolsa de Trabajo | Raíces de Iztacalco</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="app.js"></script>
+</head>
+<body data-page="empleos" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
+  <div id="shared-header"></div>
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde">
+      <div>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta">💼 Bolsa de Trabajo «A 15 Minutos de Casa»</h2>
+        <p class="text-xs sm:text-sm text-grafito">Vacantes en comercios de la Ramos Millán para trabajar sin cruzar la ciudad.</p>
+      </div>
+      <a href="anunciate.html?tipo=empleo" class="px-4 py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs shadow-sm">
+        + Publicar Vacante ($100 MXN) →
+      </a>
+    </div>
+    <div id="empleos-box" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+  </main>
+  <div id="shared-footer"></div>
+  <script>
+    window.onPageRender = function() {
+      document.getElementById('empleos-box').innerHTML = DB.empleos
+        .filter(e => matchesGlobalFilter(e.sector, `${e.puesto} ${e.negocio} ${e.requisitos}`))
+        .map(e => `
+          <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
+            <div class="space-y-2">
+              <span class="text-[10px] font-mono font-bold bg-chinampaLight text-chinampa px-2.5 py-0.5 rounded-full">📍 A 15 MIN DE CASA • ${e.sector}</span>
+              ${e.foto ? `<div class="cursor-pointer overflow-hidden rounded-xl border border-borde my-2" onclick="openPhotoLightbox('${e.foto}', '${e.puesto}')"><img src="${e.foto}" class="w-full h-44 object-cover" /></div>` : ''}
+              <h3 class="font-serif font-bold text-lg">${e.puesto}</h3>
+              <p class="text-xs font-bold text-terracota">🏪 ${e.negocio}</p>
+              <p class="text-xs font-mono font-bold text-chinampa">💰 ${e.sueldo || 'Consultar detalles'}</p>
+              <p class="text-xs text-grafito bg-papel p-3 rounded-xl border border-borde">${e.requisitos}</p>
+            </div>
+            <button onclick="openWhatsAppDirect('${e.whatsapp}', 'Hola, vi la vacante de *${e.puesto}* en Raíces de Iztacalco y me interesa postularme:')" class="mt-4 w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs">
+              📲 Postularme por WhatsApp
+            </button>
+          </div>
+        `).join('');
+    };
+    document.addEventListener('DOMContentLoaded', () => { renderSharedLayout('empleos'); window.onPageRender(); });
+  </script>
+</body>
+</html>
