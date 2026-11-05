@@ -14,7 +14,7 @@
   
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-8 pb-20">
     
-    <!-- Encabezado con el Botón de Subir Foto Grande y de Alto Contraste -->
+    <!-- Encabezado con Botón de Alto Contraste (Texto oscuro sobre fondo ámbar brillante) -->
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white rounded-2xl border border-borde p-6 shadow-sm">
       <div>
         <span class="text-xs font-mono font-bold text-terracota bg-red-50 border border-red-200 px-2.5 py-1 rounded-md">
@@ -24,20 +24,84 @@
         <p class="text-xs sm:text-sm text-stone-700 font-medium mt-1">Comparte fotografías antiguas de tu familia o de cómo eran las calles de la Ramos Millán.</p>
       </div>
       
-      <!-- Botón mejorado: más grande, color terracota oscuro de alto contraste y letras blancas -->
-      <a href="anunciate.html?tipo=foto" class="px-6 py-3.5 rounded-xl bg-terracotaDark hover:bg-stone-900 text-white font-extrabold text-sm shrink-0 shadow-lg transition flex items-center gap-2.5">
+      <!-- Botón con color de alto contraste garantizado para que se vea impecable -->
+      <a href="anunciate.html?tipo=foto" class="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-stone-950 font-extrabold text-sm shrink-0 shadow-lg transition flex items-center gap-2.5">
         <span class="text-lg">📷</span>
         <span>Subir mi Foto a esta sección</span>
-        <span class="text-base">→</span>
+        <span class="text-base font-bold">→</span>
       </a>
     </div>
 
-    <div id="cronicas-list" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    <!-- Historia de Gabriel Ramos Millán y Cápsula del Tiempo -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div class="lg:col-span-8 bg-white rounded-2xl border border-borde shadow-sm overflow-hidden">
+        <div class="p-4 sm:p-5 border-b border-borde bg-crema/60 flex flex-wrap items-center justify-between gap-2">
+          <span class="px-2.5 py-1 rounded bg-terracota text-white font-mono text-xs font-bold">HISTORIA FUNDACIONAL</span>
+          <div class="inline-flex rounded-lg bg-white p-1 border border-borde">
+            <button onclick="setEra('1955')" id="btn-1955" class="px-3 py-1 rounded text-xs font-bold bg-terracota text-white">📷 Vista 1955 (Chinampas)</button>
+            <button onclick="setEra('2026')" id="btn-2026" class="px-3 py-1 rounded text-xs font-semibold text-tinta">🏙️ Vista Hoy (Ramos Millán)</button>
+          </div>
+        </div>
+
+        <div class="relative h-64 sm:h-80 bg-stone-900">
+          <img id="era-img" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80" alt="Historia de la Ramos Millán" class="w-full h-full object-cover sepia-vintage transition-all duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4 text-white space-y-1">
+            <span id="era-badge" class="inline-block bg-amber-400 text-stone-950 font-mono text-xs font-bold px-2.5 py-0.5 rounded">AÑO 1952: Trazo de las calles Sur y Oriente</span>
+            <p id="era-caption" class="text-xs sm:text-sm text-stone-200">Antes del asfalto en Avenida Té y Plutarco Elías Calles, las familias fundadoras convivían con zanjas chinamperas conectadas al antiguo Canal de la Viga.</p>
+          </div>
+        </div>
+
+        <div class="p-6 space-y-4">
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta">
+            ¿Por qué nuestra colonia se llama Gabriel Ramos Millán? La historia del «Apóstol del Maíz»
+          </h2>
+          <p class="text-sm sm:text-base text-grafito leading-relaxed">
+            Cada mañana caminamos por <strong>Sur 157</strong> rumbo al Mercado Bramadero o cruzamos <strong>Oriente 100-A</strong> en Tlacotal. Gabriel Ramos Millán fue el impulsor de la Comisión Nacional del Maíz que modernizó el campo mexicano en los años 40; tras su fallecimiento en 1949 en el accidente aéreo del Pico del Fraile, nuestras cuadras recibieron su nombre en honor a su legado.
+          </p>
+        </div>
+      </div>
+
+      <!-- Monitor y Precios -->
+      <div class="lg:col-span-4 space-y-5">
+        <div class="bg-white rounded-2xl border border-borde p-5 space-y-3 shadow-sm">
+          <h3 class="font-serif font-bold text-lg text-tinta border-b border-borde pb-2">📢 Monitor Vecinal de Hoy</h3>
+          <div class="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-900">
+            <strong>🚗 Alerta Ciudad Deportiva / Estadio GNP:</strong> Cierres nocturnos en lateral de Río Churubusco. Usa Sur 157 o Plutarco Elías Calles.
+          </div>
+          <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950">
+            <strong>🏛️ Explanada Alcaldía Iztacalco:</strong> Jornada de salud y esterilización canina gratuita frente a Ventanilla Única (9:00 a 15:00 h).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Listado de Crónicas y Fotos Vecinales -->
+    <div>
+      <h3 class="font-serif text-2xl font-bold text-stone-900 mb-4">Álbum Comunitario y Crónicas del Barrio</h3>
+      <div id="cronicas-list" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    </div>
+
   </main>
 
   <div id="shared-footer"></div>
 
   <script>
+    function setEra(era) {
+      const img = document.getElementById('era-img');
+      const badge = document.getElementById('era-badge');
+      const cap = document.getElementById('era-caption');
+      if (era === '1955') {
+        img.classList.add('sepia-vintage');
+        badge.textContent = 'AÑO 1952: Trazo de las calles Sur y Oriente';
+        cap.textContent = 'Antes del asfalto en Avenida Té y Plutarco Elías Calles, las familias fundadoras convivían con zanjas chinamperas conectadas al antiguo Canal de la Viga.';
+      } else {
+        img.classList.remove('sepia-vintage');
+        badge.textContent = 'HOY EN 2026: Corazón comercial de Iztacalco';
+        cap.textContent = 'Hoy la colonia Gabriel Ramos Millán es uno de los barrios con mayor vida comercial de la CDMX entre el Mercado Bramadero, Mercado Tlacotal y Av. Té.';
+      }
+    }
+
     window.onPageRender = function() {
       const list = document.getElementById('cronicas-list');
       const items = DB.cronicas.filter(c => matchesGlobalFilter(c.sector, `${c.titulo} ${c.contenidoCompleto} ${c.autor || ''}`));
