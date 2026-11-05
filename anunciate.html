@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Publicar y Subir Fotos | Raíces de Iztacalco</title>
+  <title>Publicar y Subir Anuncios | Raíces de Iztacalco</title>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="app.js"></script>
@@ -15,61 +15,67 @@
 
   <div id="shared-header"></div>
 
-  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 space-y-8">
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 space-y-8 pb-20">
 
-    <!-- Selector Rápido por Botones -->
+    <!-- Selector Rápido de Categorías -->
     <div class="bg-white rounded-2xl border border-borde p-6 shadow-sm space-y-4">
       <div class="text-center max-w-2xl mx-auto">
         <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-mono text-xs font-bold">
-          ✨ FORMULARIO INTELIGENTE VECINAL
+          ✨ CENTRO DE PUBLICACIÓN VECINAL
         </span>
         <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta mt-2">
           ¿Qué deseas publicar hoy en Raíces de Iztacalco?
         </h2>
         <p class="text-xs sm:text-sm text-grafito mt-1">
-          Selecciona una opción y el formulario te pedirá <strong>únicamente los datos y la foto necesarios</strong> para esa sección:
+          Elige la sección correspondiente para mostrar los campos correctos:
         </p>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 pt-2">
-        <button type="button" onclick="setFormCategory('FOTO_HISTORIA')" data-cat-btn="FOTO_HISTORIA" class="cat-selector-btn p-3 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
-          <span class="text-2xl">📷</span>
-          <span class="text-xs font-extrabold leading-tight">Subir Foto Antigua</span>
-          <span class="text-[10px] font-mono text-chinampa font-bold">Gratis</span>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 pt-2">
+        <button type="button" onclick="setFormCategory('NOTICIA')" data-cat-btn="NOTICIA" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-xl">🗞️</span>
+          <span class="text-[11px] font-extrabold leading-tight">Noticia Vecinal</span>
+          <span class="text-[9px] font-mono text-terracota font-bold">Autorizada</span>
         </button>
 
-        <button type="button" onclick="setFormCategory('MASCOTA')" data-cat-btn="MASCOTA" class="cat-selector-btn p-3 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
-          <span class="text-2xl">🐾</span>
-          <span class="text-xs font-extrabold leading-tight">Buscar / Reportar Mascota</span>
-          <span class="text-[10px] font-mono text-chinampa font-bold">Gratis o Boost $50</span>
+        <button type="button" onclick="setFormCategory('FOTO_HISTORIA')" data-cat-btn="FOTO_HISTORIA" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-xl">📷</span>
+          <span class="text-[11px] font-extrabold leading-tight">Foto Antigua</span>
+          <span class="text-[9px] font-mono text-chinampa font-bold">Gratis</span>
         </button>
 
-        <button type="button" onclick="setFormCategory('TIANGUIS')" data-cat-btn="TIANGUIS" class="cat-selector-btn p-3 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
-          <span class="text-2xl">🛍️</span>
-          <span class="text-xs font-extrabold leading-tight">Vender en Tianguis</span>
-          <span class="text-[10px] font-mono text-grafito font-bold">Gratis o $39</span>
+        <button type="button" onclick="setFormCategory('MASCOTA')" data-cat-btn="MASCOTA" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-xl">🐾</span>
+          <span class="text-[11px] font-extrabold leading-tight">Mascota</span>
+          <span class="text-[9px] font-mono text-chinampa font-bold">Gratis / Boost</span>
         </button>
 
-        <button type="button" onclick="setFormCategory('EMPLEO')" data-cat-btn="EMPLEO" class="cat-selector-btn p-3 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
-          <span class="text-2xl">💼</span>
-          <span class="text-xs font-extrabold leading-tight">Publicar Empleo</span>
-          <span class="text-[10px] font-mono text-grafito font-bold">$100 / 15 días</span>
+        <button type="button" onclick="setFormCategory('TIANGUIS')" data-cat-btn="TIANGUIS" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-xl">🛍️</span>
+          <span class="text-[11px] font-extrabold leading-tight">Tianguis</span>
+          <span class="text-[9px] font-mono text-grafito font-bold">Gratis / $39</span>
         </button>
 
-        <button type="button" onclick="setFormCategory('NEGOCIO')" data-cat-btn="NEGOCIO" class="cat-selector-btn col-span-2 sm:col-span-1 p-3 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
-          <span class="text-2xl">🏪</span>
-          <span class="text-xs font-extrabold leading-tight">Anunciar Mi Negocio</span>
-          <span class="text-[10px] font-mono text-terracota font-bold">Básico $0 / Pro $199</span>
+        <button type="button" onclick="setFormCategory('EMPLEO')" data-cat-btn="EMPLEO" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-xl">💼</span>
+          <span class="text-[11px] font-extrabold leading-tight">Empleo</span>
+          <span class="text-[9px] font-mono text-grafito font-bold">$100 / 15d</span>
+        </button>
+
+        <button type="button" onclick="setFormCategory('NEGOCIO')" data-cat-btn="NEGOCIO" class="cat-selector-btn p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center gap-1">
+          <span class="text-xl">🏪</span>
+          <span class="text-[11px] font-extrabold leading-tight">Negocio</span>
+          <span class="text-[9px] font-mono text-terracota font-bold">Pro $199</span>
         </button>
       </div>
     </div>
 
-    <!-- Contenedor del Formulario Adaptable -->
+    <!-- Formulario Dinámico -->
     <div class="bg-white rounded-2xl border-2 border-terracota/25 p-6 sm:p-8 shadow-sm">
       <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-borde">
         <div>
-          <span id="form-badge" class="text-[11px] font-mono uppercase font-bold text-terracota">SECCIÓN: CRÓNICAS Y RAÍCES</span>
-          <h3 id="form-heading" class="font-serif text-xl sm:text-2xl font-bold text-tinta">Subir Foto para Crónicas y Raíces</h3>
+          <span id="form-badge" class="text-[11px] font-mono uppercase font-bold text-terracota">SECCIÓN</span>
+          <h3 id="form-heading" class="font-serif text-xl sm:text-2xl font-bold text-tinta">Formulario</h3>
         </div>
         <span class="text-[11px] font-mono bg-green-50 text-chinampa border border-green-200 px-2.5 py-1 rounded-md font-bold">
           🛡️ Revisión Vecinal Activa
@@ -87,13 +93,11 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <label id="photo-label" class="block text-xs font-bold uppercase font-mono text-tinta">
-                📸 Selecciona la fotografía desde tu celular o computadora *
+                📸 Fotografía obligatoria u opcional
               </label>
-              <p class="text-[11px] text-grafito">
-                Formatos permitidos: JPG, PNG o WebP. Se ajusta automáticamente para cargar rápido.
-              </p>
+              <p class="text-[11px] text-grafito">Formatos JPG o PNG optimizados para carga rápida.</p>
             </div>
-            <label class="cursor-pointer inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs shrink-0 transition">
+            <label class="cursor-pointer inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-tinta text-white font-bold text-xs shrink-0">
               <span>📁 Elegir Foto</span>
               <input id="f-photo-input" type="file" accept="image/*" onchange="handlePhotoPreview(event)" class="hidden" />
             </label>
@@ -102,17 +106,18 @@
           <div id="photo-preview-box" class="hidden pt-2 flex items-center gap-4">
             <img id="photo-preview-img" src="" alt="Vista previa" class="w-24 h-24 object-cover rounded-xl border border-borde shadow-sm" />
             <div class="text-xs space-y-1">
-              <p class="font-bold text-chinampa">✓ Fotografía lista para enviarse</p>
-              <button type="button" onclick="clearSelectedPhoto()" class="text-red-700 font-bold hover:underline">
-                ✕ Quitar y elegir otra foto
-              </button>
+              <p class="font-bold text-chinampa">✓ Fotografía lista</p>
+              <button type="button" onclick="clearSelectedPhoto()" class="text-red-700 font-bold hover:underline">✕ Quitar foto</button>
             </div>
           </div>
         </div>
 
-        <button id="btn-submit-dynamic" type="submit" class="w-full py-3.5 rounded-xl bg-terracota hover:bg-terracotaDark text-white font-extrabold text-sm shadow transition">
-          Enviar Publicación →
-        </button>
+        <!-- Botón de Envío Claramente Visible -->
+        <div class="pt-4">
+          <button id="btn-submit-dynamic" type="submit" class="w-full py-4 rounded-xl bg-terracota hover:bg-terracotaDark text-white font-extrabold text-base shadow-lg transition">
+            Enviar Publicación →
+          </button>
+        </div>
       </form>
 
       <div id="result-box" class="hidden mt-6 p-5 rounded-xl bg-chinampaLight border-2 border-chinampa text-chinampa text-xs sm:text-sm space-y-3"></div>
@@ -123,157 +128,28 @@
   <div id="shared-footer"></div>
 
   <script>
-    let currentCat = 'FOTO_HISTORIA';
+    let currentCat = 'NOTICIA';
     let compressedPhotoBase64 = '';
 
     const CONFIG_CATEGORIAS = {
-      FOTO_HISTORIA: {
-        badge: 'SECCIÓN: CRÓNICAS Y RAÍCES (100% GRATIS)',
-        heading: '📷 Subir una Foto Histórica o de la Colonia',
-        photoLabel: '📸 Sube aquí la fotografía de la colonia *',
-        photoRequired: true,
-        btnText: 'Subir Foto e Historia al Periódico →',
+      NOTICIA: {
+        badge: 'SECCIÓN: NOTICIAS VECINALES (PREVIA AUTORIZACIÓN)',
+        heading: '🗞️ Enviar Noticia de la Colonia',
+        photoLabel: '📸 Foto ilustrativa de la noticia (Opcional)',
+        photoRequired: false,
+        btnText: 'Enviar Noticia para Revisión Vecinal →',
         renderFields: () => `
-          <input type="hidden" id="f-modalidad" value="Gratis" />
+          <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 mb-2">
+            <strong>🤝 Espacio protegido:</strong> Comparte información con respeto mutuo. No se permiten publicaciones de conflicto.
+          </div>
+          <input type="hidden" id="f-modalidad" value="Aprobacion Previa" />
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">1. Nombre del Autor o Familia que comparte la foto *</label>
-              <input id="f-subdato" type="text" required maxlength="90" placeholder="Ej. Foto por Don Roberto Gómez / Familia Martínez" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <label class="block text-xs font-bold uppercase font-mono mb-1">1. Título principal de la noticia *</label>
+              <input id="f-titulo" type="text" required maxlength="100" placeholder="Ej. Jornada de bacheo sobre Calle Sur 157" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Sector de la Ramos Millán donde se tomó *</label>
-              <select id="f-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
-                <option value="Bramadero">Sección Bramadero (Sur 157 - 163)</option>
-                <option value="Tlacotal">Sección Tlacotal (Sur 125 - Ote 100)</option>
-                <option value="Cuchilla">Sección Cuchilla</option>
-                <option value="Av. Té / Alcaldía">Av. Té / Explanada Alcaldía</option>
-                <option value="Coyuya / Plutarco">Metro Coyuya / Plutarco</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">3. Título breve o Calle/Año aproximado de la foto *</label>
-            <input id="f-titulo" type="text" required maxlength="100" placeholder="Ej. Calle Sur 157 en 1978 / Fiesta en el Mercado Tlacotal" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">4. Historia de la fotografía *</label>
-            <textarea id="f-detalles" rows="4" required maxlength="700" placeholder="Cuéntanos qué se ve en la foto, en qué año se tomó o qué recuerdo tienes de ese lugar de nuestra colonia..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
-          </div>
-          <input type="hidden" id="f-wa" value="" />
-        `
-      },
-
-      MASCOTA: {
-        badge: 'SECCIÓN: RADAR DE MASCOTAS DE LA RAMOS MILLÁN',
-        heading: '🐾 Publicar Mascota Perdida, Encontrada o en Adopción',
-        photoLabel: '📸 Sube una foto clara de la mascota *',
-        photoRequired: true,
-        btnText: 'Publicar Alerta de Mascota →',
-        renderFields: () => `
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-2">1. Elige cómo quieres publicar la alerta *</label>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <label class="flex items-start gap-2.5 p-3.5 rounded-xl border-2 border-borde bg-papel cursor-pointer hover:border-terracota">
-                <input type="radio" name="mascota_plan" value="Gratis" checked onchange="document.getElementById('f-modalidad').value=this.value" class="mt-1" />
-                <div class="text-xs">
-                  <strong class="block text-tinta text-sm">Alerta Vecinal Gratis ($0 MXN)</strong>
-                  <span class="text-grafito">Aparece en el Radar de Mascotas con foto y botón directo a tu WhatsApp.</span>
-                </div>
-              </label>
-              <label class="flex items-start gap-2.5 p-3.5 rounded-xl border-2 border-red-300 bg-red-50/70 cursor-pointer hover:border-red-600">
-                <input type="radio" name="mascota_plan" value="Boost $50" onchange="document.getElementById('f-modalidad').value=this.value" class="mt-1" />
-                <div class="text-xs">
-                  <strong class="block text-red-900 text-sm">🔥 Boost Urgente ($50 MXN / 7 días)</strong>
-                  <span class="text-red-800">Se fija hasta arriba de la sección con borde rojo urgente para mayor visibilidad.</span>
-                </div>
-              </label>
-            </div>
-            <input type="hidden" id="f-modalidad" value="Gratis" />
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Nombre de la mascota y raza/color *</label>
-              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Se busca a 'Canelo' (Mestizo color miel)" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
-            </div>
-            <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Sector de la colonia *</label>
-              <select id="f-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
-                <option value="Bramadero">Sección Bramadero (Sur 157 - 163)</option>
-                <option value="Tlacotal">Sección Tlacotal (Sur 125 - Ote 100)</option>
-                <option value="Cuchilla">Sección Cuchilla</option>
-                <option value="Av. Té / Alcaldía">Av. Té / Explanada Alcaldía</option>
-                <option value="Coyuya / Plutarco">Metro Coyuya / Plutarco</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">4. Última calle o esquina donde se vio *</label>
-              <input id="f-subdato" type="text" required maxlength="100" placeholder="Ej. Sur 159 esq. Oriente 106 cerca del mercado" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
-            </div>
-            <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">5. WhatsApp del dueño para recibir avisos (10 dígitos) *</label>
-              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">6. Señas particulares y detalles *</label>
-            <textarea id="f-detalles" rows="3" required maxlength="450" placeholder="Ej. Lleva collar azul con plaquita, es muy nervioso, se salió ayer a las 6 PM..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
-          </div>
-        `
-      },
-
-      TIANGUIS: {
-        badge: 'SECCIÓN: EL TIANGUIS DIGITAL (CLASIFICADOS VECINALES)',
-        heading: '🛍️ Subir un Producto o Postre al Tianguis Digital',
-        photoLabel: '📸 Sube una foto del artículo o producto que vendes *',
-        photoRequired: true,
-        btnText: 'Publicar en El Tianguis Digital →',
-        renderFields: () => `
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-2">1. Elige el tipo de anuncio *</label>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <label class="flex items-start gap-2.5 p-3 rounded-xl border-2 border-borde bg-papel cursor-pointer">
-                <input type="radio" name="tianguis_plan" value="Gratis" checked onchange="document.getElementById('f-modalidad').value=this.value" class="mt-1" />
-                <div class="text-xs">
-                  <strong class="block text-tinta text-sm">1 Artículo Sencillo Gratis ($0)</strong>
-                  <span class="text-grafito">Publicación estándar en el listado del Tianguis Digital.</span>
-                </div>
-              </label>
-              <label class="flex items-start gap-2.5 p-3 rounded-xl border-2 border-amber-400 bg-amber-50/70 cursor-pointer">
-                <input type="radio" name="tianguis_plan" value="Destacado $39" onchange="document.getElementById('f-modalidad').value=this.value" class="mt-1" />
-                <div class="text-xs">
-                  <strong class="block text-amber-950 text-sm">🔥 Anuncio Destacado ($39 MXN / 7 días)</strong>
-                  <span class="text-amber-900">Aparece fijado al inicio con etiqueta destacada.</span>
-                </div>
-              </label>
-            </div>
-            <input type="hidden" id="f-modalidad" value="Gratis" />
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">2. ¿Qué artículo vendes y a qué precio? *</label>
-              <input id="f-titulo" type="text" required maxlength="95" placeholder="Ej. Bicicleta R26 Seminueva — $1,850 MXN" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
-            </div>
-            <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Punto de Entrega Seguro en la colonia *</label>
-              <select id="f-subdato" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
-                <option value="Explanada Alcaldía Iztacalco">🏛️ Explanada Alcaldía Iztacalco</option>
-                <option value="Metro Iztacalco (Línea 8)">🚇 Exterior Metro Iztacalco</option>
-                <option value="Metro Coyuya">🚇 Exterior Metro Coyuya</option>
-                <option value="Entrada Mercado Bramadero">🛒 Entrada Mercado Bramadero (Sur 163)</option>
-                <option value="Entrada Mercado Tlacotal">🛒 Entrada Mercado Tlacotal (Sur 125)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">4. Sector donde te ubicas *</label>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Sector de la Ramos Millán *</label>
               <select id="f-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
                 <option value="Bramadero">Sección Bramadero</option>
                 <option value="Tlacotal">Sección Tlacotal</option>
@@ -282,121 +158,192 @@
                 <option value="Coyuya / Plutarco">Coyuya / Plutarco</option>
               </select>
             </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">3. Ubicación o calle exacta del acontecimiento *</label>
+            <input id="f-subdato" type="text" required maxlength="100" placeholder="Ej. Sur 157 esq. Oriente 104 • Reportó: Comité Vecinal" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">4. Redacción de la noticia *</label>
+            <textarea id="f-detalles" rows="4" required maxlength="600" placeholder="Escribe la información detallada..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+          </div>
+          <input type="hidden" id="f-wa" value="" />
+        `
+      },
+      FOTO_HISTORIA: {
+        badge: 'SECCIÓN: CRÓNICAS Y RAÍCES',
+        heading: '📷 Subir Foto Antigua de la Colonia',
+        photoLabel: '📸 Sube la fotografía histórica *',
+        photoRequired: true,
+        btnText: 'Subir Foto Antigua →',
+        renderFields: () => `
+          <input type="hidden" id="f-modalidad" value="Gratis" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">5. Tu WhatsApp para acordar la entrega (10 dígitos) *</label>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">1. Nombre del autor o familia *</label>
+              <input id="f-subdato" type="text" required maxlength="90" placeholder="Ej. Familia Martínez" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Sector *</label>
+              <select id="f-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
+                <option value="Bramadero">Bramadero</option><option value="Tlacotal">Tlacotal</option><option value="Cuchilla">Cuchilla</option><option value="Av. Té / Alcaldía">Av. Té / Alcaldía</option><option value="Coyuya / Plutarco">Coyuya / Plutarco</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">3. Título de la foto o calle *</label>
+            <input id="f-titulo" type="text" required maxlength="100" placeholder="Ej. Calle Sur 157 en 1978" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">4. Historia de la foto *</label>
+            <textarea id="f-detalles" rows="3" required maxlength="600" placeholder="Cuéntanos el recuerdo..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+          </div>
+          <input type="hidden" id="f-wa" value="" />
+        `
+      },
+      MASCOTA: {
+        badge: 'SECCIÓN: RADAR DE MASCOTAS',
+        heading: '🐾 Reportar Mascota Perdida o Adopción',
+        photoLabel: '📸 Foto clara de la mascota *',
+        photoRequired: true,
+        btnText: 'Publicar Alerta de Mascota →',
+        renderFields: () => `
+          <input type="hidden" id="f-modalidad" value="Gratis" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">1. Nombre o Título de la Mascota *</label>
+              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Se busca a 'Canelo' (Mestizo color miel)" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Sector *</label>
+              <select id="f-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
+                <option value="Bramadero">Bramadero</option><option value="Tlacotal">Tlacotal</option><option value="Cuchilla">Cuchilla</option><option value="Av. Té / Alcaldía">Av. Té / Alcaldía</option><option value="Coyuya / Plutarco">Coyuya / Plutarco</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Última calle o lugar donde se vio *</label>
+              <input id="f-subdato" type="text" required maxlength="100" placeholder="Ej. Sur 159 esq. Oriente 106" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">4. WhatsApp de contacto (10 dígitos) *</label>
               <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
             </div>
           </div>
-
           <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">6. Estado del producto y detalles *</label>
-            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Describe las condiciones del artículo..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">5. Descripción detallada y señas particulares *</label>
+            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Lleva collar azul, es noble, se ofrece gratificación..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
       },
-
+      TIANGUIS: {
+        badge: 'SECCIÓN: TIANGUIS DIGITAL',
+        heading: '🛍️ Vender un Artículo en el Tianguis',
+        photoLabel: '📸 Foto del producto *',
+        photoRequired: true,
+        btnText: 'Publicar en Tianguis Digital →',
+        renderFields: () => `
+          <input type="hidden" id="f-modalidad" value="Gratis" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">1. Producto y Precio *</label>
+              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Bicicleta R26 — $1,850 MXN" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Punto de Entrega Seguro *</label>
+              <select id="f-subdato" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
+                <option value="Explanada Alcaldía Iztacalco">Explanada Alcaldía Iztacalco</option><option value="Metro Iztacalco">Metro Iztacalco</option><option value="Metro Coyuya">Metro Coyuya</option><option value="Mercado Bramadero">Mercado Bramadero</option><option value="Mercado Tlacotal">Mercado Tlacotal</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Sector *</label>
+              <select id="f-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
+                <option value="Bramadero">Bramadero</option><option value="Tlacotal">Tlacotal</option><option value="Cuchilla">Cuchilla</option><option value="Av. Té / Alcaldía">Av. Té / Alcaldía</option><option value="Coyuya / Plutarco">Coyuya / Plutarco</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">4. WhatsApp de contacto *</label>
+              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">5. Descripción del artículo *</label>
+            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Condiciones y detalles..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+          </div>
+        `
+      },
       EMPLEO: {
-        badge: 'SECCIÓN: BOLSA DE TRABAJO «A 15 MINUTOS DE CASA»',
-        heading: '💼 Publicar una Vacante de Empleo Local ($100 MXN / 15 días)',
+        badge: 'SECCIÓN: BOLSA DE TRABAJO',
+        heading: '💼 Publicar Vacante de Empleo',
         photoLabel: '📸 Foto del negocio o letrero (Opcional)',
         photoRequired: false,
-        btnText: 'Registrar Vacante y Pasar al Pago ($100) →',
+        btnText: 'Registrar Vacante Local →',
         renderFields: () => `
           <input type="hidden" id="f-modalidad" value="Vacante $100" />
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase font-mono mb-1">1. Puesto solicitado *</label>
-              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Ayudante de Mostrador / Panadero" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Ayudante de Mostrador" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Nombre del Negocio, Calle y Sueldo *</label>
-              <input id="f-subdato" type="text" required maxlength="110" placeholder="Ej. Panadería La Espiga (Sur 125) • $1,900/sem" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Negocio y sueldo *</label>
+              <input id="f-subdato" type="text" required maxlength="100" placeholder="Ej. Panadería La Espiga • $1,900/sem" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
           </div>
-
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Sector del local *</label>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Sector *</label>
               <select id="f-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
-                <option value="Bramadero">Sección Bramadero</option>
-                <option value="Tlacotal">Sección Tlacotal</option>
-                <option value="Cuchilla">Sección Cuchilla</option>
-                <option value="Av. Té / Alcaldía">Av. Té / Alcaldía</option>
-                <option value="Coyuya / Plutarco">Coyuya / Plutarco</option>
+                <option value="Bramadero">Bramadero</option><option value="Tlacotal">Tlacotal</option><option value="Cuchilla">Cuchilla</option><option value="Av. Té / Alcaldía">Av. Té / Alcaldía</option><option value="Coyuya / Plutarco">Coyuya / Plutarco</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">4. WhatsApp para postulaciones (10 dígitos) *</label>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">4. WhatsApp de contacto *</label>
               <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
             </div>
           </div>
-
           <div>
             <label class="block text-xs font-bold uppercase font-mono mb-1">5. Horario y requisitos *</label>
-            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Ej. Horario de 9:00 a 17:00 h, vivir en Iztacalco..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Requisitos..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
       },
-
       NEGOCIO: {
-        badge: 'SECCIÓN: DIRECTORIO DE COMERCIO DE BARRIO',
-        heading: '🏪 Dar de Alta mi Negocio u Oficio en el Directorio',
-        photoLabel: '📸 Sube una foto de tu fachada, logo o platillo *',
-        photoRequired: false,
-        btnText: 'Registrar mi Negocio →',
+        badge: 'SECCIÓN: DIRECTORIO DE COMERCIO',
+        heading: '🏪 Dar de Alta mi Negocio',
+        photoLabel: '📸 Foto de fachada o platillo *',
+        photoRequired: true,
+        btnText: 'Registrar Negocio en Directorio →',
         renderFields: () => `
-          <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-2">1. Elige el Plan para tu Negocio *</label>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <label class="flex items-start gap-2.5 p-3 rounded-xl border-2 border-terracota bg-amber-50/70 cursor-pointer">
-                <input type="radio" name="neg_plan" value="Plan Pro $199" checked onchange="document.getElementById('f-modalidad').value=this.value" class="mt-1" />
-                <div class="text-xs">
-                  <strong class="block text-terracota text-sm">★ Plan Pro Orgullo de Barrio ($199/mes)</strong>
-                  <span class="text-tinta">Incluye foto, carrito de pedidos a WhatsApp, mapa y Oferta del Jueves.</span>
-                </div>
-              </label>
-              <label class="flex items-start gap-2.5 p-3 rounded-xl border-2 border-borde bg-papel cursor-pointer">
-                <input type="radio" name="neg_plan" value="Gratis" onchange="document.getElementById('f-modalidad').value=this.value" class="mt-1" />
-                <div class="text-xs">
-                  <strong class="block text-tinta text-sm">Perfil Básico Gratuito ($0)</strong>
-                  <span class="text-grafito">Nombre, giro, calle y horario comercial.</span>
-                </div>
-              </label>
-            </div>
-            <input type="hidden" id="f-modalidad" value="Plan Pro $199" />
-          </div>
-
+          <input type="hidden" id="f-modalidad" value="Plan Pro $199" />
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Nombre del Negocio y Giro *</label>
-              <input id="f-titulo" type="text" required maxlength="95" placeholder="Ej. Carnitas El Patrón • Comida y Antojitos" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <label class="block text-xs font-bold uppercase font-mono mb-1">1. Nombre del negocio y giro *</label>
+              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Carnitas El Patrón" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Calle exacta en la colonia *</label>
-              <input id="f-subdato" type="text" required maxlength="110" placeholder="Ej. Sur 163 casi esq. Oriente 108" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <label class="block text-xs font-bold uppercase font-mono mb-1">2. Calle exacta *</label>
+              <input id="f-subdato" type="text" required maxlength="100" placeholder="Ej. Sur 163 esq. Oriente 108" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
           </div>
-
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">4. Sector de la Ramos Millán *</label>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">3. Sector *</label>
               <select id="f-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
-                <option value="Bramadero">Sección Bramadero</option>
-                <option value="Tlacotal">Sección Tlacotal</option>
-                <option value="Cuchilla">Sección Cuchilla</option>
-                <option value="Av. Té / Alcaldía">Av. Té / Alcaldía</option>
-                <option value="Coyuya / Plutarco">Coyuya / Plutarco</option>
+                <option value="Bramadero">Bramadero</option><option value="Tlacotal">Tlacotal</option><option value="Cuchilla">Cuchilla</option><option value="Av. Té / Alcaldía">Av. Té / Alcaldía</option><option value="Coyuya / Plutarco">Coyuya / Plutarco</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-bold uppercase font-mono mb-1">5. WhatsApp para pedidos (10 dígitos) *</label>
+              <label class="block text-xs font-bold uppercase font-mono mb-1">4. WhatsApp para pedidos *</label>
               <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
             </div>
           </div>
-
           <div>
-            <label class="block text-xs font-bold uppercase font-mono mb-1">6. Productos principales y promoción vecinal *</label>
-            <textarea id="f-detalles" rows="3" required maxlength="500" placeholder="Ej. 1 Kg de carnitas $290. Promoción: Salsa habanero gratis..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+            <label class="block text-xs font-bold uppercase font-mono mb-1">5. Productos y promoción *</label>
+            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Productos y precios..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
       }
@@ -404,15 +351,13 @@
 
     function setFormCategory(catKey) {
       currentCat = catKey;
-      const cfg = CONFIG_CATEGORIAS[catKey] || CONFIG_CATEGORIAS.FOTO_HISTORIA;
-
+      const cfg = CONFIG_CATEGORIAS[catKey] || CONFIG_CATEGORIAS.NOTICIA;
       document.querySelectorAll('.cat-selector-btn').forEach(btn => {
         const active = btn.getAttribute('data-cat-btn') === catKey;
         btn.className = active
-          ? 'cat-selector-btn p-3 rounded-xl border-2 border-terracota bg-amber-50 text-terracota text-center transition flex flex-col items-center gap-1 shadow-sm'
-          : 'cat-selector-btn p-3 rounded-xl border-2 border-borde bg-papel hover:border-stone-400 text-tinta text-center transition flex flex-col items-center gap-1';
+          ? 'cat-selector-btn p-2.5 rounded-xl border-2 border-terracota bg-amber-50 text-terracota text-center transition flex flex-col items-center gap-1 shadow-sm'
+          : 'cat-selector-btn p-2.5 rounded-xl border-2 border-borde bg-papel hover:border-stone-400 text-tinta text-center transition flex flex-col items-center gap-1';
       });
-
       document.getElementById('form-badge').textContent = cfg.badge;
       document.getElementById('form-heading').textContent = cfg.heading;
       document.getElementById('photo-label').textContent = cfg.photoLabel;
@@ -424,20 +369,17 @@
     function handlePhotoPreview(event) {
       const file = event.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
           const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 360; // Optimizado para Google Sheets
+          const MAX_WIDTH = 360;
           const scale = Math.min(1, MAX_WIDTH / img.width);
           canvas.width = Math.round(img.width * scale);
           canvas.height = Math.round(img.height * scale);
-
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
           compressedPhotoBase64 = canvas.toDataURL('image/jpeg', 0.55);
           document.getElementById('photo-preview-img').src = compressedPhotoBase64;
           document.getElementById('photo-preview-box').classList.remove('hidden');
@@ -459,24 +401,23 @@
 
       const cfg = CONFIG_CATEGORIAS[currentCat];
       if (cfg.photoRequired && !compressedPhotoBase64) {
-        alert('Por favor selecciona y adjunta la fotografía antes de enviar.');
+        alert('Por favor selecciona y adjunta la fotografía requerida.');
         return;
       }
 
       const btn = document.getElementById('btn-submit-dynamic');
-      const originalText = btn.textContent;
       btn.disabled = true;
-      btn.textContent = 'Enviando publicación y fotografía...';
+      btn.textContent = 'Enviando...';
 
       const payload = {
         website_url_trap: '',
         categoria: currentCat,
-        modalidad: sanitizeHTML(document.getElementById('f-modalidad') ? document.getElementById('f-modalidad').value : 'Gratis'),
-        sector: sanitizeHTML(document.getElementById('f-sector') ? document.getElementById('f-sector').value : 'Bramadero'),
-        titulo: sanitizeHTML(document.getElementById('f-titulo') ? document.getElementById('f-titulo').value : ''),
-        subdato: sanitizeHTML(document.getElementById('f-subdato') ? document.getElementById('f-subdato').value : ''),
-        detalles: sanitizeHTML(document.getElementById('f-detalles') ? document.getElementById('f-detalles').value : ''),
-        whatsapp: sanitizeHTML(document.getElementById('f-wa') ? document.getElementById('f-wa').value : ''),
+        modalidad: document.getElementById('f-modalidad') ? document.getElementById('f-modalidad').value : 'Gratis',
+        sector: document.getElementById('f-sector').value,
+        titulo: document.getElementById('f-titulo').value,
+        subdato: document.getElementById('f-subdato').value,
+        detalles: document.getElementById('f-detalles').value,
+        whatsapp: document.getElementById('f-wa') ? document.getElementById('f-wa').value : '',
         foto: compressedPhotoBase64 || ''
       };
 
@@ -488,45 +429,18 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
-        } catch (err) {
-          console.warn('Error al conectar con Sheets:', err);
-        }
+        } catch (err) {}
       }
 
       btn.disabled = false;
-      btn.textContent = originalText;
-
-      let mpPlan = null;
-      if (payload.modalidad.includes('199')) mpPlan = MP_LINKS.SUSCRIPCION_PRO_199;
-      else if (payload.modalidad.includes('39')) mpPlan = MP_LINKS.TIANGUIS_39;
-      else if (payload.modalidad.includes('100')) mpPlan = MP_LINKS.VACANTE_100;
-      else if (payload.modalidad.includes('50')) mpPlan = MP_LINKS.BOOST_50;
+      btn.textContent = cfg.btnText;
 
       const resBox = document.getElementById('result-box');
       resBox.classList.remove('hidden');
       resBox.innerHTML = `
-        <p class="font-bold text-sm">
-          ✅ ¡Recibido! Tu publicación "${payload.titulo}" fue enviada con éxito.
-        </p>
-        ${mpPlan ? `
-          <div class="p-4 rounded-xl bg-white border border-chinampa text-tinta space-y-2 mt-2">
-            <p class="font-bold text-sky-900">💳 PASO 2: Completa tu pago seguro de ${mpPlan.amount} en Mercado Pago:</p>
-            <div class="flex flex-wrap gap-2">
-              <a href="${mpPlan.url}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs">
-                Abrir Link Oficial de Mercado Pago ↗
-              </a>
-              <button type="button" onclick="openWhatsAppDirect(ADMIN_WHATSAPP, 'Hola, acabo de subir *${payload.titulo}* (${payload.modalidad}) y envío mi comprobante de pago:')" class="px-4 py-2 rounded-lg bg-chinampa text-white font-bold text-xs">
-                📲 Enviar comprobante por WhatsApp
-              </button>
-            </div>
-          </div>
-        ` : `
-          <p class="text-xs mt-1">
-            En cuanto cambies el estatus a <strong>"Aprobado"</strong> en tu hoja de Google Sheets, aparecerá publicada en vivo con su fotografía.
-          </p>
-        `}
+        <p class="font-bold text-sm">✅ ¡Enviado con éxito!</p>
+        <p class="text-xs mt-1">Tu publicación ha entrado a revisión. En cuanto el administrador la apruebe en Google Sheets, aparecerá visible en la página web.</p>
       `;
-
       e.target.reset();
       clearSelectedPhoto();
     }
@@ -535,12 +449,13 @@
       renderSharedLayout('anunciate');
       const params = new URLSearchParams(window.location.search);
       const tipo = params.get('tipo');
-      if (tipo === 'foto') setFormCategory('FOTO_HISTORIA');
+      if (tipo === 'noticia') setFormCategory('NOTICIA');
+      else if (tipo === 'foto') setFormCategory('FOTO_HISTORIA');
       else if (tipo === 'mascota') setFormCategory('MASCOTA');
       else if (tipo === 'tianguis') setFormCategory('TIANGUIS');
       else if (tipo === 'empleo') setFormCategory('EMPLEO');
       else if (tipo === 'negocio') setFormCategory('NEGOCIO');
-      else setFormCategory('FOTO_HISTORIA');
+      else setFormCategory('NOTICIA');
     });
   </script>
 </body>
