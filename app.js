@@ -1,17 +1,45 @@
+/**
+ * ============================================================================
+ * ARCHIVO CENTRAL: app.js — RAÍCES DE IZTACALCO (EDICIÓN GABRIEL RAMOS MILLÁN)
+ * ============================================================================
+ */
+
+// 1. TU URL DE GOOGLE APPS SCRIPT:
 const GOOGLE_SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz_yuI8WhbZFM79eoLqJhRfB5C9fAAMRb896IVKb9nHHKzX_AIK4u2RUR9k6jvm6Je7dA/exec";
+
+// 2. TU WHATSAPP DE ADMINISTRADOR:
 const ADMIN_WHATSAPP = "5510803153";
 
 const MP_LINKS = {
   SUSCRIPCION_PRO_199: { title: "Suscripción Mensual Pro", amount: "$199 MXN / mes", url: "https://mpago.la/259su4B" },
   TIANGUIS_39: { title: "Anuncio Destacado Tianguis", amount: "$39 MXN", url: "https://mpago.la/1AWbVzE" },
+  OFICIO_50: { title: "Anuncio de Oficio Verificado", amount: "$50 MXN", url: "https://mpago.la/2UZYU9q" },
   VACANTE_100: { title: "Publicación de Vacante", amount: "$100 MXN", url: "https://mpago.la/32DNrnt" },
   BOOST_50: { title: "Boost Mascota Perdida", amount: "$50 MXN", url: "https://mpago.la/2UZYU9q" }
 };
 
+if (typeof tailwind !== "undefined") {
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          papel: '#FBF8F3', crema: '#F3EDE2', tinta: '#1C1917', grafito: '#57534E',
+          terracota: '#9B2C2C', terracotaDark: '#742A2A', maiz: '#D97706',
+          chinampa: '#15803D', chinampaLight: '#DCFCE7', borde: '#E5DEC9'
+        },
+        fontFamily: {
+          serif: ['Fraunces', 'Georgia', 'serif'],
+          sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace']
+        }
+      }
+    }
+  };
+}
+
 let currentSector = localStorage.getItem('raices_sector') || 'TODOS';
 let searchQuery = '';
 const businessCarts = {};
-let sheetsAlreadySynced = false;
 
 function sanitizeHTML(str) {
   return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;').trim();
@@ -35,13 +63,22 @@ const DB = {
   empleos: []
 };
 
+// Función principal de sincronización con Google Sheets (evita caché con t=Date.now())
 async function syncWithGoogleSheets() {
-  if (!GOOGLE_SHEETS_WEBAPP_URL || sheetsAlreadySynced) return;
+  if (!GOOGLE_SHEETS_WEBAPP_URL) return;
   try {
     const sep = GOOGLE_SHEETS_WEBAPP_URL.includes('?') ? '&' : '?';
     const res = await fetch(`${GOOGLE_SHEETS_WEBAPP_URL}${sep}t=${Date.now()}`, { redirect: 'follow' });
     const data = await res.json();
-    sheetsAlreadySynced = true;
+
+    // Limpia los arreglos locales para cargar únicamente los registros con estatus Aprobado
+    DB.noticias = [];
+    DB.cronicas = [];
+    DB.mascotas = [];
+    DB.oficios = [];
+    DB.empleos = [];
+    DB.tianguis = [];
+    DB.negocios = [];
 
     if (Array.isArray(data.publicaciones)) {
       data.publicaciones.forEach(pub => {
@@ -72,7 +109,7 @@ async function syncWithGoogleSheets() {
 
     if (typeof window.onPageRender === 'function') window.onPageRender();
   } catch (err) {
-    console.warn('Modo local activo:', err);
+    console.warn('Error sincronizando con Google Sheets:', err);
   }
 }
 
@@ -195,6 +232,58 @@ function renderSharedLayout(activePage) {
       </header>
     `;
   }
+
+  const footerContainer = document.getElementById('shared-footer');
+  if (footerContainer) {
+    footerContainer.innerHTML = `
+      <footer class="bg-tinta text-stone-300 border-t border-stone-800 mt-14 pb-20 lg:pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <span class="font-mono text-[11px] uppercase tracking-widest text-amber-400 font-bold">RAÍCES DE IZTACALCO</span>
+              <h4 class="font-serif text-xl font-bold text-white mt-1">Edición Gabriel Ramos Millán</h4>
+              <p class="text-xs text-stone-400 mt-2 leading-relaxed">
+                Periódico digital comunitario y directorio de comercio local sin comisiones.
+              </p>
+            </div>
+            <div>
+              <h5 class="font-mono text-xs uppercase font-bold text-white mb-2">Secciones Independientes</h5>
+              <ul class="text-xs text-stone-300 space-y-1.5">
+                <li><a href="noticias.html" class="hover:text-amber-300">🗞️ Noticias Vecinales</a></li>
+                <li><a href="cronicas.html" class="hover:text-amber-300">📷 Crónicas y Raíces</a></li>
+                <li><a href="comercio.html" class="hover:text-amber-300">🏪 Comercio de Barrio</a></li>
+                <li><a href="tianguis.html" class="hover:text-amber-300">🛍️ Tianguis Digital</a></li>
+                <li><a href="mascotas.html" class="hover:text-amber-300">🐾 Radar de Mascotas</a></li>
+                <li><a href="oficios.html" class="hover:text-amber-300">🛠️ El Oficio Verificado</a></li>
+                <li><a href="empleos.html" class="hover:text-amber-300">💼 Bolsa de Trabajo</a></li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-xl bg-stone-900 border border-stone-700">
+              <h5 class="font-mono text-xs uppercase font-bold text-amber-400 mb-1.5">🛡️ Seguridad Vecinal</h5>
+              <p class="text-[11px] text-stone-300 leading-relaxed">
+                Acuerda tratos únicamente en puntos públicos seguros. Nunca deposites por adelantado a desconocidos.
+              </p>
+            </div>
+          </div>
+          <div class="pt-4 border-t border-stone-800 text-center text-[11px] text-stone-400">
+            © 2026 Raíces de Iztacalco — Col. Gabriel Ramos Millán, CDMX.
+          </div>
+        </div>
+      </footer>
+
+      <nav class="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-borde z-40 px-1 py-1 shadow-lg">
+        <div class="grid grid-cols-5 gap-1 max-w-lg mx-auto text-center text-[10px]">
+          <a href="index.html" class="py-1 ${activePage === 'inicio' ? 'text-terracota font-extrabold' : 'text-grafito'}">🏠 Inicio</a>
+          <a href="noticias.html" class="py-1 ${activePage === 'noticias' ? 'text-terracota font-extrabold' : 'text-grafito'}">🗞️ Noticias</a>
+          <a href="comercio.html" class="py-1 ${activePage === 'comercio' ? 'text-terracota font-extrabold' : 'text-grafito'}">🏪 Comercio</a>
+          <a href="mascotas.html" class="py-1 ${activePage === 'mascotas' ? 'text-terracota font-extrabold' : 'text-grafito'}">🐾 Mascotas</a>
+          <a href="anunciate.html" class="py-1 ${activePage === 'anunciate' ? 'text-terracota font-extrabold' : 'text-grafito'}">➕ Publicar</a>
+        </div>
+      </nav>
+    `;
+  }
+
+  syncWithGoogleSheets();
 }
 
 function changeGlobalSector(sec) {
