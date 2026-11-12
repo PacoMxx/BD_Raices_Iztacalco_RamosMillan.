@@ -3,177 +3,263 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Raíces de Iztacalco | Portada Principal — Gabriel Ramos Millán</title>
+  <title>Raíces de Iztacalco | Periódico Comunitario y Comercio de Barrio</title>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="app.js"></script>
+  <style>
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeScroll 32s linear infinite;
+    }
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+  </style>
 </head>
 <body data-page="inicio" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
 
-  <!-- Cabecera Compartida -->
+  <!-- Cabecera Compartida (Incluye Marquesina de Patrocinadores, Título Grande, Sectores y Menú) -->
   <div id="shared-header"></div>
 
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-10">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-8 pb-20">
 
-    <!-- Banner de Bienvenida -->
-    <section class="bg-gradient-to-r from-stone-900 via-stone-800 to-terracotaDark text-white rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-      <div class="space-y-2 max-w-2xl">
-        <span class="inline-block bg-amber-400 text-stone-950 font-mono text-xs font-extrabold px-3 py-1 rounded-full">
-          👋 BIENVENIDO VECINO DE LA GABRIEL RAMOS MILLÁN
-        </span>
-        <h2 class="font-serif text-2xl sm:text-4xl font-bold leading-tight">
-          Elige la sección a la que deseas entrar hoy
-        </h2>
-        <p class="text-xs sm:text-sm text-stone-200 leading-relaxed">
-          Cada servicio e historia cuenta con su propia página independiente: noticias vecinales moderadas, directorio de comercio local con pedidos por WhatsApp, mascotas perdidas, bolsa de trabajo y oficios.
-        </p>
-      </div>
-      <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto shrink-0">
-        <a href="guia.html" class="px-5 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs sm:text-sm text-center shadow-lg transition">
-          📖 Manual de Uso Vecinal →
-        </a>
-        <a href="anunciate.html" class="px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold text-xs sm:text-sm text-center transition">
-          ➕ Enviar Anuncio / Noticia
-        </a>
-      </div>
-    </section>
-
-    <!-- TARJETAS DE SECCIONES INDEPENDIENTES -->
-    <section>
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="font-serif text-xl sm:text-2xl font-bold text-tinta">Secciones Independientes del Periódico</h3>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <!-- 1. Noticias Vecinales -->
-        <a href="noticias.html" class="group bg-white rounded-2xl border-2 border-red-200 hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl">🗞️</span>
-              <span class="font-mono text-[11px] uppercase bg-red-50 text-terracota font-bold px-2.5 py-1 rounded-full">NUEVA SECCIÓN</span>
-            </div>
-            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Noticias Vecinales</h4>
-            <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Entérate de los avisos comunitarios y mejoras urbanas de la colonia con previa autorización y bajo un espacio de estricto respeto vecinal.
-            </p>
+    <!-- 1. BANNER DE BIENVENIDA A LOS VECINOS + ENLACE A LA GUÍA -->
+    <section class="bg-white rounded-2xl border-2 border-stone-900 p-6 sm:p-8 shadow-sm relative overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <div class="lg:col-span-8 space-y-2.5">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-stone-900 font-mono text-xs font-extrabold">
+            <span>👋 BIENVENIDOS VECINOS DE LA GABRIEL RAMOS MILLÁN</span>
           </div>
-          <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Abrir Noticias Vecinales</span>
-            <span class="group-hover:translate-x-1 transition">→</span>
-          </div>
-        </a>
-
-        <!-- 2. Crónicas y Raíces -->
-        <a href="cronicas.html" class="group bg-white rounded-2xl border-2 border-borde hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl">📷</span>
-              <span class="font-mono text-[11px] uppercase bg-crema text-tinta font-bold px-2.5 py-1 rounded-full">HISTORIA Y FOTOS</span>
-            </div>
-            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Crónicas y Raíces</h4>
-            <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Fotografías antiguas de nuestra colonia, relatos de los mercados tradicionales y monitor vial de la alcaldía.
-            </p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Abrir Crónicas y Raíces</span>
-            <span class="group-hover:translate-x-1 transition">→</span>
-          </div>
-        </a>
-
-        <!-- 3. Comercio de Barrio -->
-        <a href="comercio.html" class="group bg-white rounded-2xl border-2 border-amber-300 hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl">🏪</span>
-              <span class="font-mono text-[11px] uppercase bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-full">OFERTAS Y PEDIDOS</span>
-            </div>
-            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Comercio de Barrio</h4>
-            <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Directorio de negocios locales de Bramadero, Tlacotal y Cuchilla con carrito directo al WhatsApp del comerciante.
-            </p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Abrir Directorio de Comercio</span>
-            <span class="group-hover:translate-x-1 transition">→</span>
-          </div>
-        </a>
-
-        <!-- 4. El Tianguis Digital -->
-        <a href="tianguis.html" class="group bg-white rounded-2xl border-2 border-borde hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl">🛍️</span>
-              <span class="font-mono text-[11px] uppercase bg-chinampaLight text-chinampa font-bold px-2.5 py-1 rounded-full">ENTREGAS SEGURAS</span>
-            </div>
-            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">El Tianguis Digital</h4>
-            <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Compra y venta de artículos de segunda mano entre vecinos utilizando puntos públicos seguros en Iztacalco.
-            </p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Abrir Tianguis Digital</span>
-            <span class="group-hover:translate-x-1 transition">→</span>
-          </div>
-        </a>
-
-        <!-- 5. Radar de Mascotas (Independiente) -->
-        <a href="mascotas.html" class="group bg-white rounded-2xl border-2 border-red-300 hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl">🐾</span>
-              <span class="font-mono text-[11px] uppercase bg-red-100 text-red-900 font-bold px-2.5 py-1 rounded-full">PÁGINA INDEPENDIENTE</span>
-            </div>
-            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Radar de Mascotas</h4>
-            <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Reportes de perritos o gatitos perdidos, encontrados o en adopción con fotos y contacto directo por WhatsApp.
-            </p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Abrir Radar de Mascotas</span>
-            <span class="group-hover:translate-x-1 transition">→</span>
-          </div>
-        </a>
-
-        <!-- 6. El Oficio Verificado (Independiente) -->
-        <a href="oficios.html" class="group bg-white rounded-2xl border-2 border-borde hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl">🛠️</span>
-              <span class="font-mono text-[11px] uppercase bg-stone-200 text-tinta font-bold px-2.5 py-1 rounded-full">PÁGINA INDEPENDIENTE</span>
-            </div>
-            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">El Oficio Verificado</h4>
-            <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Plomeros, cerrajeros y electricistas de confianza que atienden de inmediato en las cuadras de la Ramos Millán.
-            </p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Abrir Directorio de Oficios</span>
-            <span class="group-hover:translate-x-1 transition">→</span>
-          </div>
-        </a>
-
-        <!-- 7. Bolsa de Trabajo (Independiente) -->
-        <a href="empleos.html" class="group bg-white rounded-2xl border-2 border-chinampa/40 hover:border-terracota p-6 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl">💼</span>
-              <span class="font-mono text-[11px] uppercase bg-chinampaLight text-chinampa font-bold px-2.5 py-1 rounded-full">PÁGINA INDEPENDIENTE</span>
-            </div>
-            <h4 class="font-serif text-2xl font-bold text-tinta group-hover:text-terracota transition">Bolsa de Trabajo Local</h4>
-            <p class="text-xs sm:text-sm text-grafito mt-2 leading-relaxed">
-              Vacantes en comercios y talleres locales para trabajar a menos de 15 minutos de casa sin cruzar la ciudad.
-            </p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-borde flex items-center justify-between text-xs font-bold text-terracota">
-            <span>Abrir Bolsa de Trabajo</span>
-            <span class="group-hover:translate-x-1 transition">→</span>
-          </div>
-        </a>
-
+          <h2 class="font-serif text-2xl sm:text-4xl font-extrabold text-stone-900 leading-tight">
+            Tu periódico digital de cuadra, comercio local y avisos al día
+          </h2>
+          <p class="text-xs sm:text-sm text-stone-700 font-medium leading-relaxed">
+            Bienvenidos a <strong>Raíces de Iztacalco</strong>. Este espacio fue creado para conectar a nuestras familias de Bramadero, Tlacotal, Cuchilla, Av. Té y Coyuya: aquí puedes consultar el reporte diario de tráfico por eventos en el Estadio GNP y Palacio de los Deportes, enterarte de noticias de tu cuadra y apoyar a los negocios, oficios y tianguis de nuestra colonia sin intermediarios.
+          </p>
+        </div>
+        <div class="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-end">
+          <a href="guia.html" class="w-full px-5 py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 border-2 border-stone-900 font-extrabold text-xs sm:text-sm shadow transition flex items-center justify-center gap-2 text-center">
+            <span>📖 Guía Vecinal: ¿Cómo usar la página?</span>
+            <span>→</span>
+          </a>
+          <a href="anunciate.html" class="w-full px-5 py-3.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 border-2 border-stone-900 font-extrabold text-xs sm:text-sm shadow transition flex items-center justify-center gap-2 text-center">
+            <span>➕ Publicar un Anuncio o Noticia</span>
+            <span>→</span>
+          </a>
+        </div>
       </div>
     </section>
+
+    <!-- 2. ESTRUCTURA PRINCIPAL ESTILO BLOG + ESCAPARATE DE ANUNCIOS PAGADOS -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- =====================================================================
+           COLUMNA IZQUIERDA (8 cols): BLOG DIARIO, TRÁFICO, ESTADIO GNP Y NOTICIAS
+           ===================================================================== -->
+      <div class="lg:col-span-8 space-y-8">
+
+        <!-- MONITOR DIARIO: TRÁFICO, ESTADIO GNP Y PALACIO DE LOS DEPORTES -->
+        <section class="bg-white rounded-2xl border-2 border-red-700 shadow-sm overflow-hidden">
+          <div class="bg-stone-900 text-amber-300 px-5 py-3.5 flex flex-wrap items-center justify-between gap-2 border-b border-stone-800">
+            <div class="flex items-center gap-2">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+              <h3 class="font-mono text-xs sm:text-sm font-extrabold uppercase tracking-wider text-white">
+                🏟️ Monitor Diario: Vialidad, Estadio GNP y Palacio de los Deportes
+              </h3>
+            </div>
+            <span id="fecha-monitor-hoy" class="font-mono text-[11px] bg-amber-400 text-stone-950 font-extrabold px-2.5 py-0.5 rounded">
+              REPORTE DEL DÍA
+            </span>
+          </div>
+
+          <div class="p-5 sm:p-6 space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Tarjeta Estadio GNP y Palacio de los Deportes -->
+              <div class="p-4 rounded-xl bg-red-50 border border-red-200 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-mono font-extrabold bg-red-700 text-white px-2 py-0.5 rounded">🎸 EVENTOS MASIVOS HOY</span>
+                  <span class="text-xs font-bold text-red-900">19:00 a 23:30 h</span>
+                </div>
+                <h4 class="font-serif font-bold text-base text-stone-900">Estadio GNP Seguros y Palacio de los Deportes</h4>
+                <p class="text-xs text-stone-800 font-medium leading-relaxed">
+                  <strong>Afectación vial:</strong> Carga vehicular intensa en lateral de Río Churubusco, Añil, Viaducto Río de la Piedad y accesos a Puerta 6 y Metro Ciudad Deportiva.
+                </p>
+                <p class="text-xs text-red-950 font-bold bg-white/80 p-2 rounded-lg border border-red-200">
+                  🚗 Ruta alterna vecinal: Utiliza Sur 157, Av. Plutarco Elías Calles o Eje 4 Sur Té para cruzar la colonia sin quedar atrapado.
+                </p>
+              </div>
+
+              <!-- Tarjeta Tráfico Local y Tianguis -->
+              <div class="p-4 rounded-xl bg-amber-50 border border-amber-300 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-mono font-extrabold bg-stone-900 text-amber-300 px-2 py-0.5 rounded">🚦 VIALIDAD Y BARRIO</span>
+                  <span class="text-xs font-bold text-stone-900">Reporte Matutino / Vespertino</span>
+                </div>
+                <h4 class="font-serif font-bold text-base text-stone-900">Movilidad en la Gabriel Ramos Millán</h4>
+                <p class="text-xs text-stone-800 font-medium leading-relaxed">
+                  <strong>Puntos con circulación lenta:</strong> Entorno del Mercado Bramadero (Sur 163), cruces de Oriente 106 y zona escolar sobre Oriente 100-A en horarios de entrada y salida.
+                </p>
+                <p class="text-xs text-stone-900 font-bold bg-white/80 p-2 rounded-lg border border-amber-300">
+                  🏛️ Aviso Alcaldía: Ventanilla Única y explanada operando con normalidad de 9:00 a 15:00 h.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-borde text-xs">
+              <span class="text-stone-700 font-medium">¿Viste un cierre vial, bache o imprevisto hoy en tu cuadra?</span>
+              <a href="anunciate.html?tipo=noticia" class="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-stone-950 font-extrabold transition">
+                📢 Reportar Aviso Vial Gratis →
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- BLOG DE NOTICIAS VECINALES RECIENTES -->
+        <section class="space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-stone-900 pb-3">
+            <div>
+              <span class="text-xs font-mono font-extrabold text-terracota uppercase">🗞️ EL BLOG DE LA COLONIA</span>
+              <h3 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900">Noticias y Avisos Vecinales del Día</h3>
+            </div>
+            <div class="flex items-center gap-2">
+              <a href="anunciate.html?tipo=noticia" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-stone-950 font-extrabold text-xs shadow transition">
+                + Publicar Noticia
+              </a>
+              <a href="noticias.html" class="px-3.5 py-2 rounded-xl bg-white border border-stone-900 text-stone-900 hover:bg-stone-100 font-bold text-xs transition">
+                Ver todas →
+              </a>
+            </div>
+          </div>
+
+          <div id="blog-noticias-container" class="space-y-5"></div>
+        </section>
+
+        <!-- CRÓNICAS Y MEMORIA BARRIAL EN PORTADA -->
+        <section class="space-y-4 pt-2">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-stone-900 pb-3">
+            <div>
+              <span class="text-xs font-mono font-extrabold text-terracota uppercase">📷 HISTORIA E IDENTIDAD</span>
+              <h3 class="font-serif text-2xl font-bold text-stone-900">Crónicas y Recuerdos de Nuestras Calles</h3>
+            </div>
+            <div class="flex items-center gap-2">
+              <a href="anunciate.html?tipo=foto" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-stone-950 font-extrabold text-xs shadow transition">
+                📷 Subir Foto Antigua
+              </a>
+              <a href="cronicas.html" class="px-3.5 py-2 rounded-xl bg-white border border-stone-900 text-stone-900 hover:bg-stone-100 font-bold text-xs transition">
+                Ir al Álbum →
+              </a>
+            </div>
+          </div>
+
+          <div id="blog-cronicas-container" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+        </section>
+
+      </div>
+
+      <!-- =====================================================================
+           COLUMNA DERECHA (4 cols): ESCAPARATE DE ANUNCIOS PAGADOS Y DESTACADOS
+           ===================================================================== -->
+      <aside class="lg:col-span-4 space-y-6">
+
+        <!-- Cabecera del Escaparate Comercial y Clasificados -->
+        <div class="bg-stone-900 text-white rounded-2xl p-5 border-2 border-amber-400 shadow-md space-y-2">
+          <span class="inline-block bg-amber-400 text-stone-950 font-mono text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">
+            ⭐ SECCIÓN PATROCINADA Y CLASIFICADOS
+          </span>
+          <h3 class="font-serif text-xl font-bold text-white">Anuncios de Nuestra Comunidad</h3>
+          <p class="text-xs text-stone-300 font-medium leading-relaxed">
+            Apoya el comercio local de la Ramos Millán. ¿Quieres aparecer aquí? Publica tu negocio, oficio, vacante o artículo.
+          </p>
+          <a href="anunciate.html" class="mt-2 w-full py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs flex items-center justify-center gap-1.5 shadow transition">
+            <span>✨ Anunciarme en esta sección</span>
+            <span>→</span>
+          </a>
+        </div>
+
+        <!-- 1. NEGOCIOS SUSCRITOS (COMERCIO DE BARRIO $199) -->
+        <div class="bg-white rounded-2xl border-2 border-stone-900 p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-borde pb-2.5">
+            <div>
+              <span class="text-[10px] font-mono font-extrabold text-terracota uppercase">🏪 SUSCRIPCIÓN PRO</span>
+              <h4 class="font-serif font-bold text-lg text-stone-900 leading-none">Negocios del Barrio</h4>
+            </div>
+            <a href="comercio.html" class="text-xs font-extrabold text-terracota hover:underline">Ver mapa →</a>
+          </div>
+          <div id="sidebar-negocios-box" class="space-y-3"></div>
+          <a href="anunciate.html?tipo=negocio" class="block w-full text-center py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-stone-900 font-extrabold text-xs border border-amber-300 transition">
+            + Anunciar mi Negocio ($199/mes)
+          </a>
+        </div>
+
+        <!-- 2. RADAR DE MASCOTAS (ALERTAS Y BOOST $50) -->
+        <div class="bg-white rounded-2xl border-2 border-red-600 p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-borde pb-2.5">
+            <div>
+              <span class="text-[10px] font-mono font-extrabold text-red-700 uppercase">🐾 ALERTA VECINAL</span>
+              <h4 class="font-serif font-bold text-lg text-stone-900 leading-none">Mascotas y Adopción</h4>
+            </div>
+            <a href="mascotas.html" class="text-xs font-extrabold text-red-700 hover:underline">Ver todas →</a>
+          </div>
+          <div id="sidebar-mascotas-box" class="space-y-3"></div>
+          <a href="anunciate.html?tipo=mascota" class="block w-full text-center py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs transition">
+            🐾 Publicar Mascota (Gratis / Boost $50)
+          </a>
+        </div>
+
+        <!-- 3. OFICIOS VERIFICADOS ($50) -->
+        <div class="bg-white rounded-2xl border-2 border-chinampa p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-borde pb-2.5">
+            <div>
+              <span class="text-[10px] font-mono font-extrabold text-chinampa uppercase">🛠️ SERVICIOS A DOMICILIO</span>
+              <h4 class="font-serif font-bold text-lg text-stone-900 leading-none">Oficios del Barrio</h4>
+            </div>
+            <a href="oficios.html" class="text-xs font-extrabold text-chinampa hover:underline">Ver todos →</a>
+          </div>
+          <div id="sidebar-oficios-box" class="space-y-3"></div>
+          <a href="anunciate.html?tipo=oficio" class="block w-full text-center py-2 rounded-xl bg-chinampa hover:bg-green-800 text-white font-extrabold text-xs transition">
+            🛠️ Anunciar mi Oficio ($50 MXN)
+          </a>
+        </div>
+
+        <!-- 4. TIANGUIS DIGITAL ($39) -->
+        <div class="bg-white rounded-2xl border border-borde p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-borde pb-2.5">
+            <div>
+              <span class="text-[10px] font-mono font-extrabold text-amber-800 uppercase">🛍️ VENTA ENTRE VECINOS</span>
+              <h4 class="font-serif font-bold text-lg text-stone-900 leading-none">Tianguis Digital</h4>
+            </div>
+            <a href="tianguis.html" class="text-xs font-extrabold text-stone-900 hover:underline">Ver todo →</a>
+          </div>
+          <div id="sidebar-tianguis-box" class="space-y-3"></div>
+          <a href="anunciate.html?tipo=tianguis" class="block w-full text-center py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-stone-950 font-extrabold text-xs transition">
+            🛍️ Vender un Artículo ($39 MXN)
+          </a>
+        </div>
+
+        <!-- 5. BOLSA DE EMPLEO LOCAL ($100) -->
+        <div class="bg-white rounded-2xl border border-borde p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-borde pb-2.5">
+            <div>
+              <span class="text-[10px] font-mono font-extrabold text-stone-700 uppercase">💼 A 15 MIN DE CASA</span>
+              <h4 class="font-serif font-bold text-lg text-stone-900 leading-none">Bolsa de Trabajo</h4>
+            </div>
+            <a href="empleos.html" class="text-xs font-extrabold text-stone-900 hover:underline">Ver vacantes →</a>
+          </div>
+          <div id="sidebar-empleos-box" class="space-y-3"></div>
+          <a href="anunciate.html?tipo=empleo" class="block w-full text-center py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 font-extrabold text-xs transition">
+            💼 Publicar Vacante ($100 MXN)
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
 
   </main>
 
@@ -181,8 +267,220 @@
   <div id="shared-footer"></div>
 
   <script>
+    // Entradas editoriales base para que el blog siempre luzca lleno y útil además de lo aprobado en Google Sheets
+    const NOTICIAS_BASE_BLOG = [
+      {
+        id: 'base_not_1',
+        titulo: 'Reporte Vial y Operativo por Conciertos en Estadio GNP y Palacio de los Deportes',
+        sector: 'Coyuya / Plutarco',
+        ubicacion: 'Río Churubusco, Añil y Viaducto Río de la Piedad',
+        descripcion: 'Vecinos: recuerden tomar precauciones entre las 18:30 y las 23:30 h en días de evento en Ciudad Deportiva. Se recomienda utilizar Sur 157, Oriente 106 y Eje 4 Sur Av. Té para tránsito local en la Gabriel Ramos Millán.',
+        fecha: 'Reporte Diario',
+        foto: ''
+      },
+      {
+        id: 'base_not_2',
+        titulo: 'Comercio justo y sin comisiones en nuestros mercados Bramadero y Tlacotal',
+        sector: 'Bramadero',
+        ubicacion: 'Sur 163 y Oriente 100-A',
+        descripcion: 'Te invitamos a consultar el Directorio de Comercio de Barrio para hacer tus pedidos directo al WhatsApp de los locatarios de la colonia y reclamar sus promociones vigentes.',
+        fecha: 'Aviso Comunitario',
+        foto: ''
+      }
+    ];
+
+    const CRONICAS_BASE_BLOG = [
+      {
+        id: 'base_cro_1',
+        titulo: 'De las chinampas de Iztacalco al trazo de las calles Sur y Oriente',
+        categoria: '📷 MEMORIA DEL BARRIO',
+        sector: 'Tlacotal',
+        autor: 'Archivo Histórico Vecinal',
+        contenidoCompleto: 'En los años 50, nuestras cuadras recibieron el nombre de Gabriel Ramos Millán, el «Apóstol del Maíz». ¿Tienes fotos antiguas de tu familia en la colonia? ¡Súbelas gratis!',
+        fecha: 'Memoria Viva',
+        foto: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80'
+      }
+    ];
+
+    window.onPageRender = function() {
+      // Actualizar fecha del monitor diario
+      const fechaEl = document.getElementById('fecha-monitor-hoy');
+      if (fechaEl) {
+        fechaEl.textContent = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+      }
+
+      // 1. Renderizar Blog de Noticias (combina las aprobadas en Sheets + las editoriales base)
+      const noticiasCombinadas = [...DB.noticias, ...NOTICIAS_BASE_BLOG].filter(n =>
+        matchesGlobalFilter(n.sector, `${n.titulo} ${n.descripcion} ${n.ubicacion}`)
+      );
+      const boxNoticias = document.getElementById('blog-noticias-container');
+      if (boxNoticias) {
+        boxNoticias.innerHTML = noticiasCombinadas.slice(0, 6).map(n => `
+          <article class="bg-white rounded-2xl border border-borde p-5 sm:p-6 shadow-sm space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <span class="px-2.5 py-0.5 rounded bg-red-50 text-terracota border border-red-200 font-extrabold">🗞️ NOTICIA VECINAL</span>
+              <span class="text-stone-700 font-bold">📍 Sector: ${sanitizeHTML(n.sector)} • ${sanitizeHTML(n.fecha)}</span>
+            </div>
+            ${n.foto ? `
+              <div class="cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightbox('${n.foto}', '${sanitizeHTML(n.titulo)}')">
+                <img src="${n.foto}" alt="${sanitizeHTML(n.titulo)}" class="w-full h-56 object-cover" />
+              </div>
+            ` : ''}
+            <h4 class="font-serif text-xl sm:text-2xl font-bold text-stone-900 leading-snug">${sanitizeHTML(n.titulo)}</h4>
+            <p class="text-xs font-extrabold text-terracota">📌 Referencia: ${sanitizeHTML(n.ubicacion)}</p>
+            <p class="text-xs sm:text-sm text-stone-800 font-medium bg-papel p-3.5 rounded-xl border border-borde leading-relaxed">${sanitizeHTML(n.descripcion)}</p>
+            <div class="pt-2 flex items-center justify-between text-xs border-t border-borde">
+              <a href="noticias.html" class="font-extrabold text-stone-900 hover:text-terracota">Ir a la sección de Noticias →</a>
+              <button onclick="shareOnWhatsApp('Noticia en Raíces de Iztacalco: ${sanitizeHTML(n.titulo)}')" class="font-extrabold text-chinampa hover:underline">📲 Compartir en WhatsApp</button>
+            </div>
+          </article>
+        `).join('');
+      }
+
+      // 2. Renderizar Crónicas en Portada
+      const cronicasCombinadas = [...DB.cronicas, ...CRONICAS_BASE_BLOG].filter(c =>
+        matchesGlobalFilter(c.sector, `${c.titulo} ${c.contenidoCompleto} ${c.autor || ''}`)
+      );
+      const boxCronicas = document.getElementById('blog-cronicas-container');
+      if (boxCronicas) {
+        boxCronicas.innerHTML = cronicasCombinadas.slice(0, 4).map(c => `
+          <article class="bg-white rounded-2xl border border-borde p-5 shadow-sm flex flex-col justify-between space-y-3">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between text-[10px] font-mono font-bold">
+                <span class="px-2 py-0.5 rounded bg-amber-100 text-stone-900">${sanitizeHTML(c.categoria || '📷 CRÓNICA')}</span>
+                <span class="text-stone-700">📍 ${sanitizeHTML(c.sector)}</span>
+              </div>
+              ${c.foto ? `
+                <div class="cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightbox('${c.foto}', '${sanitizeHTML(c.titulo)}')">
+                  <img src="${c.foto}" alt="${sanitizeHTML(c.titulo)}" class="w-full h-44 object-cover" />
+                </div>
+              ` : ''}
+              <h4 class="font-serif font-bold text-lg text-stone-900">${sanitizeHTML(c.titulo)}</h4>
+              ${c.autor ? `<p class="text-xs font-bold text-terracota">✍️ ${sanitizeHTML(c.autor)}</p>` : ''}
+              <p class="text-xs text-stone-700 font-medium leading-relaxed">${sanitizeHTML(c.contenidoCompleto)}</p>
+            </div>
+            <a href="cronicas.html" class="text-xs font-extrabold text-stone-900 hover:text-terracota pt-2 border-t border-borde block">Ver álbum histórico completo →</a>
+          </article>
+        `).join('');
+      }
+
+      // 3. Renderizar Escaparate Derecha: NEGOCIOS PAGADOS
+      const boxNegocios = document.getElementById('sidebar-negocios-box');
+      if (boxNegocios) {
+        const negList = DB.negocios.filter(n => matchesGlobalFilter(n.sector, `${n.nombre} ${n.calle} ${n.cupon}`));
+        boxNegocios.innerHTML = negList.length > 0 ? negList.slice(0, 4).map(n => `
+          <div class="p-3.5 rounded-xl bg-papel border border-stone-300 space-y-2">
+            <div class="flex items-center justify-between text-[10px] font-mono font-bold">
+              <span class="bg-stone-900 text-amber-300 px-2 py-0.5 rounded">★ PRO VERIFICADO</span>
+              <span class="text-stone-700">📍 ${sanitizeHTML(n.sector)}</span>
+            </div>
+            ${n.foto ? `<img src="${n.foto}" onclick="openPhotoLightbox('${n.foto}', '${sanitizeHTML(n.nombre)}')" class="w-full h-32 object-cover rounded-lg cursor-pointer border border-borde" />` : ''}
+            <h5 class="font-serif font-bold text-base text-stone-900">${sanitizeHTML(n.nombre)}</h5>
+            <p class="text-xs text-stone-700 font-medium">📍 ${sanitizeHTML(n.calle)}</p>
+            <p class="text-xs bg-amber-100 text-stone-900 font-bold p-2 rounded-lg border border-amber-300">🎁 ${sanitizeHTML(n.cupon)}</p>
+            <button onclick="openWhatsAppDirect('${n.whatsapp}', 'Hola *${sanitizeHTML(n.nombre)}*, los vi en la portada de Raíces de Iztacalco y quiero hacer un pedido / reclamar su promoción:')" class="w-full py-2 rounded-lg bg-chinampa hover:bg-green-800 text-white font-extrabold text-xs transition">
+              📲 Pedir por WhatsApp
+            </button>
+          </div>
+        `).join('') : `
+          <p class="text-xs text-stone-700 font-medium bg-papel p-3 rounded-xl border border-borde">
+            Anuncia tu local aquí por <strong>$199/mes</strong> y recibe pedidos directos por WhatsApp y mención en el cintillo superior.
+          </p>
+        `;
+      }
+
+      // 4. Renderizar Escaparate Derecha: MASCOTAS
+      const boxMascotas = document.getElementById('sidebar-mascotas-box');
+      if (boxMascotas) {
+        const mascList = DB.mascotas.filter(m => matchesGlobalFilter(m.sector, `${m.nombre} ${m.calle} ${m.descripcion}`));
+        boxMascotas.innerHTML = mascList.length > 0 ? mascList.slice(0, 3).map(m => `
+          <div class="p-3.5 rounded-xl bg-red-50/70 border border-red-200 space-y-2">
+            <div class="flex items-center justify-between text-[10px] font-mono font-bold">
+              <span class="bg-red-600 text-white px-2 py-0.5 rounded">${sanitizeHTML(m.tipo)}</span>
+              <span class="text-stone-800">📍 ${sanitizeHTML(m.sector)}</span>
+            </div>
+            ${m.foto ? `<img src="${m.foto}" onclick="openPhotoLightbox('${m.foto}', '${sanitizeHTML(m.nombre)}')" class="w-full h-32 object-cover rounded-lg cursor-pointer border border-borde" />` : ''}
+            <h5 class="font-serif font-bold text-base text-stone-900">${sanitizeHTML(m.nombre)}</h5>
+            <p class="text-xs font-bold text-red-900">🗺️ Visto en: ${sanitizeHTML(m.calle)}</p>
+            <button onclick="openWhatsAppDirect('${m.whatsapp}', 'Hola, vi tu alerta de mascota (*${sanitizeHTML(m.nombre)}*) en Raíces de Iztacalco:')" class="w-full py-2 rounded-lg bg-stone-900 text-white font-extrabold text-xs">
+              📲 Contactar por WhatsApp
+            </button>
+          </div>
+        `).join('') : `
+          <p class="text-xs text-stone-700 font-medium bg-papel p-3 rounded-xl border border-borde">
+            Sin reportes urgentes en este momento. Si extravías una mascota o das en adopción, repórtalo aquí.
+          </p>
+        `;
+      }
+
+      // 5. Renderizar Escaparate Derecha: OFICIOS ($50)
+      const boxOficios = document.getElementById('sidebar-oficios-box');
+      if (boxOficios) {
+        const ofiList = DB.oficios.filter(o => matchesGlobalFilter(o.sector, `${o.oficio} ${o.calle} ${o.garantia}`));
+        boxOficios.innerHTML = ofiList.length > 0 ? ofiList.slice(0, 3).map(o => `
+          <div class="p-3.5 rounded-xl bg-papel border border-borde space-y-1.5">
+            <div class="flex justify-between text-[10px] font-mono font-bold">
+              <span class="text-chinampa">✓ OFICIO VERIFICADO</span>
+              <span class="text-stone-700">📍 ${sanitizeHTML(o.sector)}</span>
+            </div>
+            <h5 class="font-serif font-bold text-base text-stone-900">${sanitizeHTML(o.oficio)}</h5>
+            <p class="text-xs text-stone-800 font-semibold">👤 ${sanitizeHTML(o.calle)}</p>
+            <p class="text-xs text-stone-700">${sanitizeHTML(o.garantia)}</p>
+            <button onclick="openWhatsAppDirect('${o.whatsapp}', 'Hola, vi su oficio anunciado en Raíces de Iztacalco y requiero una cotización:')" class="w-full mt-1 py-1.5 rounded-lg bg-chinampa text-white font-bold text-xs">
+              📲 Llamar / WhatsApp
+            </button>
+          </div>
+        `).join('') : `
+          <p class="text-xs text-stone-700 font-medium bg-papel p-3 rounded-xl border border-borde">
+            ¿Eres plomero, electricista, cerrajero o técnico en la colonia? Anúnciate por <strong>$50 MXN</strong> (30 días).
+          </p>
+        `;
+      }
+
+      // 6. Renderizar Escaparate Derecha: TIANGUIS ($39)
+      const boxTianguis = document.getElementById('sidebar-tianguis-box');
+      if (boxTianguis) {
+        const tianList = DB.tianguis.filter(t => matchesGlobalFilter(t.sector, `${t.producto} ${t.descripcion} ${t.puntoEntrega}`));
+        boxTianguis.innerHTML = tianList.length > 0 ? tianList.slice(0, 3).map(t => `
+          <div class="p-3.5 rounded-xl bg-papel border border-borde space-y-1.5">
+            ${t.foto ? `<img src="${t.foto}" onclick="openPhotoLightbox('${t.foto}', '${sanitizeHTML(t.producto)}')" class="w-full h-28 object-cover rounded-lg cursor-pointer border border-borde" />` : ''}
+            <h5 class="font-serif font-bold text-sm text-stone-900">${sanitizeHTML(t.producto)}</h5>
+            <p class="text-[11px] font-mono text-terracota font-bold">🛡️ Entrega: ${sanitizeHTML(t.puntoEntrega)}</p>
+            <button onclick="openWhatsAppDirect('${t.whatsapp}', 'Hola, me interesa tu artículo del Tianguis Digital: ${sanitizeHTML(t.producto)}')" class="w-full py-1.5 rounded-lg bg-stone-900 text-white font-bold text-xs">
+              📲 Acordar compra
+            </button>
+          </div>
+        `).join('') : `
+          <p class="text-xs text-stone-700 font-medium bg-papel p-3 rounded-xl border border-borde">
+            Vende lo que ya no uses entre vecinos por solo <strong>$39 MXN</strong> con entrega segura en la alcaldía.
+          </p>
+        `;
+      }
+
+      // 7. Renderizar Escaparate Derecha: EMPLEOS ($100)
+      const boxEmpleos = document.getElementById('sidebar-empleos-box');
+      if (boxEmpleos) {
+        const empList = DB.empleos.filter(e => matchesGlobalFilter(e.sector, `${e.puesto} ${e.negocio} ${e.requisitos}`));
+        boxEmpleos.innerHTML = empList.length > 0 ? empList.slice(0, 3).map(e => `
+          <div class="p-3.5 rounded-xl bg-papel border border-borde space-y-1.5">
+            <h5 class="font-serif font-bold text-sm text-stone-900">${sanitizeHTML(e.puesto)}</h5>
+            <p class="text-xs font-bold text-terracota">🏪 ${sanitizeHTML(e.negocio)}</p>
+            <p class="text-xs text-stone-700">${sanitizeHTML(e.requisitos)}</p>
+            <button onclick="openWhatsAppDirect('${e.whatsapp}', 'Hola, me interesa la vacante de *${sanitizeHTML(e.puesto)}* publicada en Raíces de Iztacalco:')" class="w-full py-1.5 rounded-lg bg-stone-900 text-amber-300 font-bold text-xs">
+              📲 Postularme
+            </button>
+          </div>
+        `).join('') : `
+          <p class="text-xs text-stone-700 font-medium bg-papel p-3 rounded-xl border border-borde">
+            ¿Buscas ayudante o personal en la colonia? Publica tu vacante 15 días por <strong>$100 MXN</strong>.
+          </p>
+        `;
+      }
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
       renderSharedLayout('inicio');
+      window.onPageRender();
     });
   </script>
 </body>
