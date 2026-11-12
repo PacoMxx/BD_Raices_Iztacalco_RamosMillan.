@@ -52,8 +52,8 @@ function cleanDisplayField(val, fallback) {
 }
 
 const DB = {
-  ticker: "🎸 Concierto en Estadio GNP (20:30 h): Tráfico pesado en Río Churubusco y Viaducto • ⛺ Tianguis Hoy: Sur 163 (Mercado Bramadero).",
-  patrocinadorTicker: "Servicio Mecánico Hnos. Pérez (Sur 157)",
+  ticker: "🎸 Eventos en Estadio GNP y Palacio de los Deportes: Toma precauciones en Río Churubusco y Añil • ⛺ Consume en los negocios locales de la Gabriel Ramos Millán.",
+  patrocinadorTicker: "Comercios Suscritos de la Ramos Millán",
   noticias: [],
   cronicas: [],
   negocios: [],
@@ -63,6 +63,30 @@ const DB = {
   empleos: []
 };
 
+// Genera el texto en movimiento con los negocios que han pagado su suscripción Pro
+function getPatrocinadoresTickerHTML() {
+  if (DB.negocios && DB.negocios.length > 0) {
+    const items = DB.negocios.map(n =>
+      `<a href="comercio.html" class="mx-5 hover:underline text-amber-300 font-extrabold">★ ${sanitizeHTML(n.nombre)} <span class="text-stone-300 font-normal">(${sanitizeHTML(n.calle)} · ${sanitizeHTML(n.sector)})</span></a>`
+    ).join('<span class="text-amber-500">•</span>');
+    return `${items} <span class="mx-4 text-amber-500">•</span> ${items}`;
+  }
+  return `
+    <a href="anunciate.html?tipo=negocio" class="mx-6 text-amber-300 font-extrabold hover:underline">
+      🏪 ¡Anuncia tu negocio por $199/mes y aparece en este cintillo patrocinado en toda la colonia! (Haz clic aquí) →
+    </a>
+    <span class="text-stone-400 mx-4">•</span>
+    <span class="text-stone-200 mx-4">🏟️ Consulta abajo el reporte diario de tráfico por eventos en Estadio GNP y Palacio de los Deportes</span>
+  `;
+}
+
+function updateSponsorsTicker() {
+  const track = document.getElementById('sponsors-marquee-content');
+  if (track) {
+    track.innerHTML = getPatrocinadoresTickerHTML();
+  }
+}
+
 // Función principal de sincronización con Google Sheets (evita caché con t=Date.now())
 async function syncWithGoogleSheets() {
   if (!GOOGLE_SHEETS_WEBAPP_URL) return;
@@ -71,7 +95,6 @@ async function syncWithGoogleSheets() {
     const res = await fetch(`${GOOGLE_SHEETS_WEBAPP_URL}${sep}t=${Date.now()}`, { redirect: 'follow' });
     const data = await res.json();
 
-    // Limpia los arreglos locales para cargar únicamente los registros con estatus Aprobado
     DB.noticias = [];
     DB.cronicas = [];
     DB.mascotas = [];
@@ -107,6 +130,7 @@ async function syncWithGoogleSheets() {
       });
     }
 
+    updateSponsorsTicker();
     if (typeof window.onPageRender === 'function') window.onPageRender();
   } catch (err) {
     console.warn('Error sincronizando con Google Sheets:', err);
@@ -156,20 +180,39 @@ function renderSharedLayout(activePage) {
 
   if (headerContainer) {
     headerContainer.innerHTML = `
-      ${activePage === 'inicio' ? `
-        <div class="bg-tinta text-papel text-xs border-b border-stone-800 sticky top-0 z-40">
-          <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2 overflow-x-auto whitespace-nowrap">
-              <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shrink-0"></span>
-              <span class="font-mono uppercase text-[11px] bg-red-600 text-white px-2 py-0.5 rounded font-bold shrink-0">RADAR VIAL HOY</span>
-              <span id="ticker-text" class="text-stone-200 font-medium">${DB.ticker}</span>
+      <style>
+        @keyframes tickerSlide {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-50%); }
+        }
+        .sponsors-ticker-wrap {
+          overflow: hidden;
+          white-space: nowrap;
+          flex: 1;
+        }
+        .sponsors-ticker-move {
+          display: inline-block;
+          white-space: nowrap;
+          animation: tickerSlide 28s linear infinite;
+        }
+        .sponsors-ticker-move:hover {
+          animation-play-state: paused;
+        }
+      </style>
+
+      <!-- CINTILLO SUPERIOR CON LETRAS EN MOVIMIENTO DE NEGOCIOS PATROCINADORES -->
+      <div class="bg-stone-900 text-stone-100 text-xs border-b-2 border-amber-400 sticky top-0 z-40 shadow-md">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex items-center gap-3">
+          <span class="font-mono uppercase text-[11px] bg-amber-400 text-stone-950 px-2.5 py-0.5 rounded font-extrabold shrink-0">
+            ⭐ PATROCINADO POR:
+          </span>
+          <div class="sponsors-ticker-wrap">
+            <div id="sponsors-marquee-content" class="sponsors-ticker-move text-xs font-medium">
+              ${getPatrocinadoresTickerHTML()}
             </div>
-            <a href="comercio.html" class="hidden md:inline text-[11px] text-amber-300 font-mono hover:underline shrink-0">
-              Patrocinado por: <strong>${DB.patrocinadorTicker}</strong>
-            </a>
           </div>
         </div>
-      ` : ''}
+      </div>
 
       <header class="bg-papel/95 backdrop-blur-md border-b border-borde">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-3 pb-2">
@@ -178,14 +221,15 @@ function renderSharedLayout(activePage) {
               <a href="index.html" class="font-mono uppercase font-bold text-terracota bg-red-50 border border-red-200 px-2 py-0.5 rounded">
                 ALCALDÍA IZTACALCO • CDMX
               </a>
-              <span class="capitalize font-medium">${nowStr}</span>
+              <span class="capitalize font-semibold text-stone-800">${nowStr}</span>
             </div>
             <div class="flex items-center gap-2">
-              <a href="guia.html" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-amber-100 text-amber-950 font-bold text-xs transition">📖 Guía Vecinal</a>
-              <a href="anunciate.html" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-terracota hover:bg-terracotaDark text-white font-bold text-xs shadow transition">➕ Publicar</a>
+              <a href="guia.html" class="inline-flex items-center gap-1 px-3 py-1 rounded-md bg-amber-300 hover:bg-amber-400 text-stone-950 font-extrabold text-xs transition">📖 Guía Vecinal</a>
+              <a href="anunciate.html" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 font-extrabold text-xs shadow transition">➕ Publicar</a>
             </div>
           </div>
 
+          <!-- TÍTULO EN GRANDE -->
           <div class="py-4 text-center">
             <a href="index.html" class="inline-block group">
               <p class="text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-terracota font-bold mb-1">
@@ -195,16 +239,17 @@ function renderSharedLayout(activePage) {
                 Raíces de Iztacalco
               </h1>
             </a>
-            <p class="mt-1 text-xs sm:text-sm text-grafito font-medium">
+            <p class="mt-1 text-xs sm:text-sm text-stone-700 font-medium">
               Edición Hiperlocal: <strong class="text-tinta">Col. Gabriel Ramos Millán</strong> (Bramadero · Tlacotal · Cuchilla · Av. Té · Coyuya)
             </p>
           </div>
 
+          <!-- SECTORES PARA FILTRAR -->
           <div class="border-t-2 border-b border-tinta py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto py-0.5">
               <span class="text-xs font-mono uppercase font-bold text-tinta shrink-0 mr-1">📍 Sector:</span>
               ${['TODOS', 'Bramadero', 'Tlacotal', 'Cuchilla', 'Av. Té / Alcaldía', 'Coyuya / Plutarco'].map(sec => `
-                <button onclick="changeGlobalSector('${sec}')" class="px-3 py-1 rounded-full text-xs font-bold transition shrink-0 ${currentSector === sec ? 'bg-terracota text-white' : 'bg-crema text-tinta hover:bg-stone-200'}">
+                <button onclick="changeGlobalSector('${sec}')" class="px-3 py-1 rounded-full text-xs font-bold transition shrink-0 ${currentSector === sec ? 'bg-stone-900 text-amber-300' : 'bg-crema text-tinta hover:bg-stone-200'}">
                   ${sec === 'TODOS' ? 'Toda la Ramos Millán' : sec}
                 </button>
               `).join('')}
@@ -215,16 +260,17 @@ function renderSharedLayout(activePage) {
             </div>
           </div>
 
-          <nav class="hidden lg:flex items-center justify-center flex-wrap gap-1 pt-3 pb-1" aria-label="Páginas del periódico">
+          <!-- SECCIONES EN PEQUEÑO PARA NAVEGAR (Visible en móvil y escritorio) -->
+          <nav class="flex items-center justify-start lg:justify-center overflow-x-auto gap-1 pt-2.5 pb-1" aria-label="Páginas del periódico">
             ${navItems.map(item => {
               const isActive = activePage === item.id;
               return `
-                <a href="${item.href}" class="px-3 py-2 rounded-lg text-xs sm:text-sm flex items-center gap-1.5 transition ${isActive ? 'text-terracota font-extrabold bg-crema/70' : 'text-grafito hover:text-tinta font-semibold'}">
+                <a href="${item.href}" class="px-3 py-1.5 rounded-lg text-xs shrink-0 flex items-center gap-1 transition ${isActive ? 'bg-stone-900 text-amber-300 font-extrabold shadow-sm' : 'text-stone-800 hover:bg-crema font-bold'}">
                   <span>${item.label}</span>
                 </a>
               `;
             }).join('')}
-            <a href="anunciate.html" class="ml-2 px-4 py-2 rounded-lg bg-terracota hover:bg-terracotaDark text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shadow transition">
+            <a href="anunciate.html" class="ml-1 px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-stone-950 font-extrabold text-xs shrink-0 flex items-center gap-1 shadow transition">
               <span>➕ Publicar</span>
             </a>
           </nav>
@@ -242,12 +288,12 @@ function renderSharedLayout(activePage) {
             <div>
               <span class="font-mono text-[11px] uppercase tracking-widest text-amber-400 font-bold">RAÍCES DE IZTACALCO</span>
               <h4 class="font-serif text-xl font-bold text-white mt-1">Edición Gabriel Ramos Millán</h4>
-              <p class="text-xs text-stone-400 mt-2 leading-relaxed">
+              <p class="text-xs text-stone-300 mt-2 leading-relaxed">
                 Periódico digital comunitario y directorio de comercio local sin comisiones.
               </p>
             </div>
             <div>
-              <h5 class="font-mono text-xs uppercase font-bold text-white mb-2">Secciones Independientes</h5>
+              <h5 class="font-mono text-xs uppercase font-bold text-white mb-2">Secciones del Periódico</h5>
               <ul class="text-xs text-stone-300 space-y-1.5">
                 <li><a href="noticias.html" class="hover:text-amber-300">🗞️ Noticias Vecinales</a></li>
                 <li><a href="cronicas.html" class="hover:text-amber-300">📷 Crónicas y Raíces</a></li>
@@ -256,6 +302,7 @@ function renderSharedLayout(activePage) {
                 <li><a href="mascotas.html" class="hover:text-amber-300">🐾 Radar de Mascotas</a></li>
                 <li><a href="oficios.html" class="hover:text-amber-300">🛠️ El Oficio Verificado</a></li>
                 <li><a href="empleos.html" class="hover:text-amber-300">💼 Bolsa de Trabajo</a></li>
+                <li><a href="guia.html" class="hover:text-amber-300">📖 Guía Vecinal de Uso</a></li>
               </ul>
             </div>
             <div class="p-4 rounded-xl bg-stone-900 border border-stone-700">
@@ -273,11 +320,11 @@ function renderSharedLayout(activePage) {
 
       <nav class="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-borde z-40 px-1 py-1 shadow-lg">
         <div class="grid grid-cols-5 gap-1 max-w-lg mx-auto text-center text-[10px]">
-          <a href="index.html" class="py-1 ${activePage === 'inicio' ? 'text-terracota font-extrabold' : 'text-grafito'}">🏠 Inicio</a>
-          <a href="noticias.html" class="py-1 ${activePage === 'noticias' ? 'text-terracota font-extrabold' : 'text-grafito'}">🗞️ Noticias</a>
-          <a href="comercio.html" class="py-1 ${activePage === 'comercio' ? 'text-terracota font-extrabold' : 'text-grafito'}">🏪 Comercio</a>
-          <a href="mascotas.html" class="py-1 ${activePage === 'mascotas' ? 'text-terracota font-extrabold' : 'text-grafito'}">🐾 Mascotas</a>
-          <a href="anunciate.html" class="py-1 ${activePage === 'anunciate' ? 'text-terracota font-extrabold' : 'text-grafito'}">➕ Publicar</a>
+          <a href="index.html" class="py-1 ${activePage === 'inicio' ? 'text-terracota font-extrabold' : 'text-stone-800 font-bold'}">🏠 Inicio</a>
+          <a href="noticias.html" class="py-1 ${activePage === 'noticias' ? 'text-terracota font-extrabold' : 'text-stone-800 font-bold'}">🗞️ Noticias</a>
+          <a href="comercio.html" class="py-1 ${activePage === 'comercio' ? 'text-terracota font-extrabold' : 'text-stone-800 font-bold'}">🏪 Comercio</a>
+          <a href="guia.html" class="py-1 ${activePage === 'guia' ? 'text-terracota font-extrabold' : 'text-stone-800 font-bold'}">📖 Guía</a>
+          <a href="anunciate.html" class="py-1 ${activePage === 'anunciate' ? 'text-terracota font-extrabold' : 'text-stone-800 font-bold'}">➕ Publicar</a>
         </div>
       </nav>
     `;
