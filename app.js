@@ -51,33 +51,82 @@ function cleanDisplayField(val, fallback) {
   return s;
 }
 
-const DB = {
-  ticker: "🎸 Eventos en Estadio GNP y Palacio de los Deportes: Toma precauciones en Río Churubusco y Añil • ⛺ Consume en los negocios locales de la Gabriel Ramos Millán.",
-  patrocinadorTicker: "Comercios Suscritos de la Ramos Millán",
-  noticias: [],
-  cronicas: [],
-  negocios: [],
+const INITIAL_DATA = {
+  noticias: [
+    {
+      id: 'not_init_1',
+      titulo: 'Precaución vial por eventos en Estadio GNP y Palacio de los Deportes',
+      sector: 'Coyuya / Plutarco',
+      ubicacion: 'Río Churubusco, Añil y Viaducto',
+      descripcion: 'Vecinos: tomen precauciones en horario vespertino y nocturno. Se recomienda circular por Sur 157, Oriente 106 y Eje 4 Sur Av. Té.',
+      fecha: 'Reporte Diario',
+      foto: ''
+    },
+    {
+      id: 'not_init_2',
+      titulo: 'Jornada comunitaria e información vecinal en la Gabriel Ramos Millán',
+      sector: 'Bramadero',
+      ubicacion: 'Explanada y alrededores de Sur 163',
+      descripcion: 'Comparte avisos de tu cuadra, mejoras urbanas y reportes comunitarios desde el botón de Publicar.',
+      fecha: 'Aviso Vecinal',
+      foto: ''
+    }
+  ],
+  cronicas: [
+    {
+      id: 'cro_init_1',
+      titulo: 'El origen de nuestras calles Sur y Oriente en los años 50',
+      categoria: '📷 MEMORIA VECINAL',
+      sector: 'Bramadero',
+      fecha: 'Archivo Histórico',
+      autor: 'Vecinos Fundadores',
+      contenidoCompleto: 'De las antiguas zanjas chinamperas conectadas al Canal de la Viga hasta convertirse en el corazón comercial de Iztacalco en honor a Gabriel Ramos Millán, el «Apóstol del Maíz».',
+      foto: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80',
+      patrocinado: false
+    }
+  ],
+  negocios: [
+    {
+      id: 'neg1',
+      nombre: 'Servicio Mecánico Hnos. Pérez',
+      giro: 'Talleres y Tlapalerías',
+      sector: 'Bramadero',
+      calle: 'Sur 157 cerca del Mercado Bramadero',
+      anioFundacion: 1998,
+      plan: 'PRO',
+      cupon: 'Revisión de frenos sin costo al mencionar Raíces de Iztacalco',
+      historia: 'Taller mecánico familiar de confianza en la colonia.',
+      foto: '',
+      whatsapp: ADMIN_WHATSAPP,
+      catalogo: [{ nombre: 'Afinación y diagnóstico', precio: 850 }]
+    }
+  ],
   tianguis: [],
   mascotas: [],
   oficios: [],
   empleos: []
 };
 
-// Genera el texto en movimiento con los negocios que han pagado su suscripción Pro
+const DB = {
+  ticker: "🎸 Concierto en Estadio GNP (20:30 h): Tráfico pesado en Río Churubusco y Viaducto • ⛺ Tianguis Hoy: Sur 163 (Mercado Bramadero).",
+  patrocinadorTicker: "Servicio Mecánico Hnos. Pérez (Sur 157)",
+  noticias: [...INITIAL_DATA.noticias],
+  cronicas: [...INITIAL_DATA.cronicas],
+  negocios: [...INITIAL_DATA.negocios],
+  tianguis: [...INITIAL_DATA.tianguis],
+  mascotas: [...INITIAL_DATA.mascotas],
+  oficios: [...INITIAL_DATA.oficios],
+  empleos: [...INITIAL_DATA.empleos]
+};
+
 function getPatrocinadoresTickerHTML() {
-  if (DB.negocios && DB.negocios.length > 0) {
-    const items = DB.negocios.map(n =>
-      `<a href="comercio.html" class="mx-5 hover:underline text-amber-300 font-extrabold">★ ${sanitizeHTML(n.nombre)} <span class="text-stone-300 font-normal">(${sanitizeHTML(n.calle)} · ${sanitizeHTML(n.sector)})</span></a>`
-    ).join('<span class="text-amber-500">•</span>');
-    return `${items} <span class="mx-4 text-amber-500">•</span> ${items}`;
-  }
-  return `
-    <a href="anunciate.html?tipo=negocio" class="mx-6 text-amber-300 font-extrabold hover:underline">
-      🏪 ¡Anuncia tu negocio por $199/mes y aparece en este cintillo patrocinado en toda la colonia! (Haz clic aquí) →
-    </a>
-    <span class="text-stone-400 mx-4">•</span>
-    <span class="text-stone-200 mx-4">🏟️ Consulta abajo el reporte diario de tráfico por eventos en Estadio GNP y Palacio de los Deportes</span>
-  `;
+  const listaNegocios = (DB.negocios && DB.negocios.length > 0) ? DB.negocios : INITIAL_DATA.negocios;
+  const items = listaNegocios.map(n =>
+    `<a href="comercio.html" class="mx-5 hover:underline text-amber-300 font-extrabold">★ ${sanitizeHTML(n.nombre)} <span class="text-stone-200 font-normal">(${sanitizeHTML(n.calle)} · ${sanitizeHTML(n.sector)})</span></a>`
+  ).join('<span class="text-amber-500">•</span>');
+
+  const promoAviso = `<a href="anunciate.html?tipo=negocio" class="mx-5 text-white hover:text-amber-300 font-bold">🏪 ¡Anuncia tu negocio por $199/mes y aparece en este cintillo patrocinado! →</a>`;
+  return `${items} <span class="text-amber-500">•</span> ${promoAviso} <span class="text-amber-500">•</span> ${items}`;
 }
 
 function updateSponsorsTicker() {
@@ -87,7 +136,6 @@ function updateSponsorsTicker() {
   }
 }
 
-// Función principal de sincronización con Google Sheets (evita caché con t=Date.now())
 async function syncWithGoogleSheets() {
   if (!GOOGLE_SHEETS_WEBAPP_URL) return;
   try {
@@ -95,13 +143,13 @@ async function syncWithGoogleSheets() {
     const res = await fetch(`${GOOGLE_SHEETS_WEBAPP_URL}${sep}t=${Date.now()}`, { redirect: 'follow' });
     const data = await res.json();
 
-    DB.noticias = [];
-    DB.cronicas = [];
+    DB.noticias = [...INITIAL_DATA.noticias];
+    DB.cronicas = [...INITIAL_DATA.cronicas];
+    DB.negocios = [...INITIAL_DATA.negocios];
     DB.mascotas = [];
     DB.oficios = [];
     DB.empleos = [];
     DB.tianguis = [];
-    DB.negocios = [];
 
     if (Array.isArray(data.publicaciones)) {
       data.publicaciones.forEach(pub => {
@@ -203,11 +251,12 @@ function renderSharedLayout(activePage) {
       <!-- CINTILLO SUPERIOR CON LETRAS EN MOVIMIENTO DE NEGOCIOS PATROCINADORES -->
       <div class="bg-stone-900 text-stone-100 text-xs border-b-2 border-amber-400 sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex items-center gap-3">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shrink-0"></span>
           <span class="font-mono uppercase text-[11px] bg-amber-400 text-stone-950 px-2.5 py-0.5 rounded font-extrabold shrink-0">
             ⭐ PATROCINADO POR:
           </span>
           <div class="sponsors-ticker-wrap">
-            <div id="sponsors-marquee-content" class="sponsors-ticker-move text-xs font-medium">
+            <div id="sponsors-marquee-content" class="sponsors-ticker-move text-xs font-medium text-stone-100">
               ${getPatrocinadoresTickerHTML()}
             </div>
           </div>
@@ -229,7 +278,6 @@ function renderSharedLayout(activePage) {
             </div>
           </div>
 
-          <!-- TÍTULO EN GRANDE -->
           <div class="py-4 text-center">
             <a href="index.html" class="inline-block group">
               <p class="text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-terracota font-bold mb-1">
@@ -244,7 +292,6 @@ function renderSharedLayout(activePage) {
             </p>
           </div>
 
-          <!-- SECTORES PARA FILTRAR -->
           <div class="border-t-2 border-b border-tinta py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto py-0.5">
               <span class="text-xs font-mono uppercase font-bold text-tinta shrink-0 mr-1">📍 Sector:</span>
@@ -260,7 +307,6 @@ function renderSharedLayout(activePage) {
             </div>
           </div>
 
-          <!-- SECCIONES EN PEQUEÑO PARA NAVEGAR (Visible en móvil y escritorio) -->
           <nav class="flex items-center justify-start lg:justify-center overflow-x-auto gap-1 pt-2.5 pb-1" aria-label="Páginas del periódico">
             ${navItems.map(item => {
               const isActive = activePage === item.id;
@@ -293,7 +339,7 @@ function renderSharedLayout(activePage) {
               </p>
             </div>
             <div>
-              <h5 class="font-mono text-xs uppercase font-bold text-white mb-2">Secciones del Periódico</h5>
+              <h5 class="font-mono text-xs uppercase font-bold text-white mb-2">Secciones Independientes</h5>
               <ul class="text-xs text-stone-300 space-y-1.5">
                 <li><a href="noticias.html" class="hover:text-amber-300">🗞️ Noticias Vecinales</a></li>
                 <li><a href="cronicas.html" class="hover:text-amber-300">📷 Crónicas y Raíces</a></li>
@@ -302,7 +348,7 @@ function renderSharedLayout(activePage) {
                 <li><a href="mascotas.html" class="hover:text-amber-300">🐾 Radar de Mascotas</a></li>
                 <li><a href="oficios.html" class="hover:text-amber-300">🛠️ El Oficio Verificado</a></li>
                 <li><a href="empleos.html" class="hover:text-amber-300">💼 Bolsa de Trabajo</a></li>
-                <li><a href="guia.html" class="hover:text-amber-300">📖 Guía Vecinal de Uso</a></li>
+                <li><a href="guia.html" class="hover:text-amber-300">📖 Guía Vecinal</a></li>
               </ul>
             </div>
             <div class="p-4 rounded-xl bg-stone-900 border border-stone-700">
