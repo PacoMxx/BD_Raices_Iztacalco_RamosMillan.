@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crónicas y Raíces | Raíces de Iztacalco</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#9B2C2C" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="app.js"></script>
@@ -12,10 +14,10 @@
 <body data-page="cronicas" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
   <div id="shared-header"></div>
   
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-8 pb-20">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-6 space-y-8 pb-24 lg:pb-16">
     
-    <!-- Encabezado con Botón de Alto Contraste (Texto oscuro sobre fondo ámbar brillante) -->
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white rounded-2xl border border-borde p-6 shadow-sm">
+    <!-- Encabezado con Botón de Alto Contraste -->
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white rounded-2xl border border-borde p-5 sm:p-6 shadow-sm">
       <div>
         <span class="text-xs font-mono font-bold text-terracota bg-red-50 border border-red-200 px-2.5 py-1 rounded-md">
           📷 MEMORIA HISTÓRICA DE NUESTRAS CALLES
@@ -24,8 +26,7 @@
         <p class="text-xs sm:text-sm text-stone-700 font-medium mt-1">Comparte fotografías antiguas de tu familia o de cómo eran las calles de la Ramos Millán.</p>
       </div>
       
-      <!-- Botón con color de alto contraste garantizado para que se vea impecable -->
-      <a href="anunciate.html?tipo=foto" class="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-stone-950 font-extrabold text-sm shrink-0 shadow-lg transition flex items-center gap-2.5">
+      <a href="anunciate.html?tipo=foto" class="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-stone-950 font-extrabold text-xs sm:text-sm shrink-0 shadow-lg transition flex items-center gap-2.5">
         <span class="text-lg">📷</span>
         <span>Subir mi Foto a esta sección</span>
         <span class="text-base font-bold">→</span>
@@ -37,9 +38,9 @@
       <div class="lg:col-span-8 bg-white rounded-2xl border border-borde shadow-sm overflow-hidden">
         <div class="p-4 sm:p-5 border-b border-borde bg-crema/60 flex flex-wrap items-center justify-between gap-2">
           <span class="px-2.5 py-1 rounded bg-terracota text-white font-mono text-xs font-bold">HISTORIA FUNDACIONAL</span>
-          <div class="inline-flex rounded-lg bg-white p-1 border border-borde">
-            <button onclick="setEra('1955')" id="btn-1955" class="px-3 py-1 rounded text-xs font-bold bg-terracota text-white">📷 Vista 1955 (Chinampas)</button>
-            <button onclick="setEra('2026')" id="btn-2026" class="px-3 py-1 rounded text-xs font-semibold text-tinta">🏙️ Vista Hoy (Ramos Millán)</button>
+          <div class="inline-flex rounded-lg bg-white p-1 border border-borde" role="group" aria-label="Comparativa histórica">
+            <button type="button" onclick="setEra('1955')" id="btn-1955" class="px-3 py-1 rounded text-xs font-bold bg-terracota text-white transition">📷 Vista 1955 (Chinampas)</button>
+            <button type="button" onclick="setEra('2026')" id="btn-2026" class="px-3 py-1 rounded text-xs font-semibold text-tinta transition">🏙️ Vista Hoy (Ramos Millán)</button>
           </div>
         </div>
 
@@ -52,25 +53,25 @@
           </div>
         </div>
 
-        <div class="p-6 space-y-4">
-          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-tinta">
+        <div class="p-5 sm:p-6 space-y-4">
+          <h3 class="font-serif text-2xl sm:text-3xl font-bold text-tinta">
             ¿Por qué nuestra colonia se llama Gabriel Ramos Millán? La historia del «Apóstol del Maíz»
-          </h2>
+          </h3>
           <p class="text-sm sm:text-base text-grafito leading-relaxed">
             Cada mañana caminamos por <strong>Sur 157</strong> rumbo al Mercado Bramadero o cruzamos <strong>Oriente 100-A</strong> en Tlacotal. Gabriel Ramos Millán fue el impulsor de la Comisión Nacional del Maíz que modernizó el campo mexicano en los años 40; tras su fallecimiento en 1949 en el accidente aéreo del Pico del Fraile, nuestras cuadras recibieron su nombre en honor a su legado.
           </p>
         </div>
       </div>
 
-      <!-- Monitor y Precios -->
+      <!-- Monitor y Avisos -->
       <div class="lg:col-span-4 space-y-5">
         <div class="bg-white rounded-2xl border border-borde p-5 space-y-3 shadow-sm">
           <h3 class="font-serif font-bold text-lg text-tinta border-b border-borde pb-2">📢 Monitor Vecinal de Hoy</h3>
-          <div class="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-900">
-            <strong>🚗 Alerta Ciudad Deportiva / Estadio GNP:</strong> Cierres nocturnos en lateral de Río Churubusco. Usa Sur 157 o Plutarco Elías Calles.
+          <div class="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs sm:text-sm text-red-900">
+            <strong>🚗 Alerta Ciudad Deportiva / Estadio GNP:</strong> Cierres nocturnos en lateral de Río Churubusco en días de concierto. Usa Sur 157 o Plutarco Elías Calles.
           </div>
-          <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950">
-            <strong>🏛️ Explanada Alcaldía Iztacalco:</strong> Jornada de salud y esterilización canina gratuita frente a Ventanilla Única (9:00 a 15:00 h).
+          <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-xs sm:text-sm text-amber-950">
+            <strong>🏛️ Explanada Alcaldía Iztacalco:</strong> Módulos de atención ciudadana y servicios frente a Ventanilla Única (9:00 a 15:00 h).
           </div>
         </div>
       </div>
@@ -79,7 +80,7 @@
     <!-- Listado de Crónicas y Fotos Vecinales -->
     <div>
       <h3 class="font-serif text-2xl font-bold text-stone-900 mb-4">Álbum Comunitario y Crónicas del Barrio</h3>
-      <div id="cronicas-list" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+      <div id="cronicas-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
 
   </main>
@@ -91,42 +92,71 @@
       const img = document.getElementById('era-img');
       const badge = document.getElementById('era-badge');
       const cap = document.getElementById('era-caption');
+      const btn1955 = document.getElementById('btn-1955');
+      const btn2026 = document.getElementById('btn-2026');
+
       if (era === '1955') {
+        img.src = 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80';
         img.classList.add('sepia-vintage');
         badge.textContent = 'AÑO 1952: Trazo de las calles Sur y Oriente';
         cap.textContent = 'Antes del asfalto en Avenida Té y Plutarco Elías Calles, las familias fundadoras convivían con zanjas chinamperas conectadas al antiguo Canal de la Viga.';
+        if (btn1955) btn1955.className = 'px-3 py-1 rounded text-xs font-bold bg-terracota text-white transition';
+        if (btn2026) btn2026.className = 'px-3 py-1 rounded text-xs font-semibold text-tinta transition';
       } else {
+        img.src = 'https://images.unsplash.com/photo-1585464231875-d9ef1f5ad396?auto=format&fit=crop&w=1200&q=80';
         img.classList.remove('sepia-vintage');
         badge.textContent = 'HOY EN 2026: Corazón comercial de Iztacalco';
         cap.textContent = 'Hoy la colonia Gabriel Ramos Millán es uno de los barrios con mayor vida comercial de la CDMX entre el Mercado Bramadero, Mercado Tlacotal y Av. Té.';
+        if (btn2026) btn2026.className = 'px-3 py-1 rounded text-xs font-bold bg-terracota text-white transition';
+        if (btn1955) btn1955.className = 'px-3 py-1 rounded text-xs font-semibold text-tinta transition';
       }
     }
 
+    window.onDeviceChange = function() {
+      window.onPageRender();
+    };
+
     window.onPageRender = function() {
       const list = document.getElementById('cronicas-list');
+      if (!list) return;
+
+      const dev = getEffectiveDeviceType();
+      if (dev === 'mobile') {
+        list.className = 'grid grid-cols-1 gap-5';
+      } else if (dev === 'tablet') {
+        list.className = 'grid grid-cols-2 gap-5';
+      } else {
+        list.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+      }
+
       const items = DB.cronicas.filter(c => matchesGlobalFilter(c.sector, `${c.titulo} ${c.contenidoCompleto} ${c.autor || ''}`));
-      list.innerHTML = items.map(c => `
+      list.innerHTML = items.length > 0 ? items.map(c => `
         <article class="bg-white rounded-2xl border border-borde p-5 shadow-sm flex flex-col justify-between">
           <div class="space-y-3">
-            <div class="flex justify-between text-[10px] font-mono font-bold">
-              <span class="px-2.5 py-0.5 rounded bg-crema text-terracota">${c.categoria}</span>
-              <span class="text-stone-700 font-semibold">📍 ${c.sector}</span>
+            <div class="flex justify-between text-xs font-mono font-bold">
+              <span class="px-2.5 py-0.5 rounded bg-crema text-terracota">${sanitizeHTML(c.categoria)}</span>
+              <span class="text-stone-700 font-semibold">📍 ${sanitizeHTML(c.sector)}</span>
             </div>
             ${c.foto ? `
-              <div class="cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightbox('${c.foto}', '${c.titulo}')">
-                <img src="${c.foto}" alt="${c.titulo}" class="w-full h-52 object-cover" />
+              <div class="cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightboxEncoded('${encodeDataParam(c.foto)}', '${encodeDataParam(c.titulo)}')">
+                <img src="${sanitizeHTML(c.foto)}" alt="${sanitizeHTML(c.titulo)}" loading="lazy" decoding="async" class="w-full h-52 object-cover" />
               </div>
             ` : ''}
-            <h3 class="font-serif font-bold text-lg text-stone-900 leading-snug">${c.titulo}</h3>
-            ${c.autor ? `<p class="text-xs font-bold text-terracota">✍️ Autor: ${c.autor}</p>` : ''}
-            <p class="text-xs text-stone-700 font-medium bg-papel p-3 rounded-xl border border-borde leading-relaxed">${c.contenidoCompleto}</p>
+            <h3 class="font-serif font-bold text-lg text-stone-900 leading-snug">${sanitizeHTML(c.titulo)}</h3>
+            ${c.autor ? `<p class="text-xs sm:text-sm font-bold text-terracota">✍️ Autor: ${sanitizeHTML(c.autor)}</p>` : ''}
+            <p class="text-xs sm:text-sm text-stone-700 font-medium bg-papel p-3 rounded-xl border border-borde leading-relaxed">${sanitizeHTML(c.contenidoCompleto)}</p>
           </div>
           <div class="pt-3 mt-4 border-t border-borde flex justify-between items-center text-xs">
-            <span class="font-mono text-stone-700 font-semibold">${c.fecha}</span>
-            <button onclick="shareOnWhatsApp('Crónica Ramos Millán: ${c.titulo}')" class="font-bold text-chinampa hover:underline">📲 Compartir</button>
+            <span class="font-mono text-stone-700 font-semibold">${sanitizeHTML(c.fecha)}</span>
+            <button type="button" onclick="shareOnWhatsAppEncoded('${encodeDataParam('Crónica Ramos Millán: ' + c.titulo)}')" class="font-bold text-chinampa hover:underline">📲 Compartir</button>
           </div>
         </article>
-      `).join('');
+      `).join('') : renderEmptyState({
+        icon: '📷',
+        title: 'No hay crónicas registradas con este filtro',
+        ctaHref: 'anunciate.html?tipo=foto',
+        ctaLabel: '📷 Subir Foto Antigua'
+      });
     };
 
     document.addEventListener('DOMContentLoaded', () => {

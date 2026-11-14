@@ -4,15 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Radar de Mascotas | Raíces de Iztacalco</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#9B2C2C" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="app.js"></script>
 </head>
 <body data-page="mascotas" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
   <div id="shared-header"></div>
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6 pb-20">
-    <!-- Encabezado con texto de contraste legible y botón de publicación destacado -->
-    <div class="flex flex-wrap items-center justify-between gap-4 bg-stone-900 border-2 border-red-600 text-stone-100 p-6 rounded-2xl shadow-md">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-6 space-y-6 pb-24 lg:pb-16">
+    <div class="flex flex-wrap items-center justify-between gap-4 bg-stone-900 border-2 border-red-600 text-stone-100 p-5 sm:p-6 rounded-2xl shadow-md">
       <div>
         <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white">🐾 Radar de Mascotas Perdidas y Adopción</h2>
         <p class="text-xs sm:text-sm text-stone-300 font-medium mt-1">Alertas por cuadra en la Ramos Millán. Reporta gratis o activa tu Boost Urgente.</p>
@@ -22,34 +23,54 @@
         <span>→</span>
       </a>
     </div>
-    <div id="mascotas-box" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
+    <div id="mascotas-box" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
   </main>
   <div id="shared-footer"></div>
   <script>
+    window.onDeviceChange = function() {
+      window.onPageRender();
+    };
+
     window.onPageRender = function() {
-      document.getElementById('mascotas-box').innerHTML = DB.mascotas
-        .filter(m => matchesGlobalFilter(m.sector, `${m.nombre} ${m.calle} ${m.descripcion}`))
-        .map(m => `
-          <div class="bg-white rounded-2xl border ${m.destacado ? 'border-2 border-red-600 shadow-md' : 'border-borde shadow-sm'} p-5 flex flex-col justify-between">
-            <div class="space-y-2.5">
-              <div class="flex items-center justify-between gap-2">
-                <span class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full ${m.destacado ? 'bg-red-600 text-white' : 'bg-amber-100 text-amber-900'}">${m.tipo}</span>
-                <span class="text-[11px] font-mono text-stone-700 font-semibold">📍 ${m.sector}</span>
-              </div>
-              ${m.foto ? `
-                <div class="relative group cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightbox('${m.foto}', '${m.nombre}')">
-                  <img src="${m.foto}" alt="${m.nombre}" class="w-full h-52 object-cover" />
-                </div>
-              ` : ''}
-              <h3 class="font-serif font-bold text-lg text-stone-900">${m.nombre}</h3>
-              <p class="text-xs font-bold text-terracota">🗺️ Visto en: ${m.calle}</p>
-              <p class="text-xs text-stone-700 font-medium bg-papel p-3 rounded-xl border border-borde leading-relaxed">${m.descripcion}</p>
+      const box = document.getElementById('mascotas-box');
+      if (!box) return;
+
+      const dev = getEffectiveDeviceType();
+      if (dev === 'mobile') {
+        box.className = 'grid grid-cols-1 gap-5';
+      } else if (dev === 'tablet') {
+        box.className = 'grid grid-cols-2 gap-5';
+      } else {
+        box.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5';
+      }
+
+      const items = DB.mascotas.filter(m => matchesGlobalFilter(m.sector, `${m.nombre} ${m.calle} ${m.descripcion}`));
+      box.innerHTML = items.length > 0 ? items.map(m => `
+        <article class="bg-white rounded-2xl border ${m.destacado ? 'border-2 border-red-600 shadow-md' : 'border-borde shadow-sm'} p-5 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full ${m.destacado ? 'bg-red-600 text-white' : 'bg-amber-100 text-amber-900'}">${sanitizeHTML(m.tipo)}</span>
+              <span class="text-xs font-mono text-stone-700 font-semibold">📍 ${sanitizeHTML(m.sector)}</span>
             </div>
-            <button onclick="openWhatsAppDirect('${m.whatsapp}', 'Hola, vi la alerta de tu mascota (*${m.nombre}*):')" class="mt-4 w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition">
-              📲 Avisar al dueño por WhatsApp
-            </button>
+            ${m.foto ? `
+              <div class="relative group cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightboxEncoded('${encodeDataParam(m.foto)}', '${encodeDataParam(m.nombre)}')">
+                <img src="${sanitizeHTML(m.foto)}" alt="${sanitizeHTML(m.nombre)}" loading="lazy" decoding="async" class="w-full h-52 object-cover" />
+              </div>
+            ` : ''}
+            <h3 class="font-serif font-bold text-lg text-stone-900">${sanitizeHTML(m.nombre)}</h3>
+            <p class="text-xs sm:text-sm font-bold text-terracota">🗺️ Visto en: ${sanitizeHTML(m.calle)}</p>
+            <p class="text-xs sm:text-sm text-stone-700 font-medium bg-papel p-3 rounded-xl border border-borde leading-relaxed">${sanitizeHTML(m.descripcion)}</p>
           </div>
-        `).join('');
+          <button type="button" onclick="openWhatsAppDirectEncoded('${sanitizeHTML(m.whatsapp)}', '${encodeDataParam('Hola, vi la alerta de tu mascota (*' + m.nombre + '*) en Raíces de Iztacalco:')}')" class="mt-4 w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs sm:text-sm transition">
+            📲 Avisar al dueño por WhatsApp
+          </button>
+        </article>
+      `).join('') : renderEmptyState({
+        icon: '🐾',
+        title: 'No hay alertas de mascotas en este filtro',
+        ctaHref: 'anunciate.html?tipo=mascota',
+        ctaLabel: '🐾 Reportar Mascota ($0 / Boost $50)'
+      });
     };
     document.addEventListener('DOMContentLoaded', () => { renderSharedLayout('mascotas'); window.onPageRender(); });
   </script>

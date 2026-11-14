@@ -4,18 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manual de Uso Vecinal | Raíces de Iztacalco</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#9B2C2C" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="app.js"></script>
 </head>
 <body data-page="guia" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
 
-  <!-- Cabecera Compartida -->
   <div id="shared-header"></div>
 
-  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 space-y-8 pb-20">
+  <main class="flex-1 max-w-4xl w-full mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-8 pb-24 lg:pb-16">
 
-    <!-- Sección de Título -->
     <div class="bg-white rounded-2xl border border-borde p-6 sm:p-8 shadow-sm text-center max-w-3xl mx-auto space-y-3">
       <span class="inline-block bg-amber-100 text-amber-900 font-mono text-xs font-bold px-3 py-1 rounded-full">
         📖 REGLAMENTO Y GUÍA DE OPERACIÓN
@@ -24,12 +24,11 @@
         Manual de Uso Vecinal
       </h2>
       <p class="text-xs sm:text-sm text-grafito leading-relaxed">
-        Conoce cómo funciona nuestra plataforma comunitaria, los tiempos de vigencia de los anuncios y las normas para mantener una convivencia armoniosa y segura en la colonia Gabriel Ramos Millán.
+        Conoce cómo funciona nuestra plataforma comunitaria en computadora, tableta y teléfono celular, los tiempos de vigencia de los anuncios y las normas para mantener una convivencia segura en la colonia Gabriel Ramos Millán.
       </p>
     </div>
 
-    <!-- Tiempos de Vigencia y Costos -->
-    <section class="bg-white rounded-2xl border border-borde p-6 sm:p-8 shadow-sm space-y-6">
+    <section class="bg-white rounded-2xl border border-borde p-5 sm:p-8 shadow-sm space-y-6">
       <h3 class="font-serif text-xl sm:text-2xl font-bold text-tinta border-b border-borde pb-2 flex items-center gap-2">
         ⏰ Vigencia y Costos de Publicación
       </h3>
@@ -38,103 +37,93 @@
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Tianguis Digital -->
         <div class="p-4 rounded-xl bg-papel border border-borde space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-mono font-extrabold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">🛍️ TIANGUIS DIGITAL</span>
-            <span class="text-xs font-bold text-tinta font-mono">$39 MXN</span>
+            <span class="text-xs sm:text-sm font-bold text-tinta font-mono">$39 MXN</span>
           </div>
-          <h4 class="font-bold text-sm text-stone-900">Venta de Artículos</h4>
-          <p class="text-xs text-grafito leading-relaxed">
-            Publicar tu artículo para la venta tiene un costo único de <strong>$39 MXN</strong>. Tu anuncio estará activo por un periodo de **30 días naturales**. Si logras vender tu artículo antes o deseas renovarlo al vencer, puedes dar aviso al administrador. Para quienes compran, la exploración y contacto siempre es 100% gratis.
+          <h4 class="font-bold text-sm sm:text-base text-stone-900">Venta de Artículos</h4>
+          <p class="text-xs sm:text-sm text-grafito leading-relaxed">
+            Publicar tu artículo para la venta tiene un costo único de <strong>$39 MXN</strong>. Tu anuncio estará activo por un periodo de <strong>30 días naturales</strong>. Para quienes compran, la exploración y contacto siempre es 100% gratis.
           </p>
         </div>
 
-        <!-- Comercio de Barrio -->
         <div class="p-4 rounded-xl bg-papel border border-borde space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-mono font-extrabold text-terracota bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full">🏪 COMERCIO DE BARRIO</span>
-            <span class="text-xs font-bold text-tinta font-mono">$199 MXN / mes</span>
+            <span class="text-xs sm:text-sm font-bold text-tinta font-mono">$199 MXN / mes</span>
           </div>
-          <h4 class="font-bold text-sm text-stone-900">Anunciar tu Negocio</h4>
-          <p class="text-xs text-grafito leading-relaxed">
-            El registro de negocios en el directorio con Sello Pro tiene un costo de <strong>$199 MXN mensuales</strong>. Tu negocio y su ubicación en el mapa estarán activos por un periodo de **30 días naturales** desde el pago. El anuncio es renovable mes con mes. Puedes realizar tu pedido por WhatsApp directamente con el negocio y poder reclamar tu oferta o promoción si es que la tienen disponible.
+          <h4 class="font-bold text-sm sm:text-base text-stone-900">Anunciar tu Negocio</h4>
+          <p class="text-xs sm:text-sm text-grafito leading-relaxed">
+            El registro de negocios en el directorio con Sello Pro tiene un costo de <strong>$199 MXN mensuales</strong>. Tu negocio, su aparición en el cintillo superior y su ubicación en el mapa estarán activos por <strong>30 días naturales</strong>.
           </p>
         </div>
 
-        <!-- Oficio Verificado -->
         <div class="p-4 rounded-xl bg-papel border border-borde space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-mono font-extrabold text-chinampa bg-green-50 border border-green-200 px-2.5 py-0.5 rounded-full">🛠️ OFICIOS</span>
-            <span class="text-xs font-bold text-tinta font-mono">$50 MXN</span>
+            <span class="text-xs sm:text-sm font-bold text-tinta font-mono">$50 MXN</span>
           </div>
-          <h4 class="font-bold text-sm text-stone-900">Servicios y Oficios</h4>
-          <p class="text-xs text-grafito leading-relaxed">
-            Anunciar tus servicios (plomería, cerrajería, electricidad, etc.) tiene un costo de recuperación de <strong>$50 MXN</strong>. Tu publicación estará activa y visible en la sección correspondiente por un periodo de **30 días naturales**, permitiendo que los vecinos de la colonia localicen y soliciten tu trabajo de forma directa por WhatsApp.
+          <h4 class="font-bold text-sm sm:text-base text-stone-900">Servicios y Oficios</h4>
+          <p class="text-xs sm:text-sm text-grafito leading-relaxed">
+            Anunciar tus servicios (plomería, cerrajería, electricidad, etc.) tiene un costo de recuperación de <strong>$50 MXN</strong> por <strong>30 días naturales</strong>, permitiendo que los vecinos soliciten tu trabajo directo por WhatsApp.
           </p>
         </div>
 
-        <!-- Empleos -->
         <div class="p-4 rounded-xl bg-papel border border-borde space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-mono font-extrabold text-stone-900 bg-stone-100 border border-stone-300 px-2.5 py-0.5 rounded-full">💼 EMPLEOS</span>
-            <span class="text-xs font-bold text-tinta font-mono">$100 MXN</span>
+            <span class="text-xs sm:text-sm font-bold text-tinta font-mono">$100 MXN</span>
           </div>
-          <h4 class="font-bold text-sm text-stone-900">Bolsa de Trabajo Local</h4>
-          <p class="text-xs text-grafito leading-relaxed">
-            La publicación de vacantes para negocios o talleres locales tiene un costo único de <strong>$100 MXN</strong>. El anuncio de trabajo se mantendrá activo por un periodo de **15 días naturales** para asegurar que la bolsa de empleo permanezca con ofertas de trabajo vigentes y reales para la comunidad.
+          <h4 class="font-bold text-sm sm:text-base text-stone-900">Bolsa de Trabajo Local</h4>
+          <p class="text-xs sm:text-sm text-grafito leading-relaxed">
+            La publicación de vacantes para negocios o talleres locales tiene un costo único de <strong>$100 MXN</strong> y permanece activa por <strong>15 días naturales</strong> para asegurar ofertas vigentes.
           </p>
         </div>
 
-        <!-- Noticias y Crónicas -->
         <div class="p-4 rounded-xl bg-papel border border-borde space-y-2 md:col-span-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-mono font-extrabold text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">🗞️ COMUNIDAD & HISTORIA (NOTICIAS / FOTOS)</span>
-            <span class="text-xs font-bold text-tinta font-mono">Gratuito ($0)</span>
+            <span class="text-xs font-mono font-extrabold text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">🗞️ COMUNIDAD & HISTORIA (NOTICIAS / FOTOS / MASCOTAS)</span>
+            <span class="text-xs sm:text-sm font-bold text-tinta font-mono">Gratuito ($0)</span>
           </div>
-          <h4 class="font-bold text-sm text-stone-900">Avisos y Álbum del Barrio</h4>
-          <p class="text-xs text-grafito leading-relaxed">
-            Las alertas, crónicas, fotos antiguas e informaciones comunitarias y reportes de mascotas perdidas/adopción estándar son **totalmente gratuitas**. Estarán activas hasta que se resuelvan o cumplan su ciclo, requiriendo previa validación del administrador para evitar fraudes, spam o faltas de respeto. El Boost Urgente para mascotas perdidas cuesta $50 MXN (duración de 30 días).
+          <h4 class="font-bold text-sm sm:text-base text-stone-900">Avisos y Álbum del Barrio</h4>
+          <p class="text-xs sm:text-sm text-grafito leading-relaxed">
+            Las alertas, crónicas, fotos antiguas e informaciones comunitarias y reportes de mascotas perdidas/adopción estándar son <strong>totalmente gratuitas</strong>. El Boost Urgente para mascotas perdidas cuesta $50 MXN (duración de 30 días).
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Cómo Funciona Cada Sección -->
-    <section class="bg-white rounded-2xl border border-borde p-6 sm:p-8 shadow-sm space-y-6">
+    <section class="bg-white rounded-2xl border border-borde p-5 sm:p-8 shadow-sm space-y-6">
       <h3 class="font-serif text-xl sm:text-2xl font-bold text-tinta border-b border-borde pb-2 flex items-center gap-2">
         📖 ¿Cómo Funciona la Plataforma?
       </h3>
 
       <div class="space-y-5">
-        <!-- Detalle: Comercio -->
+        <div class="space-y-1">
+          <h4 class="font-serif font-bold text-lg text-stone-900 flex items-center gap-2">💻📱 Vistas Adaptativas (Computadora, Tableta y Celular)</h4>
+          <p class="text-xs sm:text-sm text-grafito leading-relaxed">
+            La plataforma detecta automáticamente si ingresas desde un navegador web en computadora, una tableta o un teléfono celular, ajustando los menús, columnas y botones táctiles. Además, desde la parte superior puedes alternar manualmente entre <strong>💻 Web</strong>, <strong>📟 Tablet</strong> y <strong>📱 Celular</strong>.
+          </p>
+        </div>
+
         <div class="space-y-1">
           <h4 class="font-serif font-bold text-lg text-stone-900 flex items-center gap-2">🏪 Directorio de Comercio de Barrio</h4>
           <p class="text-xs sm:text-sm text-grafito leading-relaxed">
-            No necesitas instalar ninguna aplicación. En esta sección puedes buscar por giro (como comida, barberías o tlapalerías) y ubicar los locales en el mapa interactivo de la Gabriel Ramos Millán. Puedes realizar tu pedido por WhatsApp directamente con el negocio y poder reclamar tu oferta o promoción si es que el local la tiene activa. No cobramos comisiones a los comerciantes, fomentamos el trato directo y el consumo local.
+            Puedes buscar por giro (comida, barberías, salud o tlapalerías), ubicar los locales en el mapa interactivo con el botón <strong>«📍 Ubicar en mapa»</strong> y armar tu pedido directo por WhatsApp sin comisiones.
           </p>
         </div>
 
-        <!-- Detalle: Tianguis -->
-        <div class="space-y-1">
-          <h4 class="font-serif font-bold text-lg text-stone-900 flex items-center gap-2">🛍️ El Tianguis Digital</h4>
-          <p class="text-xs sm:text-sm text-grafito leading-relaxed">
-            Es nuestro espacio de clasificados para dar segunda vida a artículos entre vecinos. Para mayor tranquilidad y seguridad de la comunidad, todo anuncio cuenta con una propuesta de <strong>Punto de Entrega Seguro</strong> (como la Explanada de la Alcaldía Iztacalco o estaciones de Metro cercanas). Recuerda coordinar el encuentro con el vendedor por WhatsApp y de preferencia ir acompañado a un lugar público. El anuncio de venta dura <strong>30 días naturales</strong>.
-          </p>
-        </div>
-
-        <!-- Detalle: Seguridad y Registro -->
         <div class="space-y-1">
           <h4 class="font-serif font-bold text-lg text-stone-900 flex items-center gap-2">🛡️ Normas de Seguridad y Convivencia</h4>
-          <p class="text-xs sm:text-sm text-grafito leading-relaxed text-red-950 font-medium">
-            Por el bienestar de todos: No se toleran publicaciones que agredan, difamen o atenten contra la privacidad de otros vecinos. Cualquier anuncio con costo requiere el comprobante de pago seguro para ser liberado por el administrador. Todo post pasa por una validación humana en la hoja de cálculo de Google Sheets antes de visualizarse en la plataforma, lo que previene fraudes y spam en nuestro barrio.
+          <p class="text-xs sm:text-sm leading-relaxed text-red-950 font-medium">
+            No se toleran publicaciones que agredan, difamen o atenten contra la privacidad de otros vecinos. Todo anuncio pasa por validación humana antes de visualizarse públicamente.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Botón de acción para el final -->
-    <div class="text-center pt-4">
+    <div class="text-center pt-2">
       <a href="anunciate.html" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 font-extrabold text-sm sm:text-base shadow-lg transition">
         <span>➕ Ir a Publicar un Anuncio</span>
         <span>→</span>
@@ -143,7 +132,6 @@
 
   </main>
 
-  <!-- Pie de Página Compartido -->
   <div id="shared-footer"></div>
 
   <script>

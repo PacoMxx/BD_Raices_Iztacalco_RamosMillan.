@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Comercio de Barrio | Raíces de Iztacalco</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#9B2C2C" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -18,55 +20,57 @@
 
   <div id="shared-header"></div>
 
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6 pb-20">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-6 space-y-6 pb-24 lg:pb-16">
 
-    <!-- Banner Principal con texto de alto contraste (Blanco puro sobre fondo oscuro profundo) -->
-    <div class="bg-stone-900 border-2 border-amber-400 text-stone-100 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-md">
+    <!-- Banner Principal de alto contraste -->
+    <div class="bg-stone-900 border-2 border-amber-400 text-stone-100 rounded-2xl p-5 sm:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-md">
       <div>
-        <span class="inline-block bg-amber-400 text-stone-950 font-mono text-[11px] font-extrabold px-2.5 py-0.5 rounded-full mb-1">
+        <span class="inline-block bg-amber-400 text-stone-950 font-mono text-xs font-extrabold px-2.5 py-0.5 rounded-full mb-1">
           ✨ SELLO DE TRADICIÓN RAMOS MILLÁN • PIDE DIRECTO POR WHATSAPP
         </span>
         <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white">Directorio de Comercio de Barrio</h2>
         <p class="text-xs sm:text-sm text-stone-300 font-medium mt-1 leading-relaxed">
-          Selecciona tus productos en la tarjeta del local, ubica su calle exacta en el mapa y envía tu pedido directo al WhatsApp del comerciante sin comisiones.
+          Selecciona tus productos en la tarjeta del local, ubica su calle en el mapa interactivo y envía tu pedido directo al WhatsApp del comerciante sin comisiones.
         </p>
       </div>
-      <!-- Botón de publicación con color de alto contraste -->
-      <a href="anunciate.html?tipo=negocio" class="px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs shrink-0 shadow-lg transition flex items-center gap-2">
+      <a href="anunciate.html?tipo=negocio" class="px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs sm:text-sm shrink-0 shadow-lg transition flex items-center gap-2">
         <span>🏪 Publicar mi Negocio ($199)</span>
         <span>→</span>
       </a>
     </div>
 
+    <!-- Filtro por Giros -->
     <div id="giros-filter-bar" class="flex items-center gap-2 overflow-x-auto py-1"></div>
 
+    <!-- Mapa de Negocios -->
     <section id="mapa-comercio-section" class="bg-white rounded-2xl border border-borde shadow-sm overflow-hidden">
-      <div class="px-5 py-3.5 bg-crema/70 border-b border-borde flex flex-wrap items-center justify-between gap-2">
+      <div class="px-4 sm:px-5 py-3.5 bg-crema/70 border-b border-borde flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2">
-          <span class="text-lg">🗺️</span>
+          <span class="text-xl">🗺️</span>
           <div>
             <h3 class="font-serif font-bold text-base sm:text-lg text-stone-900 leading-none">
               Mapa de Negocios de la Colonia Gabriel Ramos Millán
             </h3>
-            <p class="text-[11px] text-stone-700 font-medium mt-0.5">
+            <p class="text-xs text-stone-700 font-medium mt-1">
               Toca cualquier marcador o el botón <strong>«📍 Ubicar en mapa»</strong> dentro de cada anuncio.
             </p>
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="resetMapView()" class="px-3 py-1.5 rounded-lg bg-white border border-borde hover:border-terracota text-xs font-bold text-stone-900 transition">
+          <button type="button" onclick="resetMapView()" class="px-3 py-1.5 rounded-lg bg-white border border-borde hover:border-terracota text-xs font-bold text-stone-900 transition">
             🔄 Centrar Mapa
           </button>
-          <button onclick="toggleMainMap()" id="btn-toggle-map" class="px-3 py-1.5 rounded-lg bg-stone-900 text-stone-100 text-xs font-bold transition">
+          <button type="button" onclick="toggleMainMap()" id="btn-toggle-map" class="px-3 py-1.5 rounded-lg bg-stone-900 text-stone-100 text-xs font-bold transition">
             Ocultar Mapa ▲
           </button>
         </div>
       </div>
       <div id="comercio-map-wrapper" class="relative">
-        <div id="comercio-map" class="w-full h-72 sm:h-80 bg-stone-200"></div>
+        <div id="comercio-map" class="w-full h-64 sm:h-80 bg-stone-200"></div>
       </div>
     </section>
 
+    <!-- Contenedor adaptable a Celular (1 col), Tableta (2 cols) y Computadora (3 cols) -->
     <div id="negocios-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
   </main>
@@ -82,20 +86,36 @@
     const GIROS_LISTA = ['TODOS', 'Comida y Antojitos', 'Salud y Mascotas', 'Talleres y Tlapalerías', 'Belleza y Barberías'];
 
     const COORDENADAS_NEGOCIOS = {
-      'neg1': { lat: 19.3862, lng: -99.0982, ref: 'Sur 163 Mercado Bramadero' }
+      'neg1': { lat: 19.3862, lng: -99.0982, ref: 'Sur 157 cerca del Mercado Bramadero' }
     };
+
+    function getCoordsForBusiness(n, idx) {
+      if (COORDENADAS_NEGOCIOS[n.id]) {
+        return COORDENADAS_NEGOCIOS[n.id];
+      }
+      if (typeof n.lat === 'number' && typeof n.lng === 'number') {
+        return { lat: n.lat, lng: n.lng };
+      }
+      const base = COORDENADAS_SECTORES[n.sector] || COORDENADAS_SECTORES['TODOS'];
+      const offsetLat = ((idx % 5) - 2) * 0.0007;
+      const offsetLng = (((idx * 2) % 5) - 2) * 0.0007;
+      return { lat: base.lat + offsetLat, lng: base.lng + offsetLng };
+    }
 
     function renderGiroButtons() {
       const bar = document.getElementById('giros-filter-bar');
       if (!bar) return;
       const iconos = {
-        'TODOS': '🏪 Todos', 'Comida y Antojitos': '🌮 Comida y Antojitos',
-        'Salud y Mascotas': '🐾 Salud y Mascotas', 'Talleres y Tlapalerías': '🔧 Tlapalerías', 'Belleza y Barberías': '💈 Barberías'
+        'TODOS': '🏪 Todos los Giros',
+        'Comida y Antojitos': '🌮 Comida y Antojitos',
+        'Salud y Mascotas': '🐾 Salud y Mascotas',
+        'Talleres y Tlapalerías': '🔧 Talleres y Tlapalerías',
+        'Belleza y Barberías': '💈 Belleza y Barberías'
       };
       bar.innerHTML = GIROS_LISTA.map(g => {
         const active = selectedGiro === g;
         return `
-          <button onclick="setGiro('${g}')" class="px-4 py-2 rounded-xl text-xs font-bold border transition shrink-0 ${
+          <button type="button" onclick="setGiro('${g}')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition shrink-0 ${
             active ? 'bg-stone-900 text-amber-300 border-stone-900 shadow-sm' : 'bg-white text-stone-900 border-borde hover:border-terracota'
           }">
             ${iconos[g] || g}
@@ -104,93 +124,228 @@
       }).join('');
     }
 
-    function setGiro(g) { selectedGiro = g; renderGiroButtons(); window.onPageRender(); }
+    function setGiro(g) {
+      selectedGiro = g;
+      renderGiroButtons();
+      window.onPageRender();
+    }
 
     function initOrUpdateMap(listaNegocios) {
+      if (typeof L === 'undefined') return;
       if (!mapInstance) {
         mapInstance = L.map('comercio-map').setView([19.3895, -99.1030], 15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(mapInstance);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '© OpenStreetMap'
+        }).addTo(mapInstance);
         markersLayer = L.layerGroup().addTo(mapInstance);
       }
       markersLayer.clearLayers();
       Object.keys(markersById).forEach(k => delete markersById[k]);
       const bounds = [];
-      listaNegocios.forEach(n => {
-        const lat = 19.3895, lng = -99.1030;
-        const marker = L.marker([lat, lng]);
-        marker.bindPopup(`<div style="font-family:sans-serif;"><strong style="color:#1c1917;">${n.nombre}</strong><br><span style="font-size:11px;color:#57534e;">${n.calle}</span></div>`);
+
+      listaNegocios.forEach((n, idx) => {
+        const coords = getCoordsForBusiness(n, idx);
+        const marker = L.marker([coords.lat, coords.lng]);
+        marker.bindPopup(`
+          <div style="font-family:sans-serif; min-width:170px;">
+            <strong style="color:#1c1917; font-size:13px;">${sanitizeHTML(n.nombre)}</strong><br/>
+            <span style="font-size:11px; color:#9B2C2C; font-weight:bold;">📍 ${sanitizeHTML(n.sector)}</span><br/>
+            <span style="font-size:11px; color:#57534e;">${sanitizeHTML(n.calle)}</span>
+          </div>
+        `);
         marker.addTo(markersLayer);
-        markersById[n.id] = marker;
-        bounds.push([lat, lng]);
+        markersById[n.id] = { marker, coords };
+        bounds.push([coords.lat, coords.lng]);
       });
-      if (bounds.length > 1) mapInstance.fitBounds(bounds, { padding: [35, 35], maxZoom: 16 });
+
+      if (bounds.length > 1) {
+        mapInstance.fitBounds(bounds, { padding: [35, 35], maxZoom: 16 });
+      } else if (bounds.length === 1) {
+        mapInstance.setView(bounds[0], 16);
+      }
     }
 
     function focusBusinessOnMap(negId) {
       const wrapper = document.getElementById('comercio-map-wrapper');
-      if (wrapper.classList.contains('hidden')) toggleMainMap();
-      document.getElementById('mapa-comercio-section').scrollIntoView({ behavior: 'smooth' });
+      if (wrapper && wrapper.classList.contains('hidden')) {
+        toggleMainMap();
+      }
+      const section = document.getElementById('mapa-comercio-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      const entry = markersById[negId];
+      if (mapInstance && entry) {
+        setTimeout(() => {
+          mapInstance.invalidateSize();
+          mapInstance.setView([entry.coords.lat, entry.coords.lng], 17, { animate: true });
+          entry.marker.openPopup();
+        }, 250);
+      }
     }
 
-    function resetMapView() { if (mapInstance) mapInstance.setView([19.3895, -99.1030], 15, { animate: true }); }
+    function resetMapView() {
+      if (mapInstance) {
+        mapInstance.setView([19.3895, -99.1030], 15, { animate: true });
+      }
+    }
+
     function toggleMainMap() {
       const wrapper = document.getElementById('comercio-map-wrapper');
       const btn = document.getElementById('btn-toggle-map');
-      if (wrapper.classList.contains('hidden')) { wrapper.classList.remove('hidden'); btn.textContent = 'Ocultar Mapa ▲'; }
-      else { wrapper.classList.add('hidden'); btn.textContent = 'Mostrar Mapa ▼'; }
+      if (!wrapper || !btn) return;
+      if (wrapper.classList.contains('hidden')) {
+        wrapper.classList.remove('hidden');
+        btn.textContent = 'Ocultar Mapa ▲';
+        if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 150);
+      } else {
+        wrapper.classList.add('hidden');
+        btn.textContent = 'Mostrar Mapa ▼';
+      }
     }
-    function toggleCardMiniMap(negId) { const box = document.getElementById(`mini-map-${negId}`); if (box) box.classList.toggle('hidden'); }
+
     function updateQty(negId, idx, delta) {
       if (!businessCarts[negId]) businessCarts[negId] = {};
       businessCarts[negId][idx] = Math.max(0, (businessCarts[negId][idx] || 0) + delta);
       window.onPageRender();
     }
+
     function sendOrderWA(negId) {
-      const n = DB.negocios.find(x => x.id === negId);
+      const n = DB.negocios.find(x => String(x.id) === String(negId));
       if (!n) return;
       const cart = businessCarts[negId] || {};
-      const lines = []; let total = 0;
-      n.catalogo.forEach((p, idx) => {
+      const lines = [];
+      let total = 0;
+      (n.catalogo || []).forEach((p, idx) => {
         const q = cart[idx] || 0;
-        if (q > 0) { total += q * p.precio; lines.push(`• ${q}x ${p.nombre} ($${q * p.precio} MXN)`); }
+        if (q > 0) {
+          total += q * p.precio;
+          lines.push(`• ${q}x ${p.nombre} ($${q * p.precio} MXN)`);
+        }
       });
-      let msg = `Hola *${n.nombre}*, vi su negocio en *Raíces de Iztacalco*. `;
-      if (lines.length > 0) msg += `\n\nQuiero pedir:\n${lines.join('\n')}\n\n*Total: $${total} MXN*.`;
-      else msg += `Quiero pedir informes y aplicar su promoción.`;
+      let msg = `Hola *${n.nombre}*, vi su negocio en *Raíces de Iztacalco*.`;
+      if (lines.length > 0) {
+        msg += `\n\nQuiero pedir:\n${lines.join('\n')}\n\n*Total estimado: $${total} MXN*.`;
+      } else {
+        msg += ` Quiero solicitar informes y aplicar su promoción vecinal (${n.cupon}).`;
+      }
       openWhatsAppDirect(n.whatsapp, msg);
     }
 
-    window.onPageRender = function() {
-      const box = document.getElementById('negocios-container');
-      const list = DB.negocios.filter(n => {
-        const gOk = selectedGiro === 'TODOS' || n.giro === selectedGiro;
-        return gOk && matchesGlobalFilter(n.sector, `${n.nombre} ${n.calle} ${n.giro}`);
-      });
-      initOrUpdateMap(list);
-      box.innerHTML = list.map(n => `
-        <div class="bg-white rounded-2xl border-2 border-stone-900 shadow-sm overflow-hidden flex flex-col justify-between">
-          <div>
-            <div class="bg-stone-900 text-amber-300 px-4 py-2 flex justify-between text-[11px] font-mono font-bold">
-              <span>★ NEGOCIO VERIFICADO PRO</span>
-              <span>📍 ${n.sector}</span>
-            </div>
-            <div class="p-5 space-y-3">
-              <h3 class="font-serif text-xl font-bold text-stone-900">${n.nombre}</h3>
-              ${n.foto ? `<img src="${n.foto}" onclick="openPhotoLightbox('${n.foto}', '${n.nombre}')" class="w-full h-44 object-cover rounded-xl cursor-pointer border border-borde" />` : ''}
-              <p class="text-xs text-stone-700 font-medium">📍 ${n.calle}</p>
-              <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-stone-900 font-bold">${n.cupon}</div>
-            </div>
-          </div>
-          <div class="p-4 bg-crema/70 border-t border-borde">
-            <button onclick="sendOrderWA('${n.id}')" class="w-full py-2.5 rounded-xl bg-chinampa text-white font-bold text-xs shadow">
-              📲 Pedir por WhatsApp
-            </button>
-          </div>
-        </div>
-      `).join('');
+    window.onDeviceChange = function() {
+      window.onPageRender();
     };
 
-    document.addEventListener('DOMContentLoaded', () => { renderSharedLayout('comercio'); renderGiroButtons(); window.onPageRender(); });
+    window.onPageRender = function() {
+      const box = document.getElementById('negocios-container');
+      if (!box) return;
+
+      const dev = getEffectiveDeviceType();
+      if (dev === 'mobile') {
+        box.className = 'grid grid-cols-1 gap-5';
+      } else if (dev === 'tablet') {
+        box.className = 'grid grid-cols-2 gap-5';
+      } else {
+        box.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+      }
+
+      const list = DB.negocios.filter(n => {
+        const gOk = selectedGiro === 'TODOS' || n.giro === selectedGiro;
+        return gOk && matchesGlobalFilter(n.sector, `${n.nombre} ${n.calle} ${n.giro} ${n.cupon}`);
+      });
+
+      initOrUpdateMap(list);
+
+      if (list.length === 0) {
+        box.innerHTML = renderEmptyState({
+          icon: '🏪',
+          title: 'No encontramos negocios con este filtro',
+          ctaHref: 'anunciate.html?tipo=negocio',
+          ctaLabel: '🏪 Anunciar mi Negocio ($199)'
+        });
+        return;
+      }
+
+      box.innerHTML = list.map(n => {
+        const cart = businessCarts[n.id] || {};
+        let subtotal = 0;
+        (n.catalogo || []).forEach((p, idx) => {
+          subtotal += (cart[idx] || 0) * p.precio;
+        });
+
+        return `
+          <article class="bg-white rounded-2xl border-2 border-stone-900 shadow-sm overflow-hidden flex flex-col justify-between">
+            <div>
+              <div class="bg-stone-900 text-amber-300 px-4 py-2 flex items-center justify-between text-xs font-mono font-bold">
+                <span>★ NEGOCIO VERIFICADO PRO</span>
+                <span>📍 ${sanitizeHTML(n.sector)}</span>
+              </div>
+              <div class="p-5 space-y-3">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <span class="text-xs font-mono font-bold text-terracota">${sanitizeHTML(n.giro)}</span>
+                    <h3 class="font-serif text-xl font-bold text-stone-900 leading-snug">${sanitizeHTML(n.nombre)}</h3>
+                  </div>
+                  <button type="button" onclick="focusBusinessOnMap('${sanitizeHTML(n.id)}')" class="px-2.5 py-1.5 rounded-lg bg-crema hover:bg-amber-200 text-stone-900 font-bold text-xs shrink-0 border border-borde transition">
+                    📍 Ubicar en mapa
+                  </button>
+                </div>
+
+                ${n.foto ? `
+                  <img src="${sanitizeHTML(n.foto)}" alt="${sanitizeHTML(n.nombre)}" loading="lazy" decoding="async" onclick="openPhotoLightboxEncoded('${encodeDataParam(n.foto)}', '${encodeDataParam(n.nombre)}')" class="w-full h-44 object-cover rounded-xl cursor-pointer border border-borde" />
+                ` : ''}
+
+                <p class="text-xs sm:text-sm text-stone-700 font-medium">📍 ${sanitizeHTML(n.calle)}</p>
+                <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs sm:text-sm text-stone-900 font-bold">
+                  🎁 ${sanitizeHTML(n.cupon)}
+                </div>
+
+                ${(n.catalogo && n.catalogo.length > 0) ? `
+                  <div class="pt-2 border-t border-borde space-y-2">
+                    <p class="text-xs font-mono uppercase font-bold text-stone-700">🛒 Selecciona productos o servicios (opcional):</p>
+                    ${n.catalogo.map((prod, idx) => {
+                      const q = cart[idx] || 0;
+                      return `
+                        <div class="flex items-center justify-between gap-2 bg-papel px-3 py-2 rounded-xl border border-borde text-xs">
+                          <div class="min-w-0">
+                            <p class="font-bold text-stone-900 truncate">${sanitizeHTML(prod.nombre)}</p>
+                            <p class="font-mono text-terracota font-bold">$${Number(prod.precio || 0)} MXN</p>
+                          </div>
+                          <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" aria-label="Disminuir cantidad" onclick="updateQty('${sanitizeHTML(n.id)}', ${idx}, -1)" class="w-7 h-7 rounded-lg bg-white border border-stone-300 font-extrabold text-stone-900 hover:bg-stone-100">−</button>
+                            <span class="w-5 text-center font-mono font-bold text-sm">${q}</span>
+                            <button type="button" aria-label="Aumentar cantidad" onclick="updateQty('${sanitizeHTML(n.id)}', ${idx}, 1)" class="w-7 h-7 rounded-lg bg-stone-900 text-amber-300 font-extrabold hover:bg-stone-800">+</button>
+                          </div>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+
+            <div class="p-4 bg-crema/70 border-t border-borde space-y-2">
+              ${subtotal > 0 ? `
+                <div class="flex items-center justify-between text-xs font-mono font-extrabold text-stone-900 px-1">
+                  <span>Total seleccionado:</span>
+                  <span class="text-chinampa">$${subtotal} MXN</span>
+                </div>
+              ` : ''}
+              <button type="button" onclick="sendOrderWA('${sanitizeHTML(n.id)}')" class="w-full py-2.5 rounded-xl bg-chinampa hover:bg-green-800 text-white font-bold text-xs sm:text-sm shadow transition">
+                📲 ${subtotal > 0 ? `Enviar Pedido ($${subtotal} MXN) por WhatsApp` : 'Pedir por WhatsApp'}
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSharedLayout('comercio');
+      renderGiroButtons();
+      window.onPageRender();
+    });
   </script>
 </body>
 </html>

@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mascotas, Oficios y Empleo | Raíces de Iztacalco</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#9B2C2C" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="app.js"></script>
@@ -12,20 +14,20 @@
 
   <div id="shared-header"></div>
 
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-10">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-6 space-y-10 pb-24 lg:pb-16">
 
     <!-- 1. Radar de Mascotas -->
     <section id="sec-mascotas" class="space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde">
         <div>
           <h2 class="font-serif text-2xl font-bold text-tinta">🐾 Radar de Mascotas Perdidas y Adopción</h2>
-          <p class="text-xs text-grafito">Alertas con fotografía por cuadra en la Ramos Millán. Subir un reporte sencillo es gratis o puedes fijarlo con Boost ($50 MXN).</p>
+          <p class="text-xs sm:text-sm text-grafito">Alertas con fotografía por cuadra en la Ramos Millán. Subir un reporte sencillo es gratis o puedes fijarlo con Boost ($50 MXN).</p>
         </div>
-        <a href="anunciate.html?tipo=mascota" class="px-4 py-2.5 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs shadow-sm transition">
+        <a href="anunciate.html?tipo=mascota" class="px-4 py-2.5 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs sm:text-sm shadow-sm transition">
           + Subir Mascota con Foto (Gratis o Boost $50) →
         </a>
       </div>
-      <div id="mascotas-box" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
+      <div id="mascotas-box" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
     </section>
 
     <!-- 2. El Oficio Verificado -->
@@ -33,11 +35,13 @@
       <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde">
         <div>
           <h2 class="font-serif text-2xl font-bold text-tinta">🛠️ El Oficio Verificado (Emergencias en Casa)</h2>
-          <p class="text-xs text-grafito">Plomeros, cerrajeros y electricistas recomendados por vecinos de la colonia.</p>
+          <p class="text-xs sm:text-sm text-grafito">Plomeros, cerrajeros y electricistas recomendados por vecinos de la colonia.</p>
         </div>
-        <a href="anunciate.html?tipo=negocio" class="text-xs font-bold text-terracota hover:underline">¿Eres técnico en la colonia? Anúnciate aquí →</a>
+        <a href="anunciate.html?tipo=oficio" class="px-4 py-2.5 rounded-xl bg-chinampa hover:bg-green-800 text-white font-bold text-xs sm:text-sm shadow-sm transition">
+          🛠️ Anunciar mi Oficio ($50 MXN) →
+        </a>
       </div>
-      <div id="oficios-box" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
+      <div id="oficios-box" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
     </section>
 
     <!-- 3. Bolsa de Trabajo a 15 Minutos -->
@@ -45,9 +49,9 @@
       <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-borde">
         <div>
           <h2 class="font-serif text-2xl font-bold text-tinta">💼 Bolsa de Trabajo «A 15 Minutos de Casa»</h2>
-          <p class="text-xs text-grafito">Vacantes en comercios de la Ramos Millán para trabajar sin cruzar la ciudad.</p>
+          <p class="text-xs sm:text-sm text-grafito">Vacantes en comercios de la Ramos Millán para trabajar sin cruzar la ciudad.</p>
         </div>
-        <a href="anunciate.html?tipo=empleo" class="px-4 py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs">
+        <a href="anunciate.html?tipo=empleo" class="px-4 py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs sm:text-sm">
           + Publicar Vacante ($100 MXN) →
         </a>
       </div>
@@ -60,81 +64,68 @@
 
   <script>
     window.onPageRender = function() {
-      // Renderizar Mascotas (Descripción arriba, Calle abajo, sin textos extraños ni Base64)
-      document.getElementById('mascotas-box').innerHTML = DB.mascotas
-        .filter(m => matchesGlobalFilter(m.sector, `${m.nombre} ${m.calle} ${m.descripcion}`))
-        .map(m => `
-          <div class="bg-white rounded-2xl border ${m.destacado ? 'border-2 border-red-600 shadow-md' : 'border-borde shadow-sm'} p-5 flex flex-col justify-between">
-            <div class="space-y-3">
-              <div class="flex items-center justify-between gap-2">
-                <span class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full ${m.destacado ? 'bg-red-600 text-white' : 'bg-amber-100 text-amber-900'}">
-                  ${m.tipo}
-                </span>
-                <span class="text-[11px] font-mono text-grafito">📍 ${m.sector}</span>
+      const mList = DB.mascotas.filter(m => matchesGlobalFilter(m.sector, `${m.nombre} ${m.calle} ${m.descripcion}`));
+      document.getElementById('mascotas-box').innerHTML = mList.length > 0 ? mList.map(m => `
+        <article class="bg-white rounded-2xl border ${m.destacado ? 'border-2 border-red-600 shadow-md' : 'border-borde shadow-sm'} p-5 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full ${m.destacado ? 'bg-red-600 text-white' : 'bg-amber-100 text-amber-900'}">
+                ${sanitizeHTML(m.tipo)}
+              </span>
+              <span class="text-xs font-mono text-grafito">📍 ${sanitizeHTML(m.sector)}</span>
+            </div>
+            ${m.foto ? `
+              <div class="cursor-pointer overflow-hidden rounded-xl border border-borde bg-stone-100" onclick="openPhotoLightboxEncoded('${encodeDataParam(m.foto)}', '${encodeDataParam(m.nombre)}')">
+                <img src="${sanitizeHTML(m.foto)}" alt="${sanitizeHTML(m.nombre)}" class="w-full h-52 object-cover" />
               </div>
-
-              ${m.foto ? `
-                <div class="overflow-hidden rounded-xl border border-borde bg-stone-100">
-                  <img src="${m.foto}" alt="${m.nombre}" class="w-full h-52 object-cover" />
-                </div>
-              ` : ''}
-
-              <h3 class="font-serif font-bold text-lg text-tinta">${m.nombre}</h3>
-              
-              <!-- Descripción arriba -->
-              <p class="text-xs text-grafito bg-papel p-3 rounded-xl border border-borde leading-relaxed">${m.descripcion}</p>
-              
-              <!-- Calle abajo -->
-              <p class="text-xs font-bold text-terracota">🗺️ Última vez visto en: ${m.calle}</p>
-            </div>
-
-            <button onclick="openWhatsAppDirect('${m.whatsapp}', 'Hola vecino, vi la alerta de tu mascota (*${m.nombre}*) en Raíces de Iztacalco y tengo información:')" class="mt-4 w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition">
-              📲 Avisar al dueño por WhatsApp
-            </button>
+            ` : ''}
+            <h3 class="font-serif font-bold text-lg text-tinta">${sanitizeHTML(m.nombre)}</h3>
+            <p class="text-xs sm:text-sm text-grafito bg-papel p-3 rounded-xl border border-borde leading-relaxed">${sanitizeHTML(m.descripcion)}</p>
+            <p class="text-xs sm:text-sm font-bold text-terracota">🗺️ Última vez visto en: ${sanitizeHTML(m.calle)}</p>
           </div>
-        `).join('');
+          <button type="button" onclick="openWhatsAppDirectEncoded('${sanitizeHTML(m.whatsapp)}', '${encodeDataParam('Hola vecino, vi la alerta de tu mascota (*' + m.nombre + '*) en Raíces de Iztacalco y tengo información:')}')" class="mt-4 w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs sm:text-sm transition">
+            📲 Avisar al dueño por WhatsApp
+          </button>
+        </article>
+      `).join('') : renderEmptyState({ icon: '🐾', title: 'Sin alertas de mascotas en este filtro', ctaHref: 'anunciate.html?tipo=mascota', ctaLabel: '🐾 Publicar Mascota' });
 
-      // Renderizar Oficios
-      document.getElementById('oficios-box').innerHTML = DB.oficios
-        .filter(o => matchesGlobalFilter(o.sector, `${o.oficio} ${o.nombre}`))
-        .map(o => `
-          <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
-            <div class="space-y-2">
-              <div class="flex justify-between text-[11px] font-mono">
-                <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">✓ VERIFICADO</span>
-                <span class="text-amber-700 font-bold">${o.calificacion}</span>
-              </div>
-              <h3 class="font-serif font-bold text-lg">${o.oficio}</h3>
-              <p class="text-xs font-semibold">${o.nombre}</p>
-              <p class="text-xs text-grafito">📍 ${o.calle}</p>
-              <p class="text-xs bg-papel p-2.5 rounded-lg border border-borde">${o.garantia}</p>
+      const oList = DB.oficios.filter(o => matchesGlobalFilter(o.sector, `${o.oficio} ${o.nombre || ''} ${o.calle} ${o.garantia}`));
+      document.getElementById('oficios-box').innerHTML = oList.length > 0 ? oList.map(o => `
+        <article class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
+          <div class="space-y-2.5">
+            <div class="flex justify-between text-xs font-mono">
+              <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">✓ VERIFICADO</span>
+              <span class="text-amber-700 font-bold">${sanitizeHTML(o.calificacion || '4.9 ★')}</span>
             </div>
-            <button onclick="openWhatsAppDirect('${o.whatsapp}', 'Hola ${o.nombre}, vi su contacto en El Oficio Verificado de Raíces de Iztacalco y requiero un servicio:')" class="mt-4 w-full py-2.5 rounded-xl bg-chinampa hover:bg-green-800 text-white font-bold text-xs">
-              📲 Solicitar servicio por WhatsApp
-            </button>
+            <h3 class="font-serif font-bold text-lg">${sanitizeHTML(o.oficio)}</h3>
+            ${o.nombre ? `<p class="text-xs sm:text-sm font-semibold text-terracota">👤 ${sanitizeHTML(o.nombre)}</p>` : ''}
+            <p class="text-xs sm:text-sm text-grafito">📍 ${sanitizeHTML(o.calle)}</p>
+            <p class="text-xs sm:text-sm bg-papel p-2.5 rounded-lg border border-borde">${sanitizeHTML(o.garantia)}</p>
           </div>
-        `).join('');
+          <button type="button" onclick="openWhatsAppDirectEncoded('${sanitizeHTML(o.whatsapp)}', '${encodeDataParam('Hola, vi su contacto de ' + o.oficio + ' en El Oficio Verificado de Raíces de Iztacalco:')}')" class="mt-4 w-full py-2.5 rounded-xl bg-chinampa hover:bg-green-800 text-white font-bold text-xs sm:text-sm">
+            📲 Solicitar servicio por WhatsApp
+          </button>
+        </article>
+      `).join('') : renderEmptyState({ icon: '🛠️', title: 'Sin oficios en este filtro', ctaHref: 'anunciate.html?tipo=oficio', ctaLabel: '🛠️ Anunciar Oficio ($50)' });
 
-      // Renderizar Empleos
-      document.getElementById('empleos-box').innerHTML = DB.empleos
-        .filter(e => matchesGlobalFilter(e.sector, `${e.puesto} ${e.negocio} ${e.requisitos}`))
-        .map(e => `
-          <div class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
-            <div class="space-y-2">
-              <span class="text-[10px] font-mono font-bold bg-chinampaLight text-chinampa px-2.5 py-0.5 rounded-full">📍 A 15 MIN DE CASA • ${e.sector}</span>
-              ${e.foto ? `
-                <img src="${e.foto}" alt="${e.puesto}" class="w-full h-44 object-cover rounded-xl border border-borde my-2" />
-              ` : ''}
-              <h3 class="font-serif font-bold text-lg">${e.puesto}</h3>
-              <p class="text-xs font-bold text-terracota">🏪 ${e.negocio}</p>
-              <p class="text-xs font-mono font-bold text-chinampa">💰 ${e.sueldo}</p>
-              <p class="text-xs text-grafito bg-papel p-3 rounded-xl border border-borde">${e.requisitos}</p>
-            </div>
-            <button onclick="openWhatsAppDirect('${e.whatsapp}', 'Hola, vi la vacante de *${e.puesto}* en Raíces de Iztacalco y me interesa postularme:')" class="mt-4 w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs">
-              📲 Postularme por WhatsApp
-            </button>
+      const eList = DB.empleos.filter(e => matchesGlobalFilter(e.sector, `${e.puesto} ${e.negocio} ${e.requisitos}`));
+      document.getElementById('empleos-box').innerHTML = eList.length > 0 ? eList.map(e => `
+        <article class="bg-white rounded-2xl border border-borde p-5 flex flex-col justify-between shadow-sm">
+          <div class="space-y-2.5">
+            <span class="text-xs font-mono font-bold bg-chinampaLight text-chinampa px-2.5 py-0.5 rounded-full">📍 A 15 MIN DE CASA • ${sanitizeHTML(e.sector)}</span>
+            ${e.foto ? `
+              <img src="${sanitizeHTML(e.foto)}" alt="${sanitizeHTML(e.puesto)}" class="w-full h-44 object-cover rounded-xl border border-borde my-2" />
+            ` : ''}
+            <h3 class="font-serif font-bold text-lg">${sanitizeHTML(e.puesto)}</h3>
+            <p class="text-xs sm:text-sm font-bold text-terracota">🏪 ${sanitizeHTML(e.negocio)}</p>
+            <p class="text-xs sm:text-sm font-mono font-bold text-chinampa">💰 ${sanitizeHTML(e.sueldo || 'Sueldo e informes en entrevista')}</p>
+            <p class="text-xs sm:text-sm text-grafito bg-papel p-3 rounded-xl border border-borde">${sanitizeHTML(e.requisitos)}</p>
           </div>
-        `).join('');
+          <button type="button" onclick="openWhatsAppDirectEncoded('${sanitizeHTML(e.whatsapp)}', '${encodeDataParam('Hola, vi la vacante de *' + e.puesto + '* en Raíces de Iztacalco y me interesa postularme:')}')" class="mt-4 w-full py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs sm:text-sm">
+            📲 Postularme por WhatsApp
+          </button>
+        </article>
+      `).join('') : renderEmptyState({ icon: '💼', title: 'Sin vacantes en este filtro', ctaHref: 'anunciate.html?tipo=empleo', ctaLabel: '💼 Publicar Vacante ($100)' });
     };
 
     document.addEventListener('DOMContentLoaded', () => {
