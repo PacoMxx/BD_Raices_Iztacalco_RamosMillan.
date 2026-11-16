@@ -335,6 +335,394 @@ const DB = {
 const SHEETS_CACHE_KEY = 'raices_sheets_cache_v1';
 const SHEETS_CACHE_TS_KEY = 'raices_sheets_cache_ts_v1';
 const SHEETS_CACHE_TTL_MS = 90 * 1000; // 90 segundos antes de volver a consultar en segundo plano
+const LOCAL_REGISTRATIONS_KEY = 'raices_registros_locales_v1';
+const MAX_SHEETS_CELL_CHARS = 47000; // Límite seguro bajo el máximo de 50,000 caracteres por celda en Google Sheets
+
+const GIROS_VALIDOS = [
+  'Comida y Antojitos',
+  'Salud y Mascotas',
+  'Talleres y Tlapalerías',
+  'Belleza y Barberías'
+];
+
+const REGISTRO_REGLAS = {
+  NOTICIA: {
+    label: 'Noticia Vecinal',
+    sectionHref: 'noticias.html',
+    sectionName: 'Noticias Vecinales',
+    photoRequired: false,
+    waRequired: false,
+    giroRequired: false
+  },
+  FOTO_HISTORIA: {
+    label: 'Crónicas y Raíces',
+    sectionHref: 'cronicas.html',
+    sectionName: 'Crónicas y Raíces',
+    photoRequired: true,
+    waRequired: false,
+    giroRequired: false
+  },
+  MASCOTA: {
+    label: 'Radar de Mascotas',
+    sectionHref: 'mascotas.html',
+    sectionName: 'Radar de Mascotas',
+    photoRequired: true,
+    waRequired: true,
+    giroRequired: false
+  },
+  TIANGUIS: {
+    label: 'Tianguis Digital',
+    sectionHref: 'tianguis.html',
+    sectionName: 'Tianguis Digital',
+    photoRequired: true,
+    waRequired: true,
+    giroRequired: false
+  },
+  OFICIO: {
+    label: 'Oficio Verificado',
+    sectionHref: 'oficios.html',
+    sectionName: 'Oficios Verificados',
+    photoRequired: false,
+    waRequired: true,
+    giroRequired: false
+  },
+  EMPLEO: {
+    label: 'Bolsa de Trabajo',
+    sectionHref: 'empleos.html',
+    sectionName: 'Bolsa de Trabajo',
+    photoRequired: false,
+    waRequired: true,
+    giroRequired: false
+  },
+  NEGOCIO: {
+    label: 'Comercio de Barrio',
+    sectionHref: 'comercio.html',
+    sectionName: 'Comercio de Barrio',
+    photoRequired: true,
+    waRequired: true,
+    giroRequired: true
+  }
+};
+
+/**
+ * Normaliza un número telefónico mexicano a 10 dígitos (elimina espacios, guiones y prefijo +52 / 521)
+ */
+function normalizePhoneMX(rawPhone) {
+  let digits = String(rawPhone || '').replace(/\D/g, '');
+  if (digits.length === 13 && digits.startsWith('521')) {
+    digits = digits.slice(3);
+  } else if (digits.length === 12 && digits.startsWith('52')) {
+    digits = digits.slice(2);
+  }
+  return digits;
+}
+
+function getMercadoPagoPlanForModalidad(modalidad) {
+  const mod = String(modalidad || 'Gratis');
+  if (mod.includes('Pro')) return MP_LINKS.SUSCRIPCION_PRO_199;
+  if (mod.includes('Destacado')) return MP_LINKS.TIANGUIS_39;
+  if (mod.includes('Oficio')) return MP_LINKS.OFICIO_50;
+  if (mod.includes('Vacante')) return MP_LINKS.VACANTE_100;
+  if (mod.includes('Boost')) return MP_LINKS.BOOST_50;
+  return null;
+}
+
+function generateRegistrationFolio() {
+  return 'RI-' + String(Math.floor(1000 + Math.random() * 9000));
+}
+
+/**
+ * Valida y normaliza un payload de registro para cualquiera de las 7 categorías
+ */
+function validateRegistrationPayload(rawPayload) {
+  const p = rawPayload || {};
+  const errors = [];
+
+  if (p.website_url_trap && String(p.website_url_trap).trim() !== '') {
+    return { valid: false, honeypot: true, errors: ['Detección anti-bots activada'], normalizedPayload: null };
+  }
+
+  const categoria = String(p.categoria || '').trim().toUpperCase();
+  const rules = REGISTRO_REGLAS[categoria];
+  if (!rules) {
+    errors.push('Selecciona una categoría válida para tu publicación.');
+  }
+
+  const sectoresValidos = SECTORES_LISTA.filter(s => s !== 'TODOS');
+  const sector = String(p.sector || '').trim();
+  if (!sectoresValidos.includes(sector)) {
+    errors.push('Selecciona un sector válido de la Colonia Gabriel Ramos Millán.');
+  }
+
+  const titulo = String(p.titulo || '').trim();
+  if (titulo.length < 3) {
+    errors.push('El título debe tener al menos 3 caracteres.');
+  } else if (titulo.length > 100) {
+    errors.push('El título no debe exceder 100 caracteres.');
+  }
+
+  const subdato = String(p.subdato || '').trim();
+  if (subdato.length < 2) {
+    errors.push('El campo de ubicación, autor o nombre secundario es obligatorio.');
+  } else if (subdato.length > 100) {
+    errors.push('El campo secundario no debe exceder 100 caracteres.');
+  }
+
+  const detalles = String(p.detalles || '').trim();
+  if (detalles.length < 5) {
+    errors.push('La descripción o detalles debe tener al menos 5 caracteres.');
+  } else if (detalles.length > 600) {
+    errors.push('La descripción no debe exceder 600 caracteres.');
+  }
+
+  const whatsappClean = normalizePhoneMX(p.whatsapp);
+  if (rules && rules.waRequired) {
+    if (!/^\d{10}$/.test(whatsappClean)) {
+      errors.push('Ingresa un número de WhatsApp válido de 10 dígitos.');
+    }
+  } else if (whatsappClean.length > 0 && !/^\d{10}$/.test(whatsappClean)) {
+    errors.push('Si ingresas un WhatsApp opcional, debe tener 10 dígitos.');
+  }
+
+  const foto = String(p.foto || '').trim();
+  if (rules && rules.photoRequired && !foto) {
+    errors.push('Por favor adjunta la fotografía requerida para esta sección.');
+  }
+  if (foto && foto.startsWith('data:image') && foto.length > 49500) {
+    errors.push('La fotografía excede el límite permitido de almacenamiento (50,000 caracteres).');
+  }
+
+  let giro = String(p.giro || '').trim();
+  if (rules && rules.giroRequired) {
+    if (!GIROS_VALIDOS.includes(giro)) {
+      errors.push('Selecciona un giro comercial válido para el negocio.');
+    }
+  }
+
+  const modalidad = String(p.modalidad || 'Gratis').trim();
+  const folio = String(p.folio || p.id || generateRegistrationFolio()).trim();
+  const sueldo = String(p.sueldo || '').trim();
+  const fecha = String(p.fecha || new Date().toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })).trim();
+
+  const normalizedPayload = {
+    website_url_trap: '',
+    id: folio,
+    folio: folio,
+    fecha: fecha,
+    categoria: categoria,
+    modalidad: modalidad,
+    giro: giro,
+    sector: sector,
+    titulo: titulo,
+    subdato: subdato,
+    detalles: detalles,
+    whatsapp: whatsappClean,
+    foto: foto,
+    sueldo: sueldo,
+    // Alias de compatibilidad hacia atrás con versiones previas de Google Apps Script
+    tipo: `${categoria} - ${modalidad}`,
+    calle: subdato,
+    descripcion: detalles,
+    precio: sueldo || modalidad
+  };
+
+  return {
+    valid: errors.length === 0,
+    honeypot: false,
+    errors: errors,
+    normalizedPayload: normalizedPayload
+  };
+}
+
+function getLocalRegistrations() {
+  try {
+    const raw = localStorage.getItem(LOCAL_REGISTRATIONS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function getCachedSheetsPublications() {
+  try {
+    const raw = localStorage.getItem(SHEETS_CACHE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveLocalRegistration(payloadObj) {
+  const list = getLocalRegistrations();
+  const folio = payloadObj.folio || payloadObj.id || generateRegistrationFolio();
+  const itemToSave = {
+    ...payloadObj,
+    id: folio,
+    folio: folio,
+    fecha: payloadObj.fecha || 'Hoy',
+    createdAt: new Date().toISOString()
+  };
+
+  const filtered = list.filter(x => String(x.folio || x.id) !== String(folio));
+  filtered.unshift(itemToSave);
+
+  try {
+    localStorage.setItem(LOCAL_REGISTRATIONS_KEY, JSON.stringify(filtered.slice(0, 50)));
+    localStorage.setItem('raices_ultimo_registro', JSON.stringify({
+      folio: folio,
+      titulo: itemToSave.titulo,
+      categoria: itemToSave.categoria,
+      sector: itemToSave.sector,
+      modalidad: itemToSave.modalidad,
+      fecha: itemToSave.createdAt
+    }));
+  } catch (quotaErr) {
+    // Si localStorage se llena por imágenes en Base64, guardar versión sin foto pesada o conservar los más recientes
+    try {
+      const compactList = filtered.slice(0, 15).map((it, idx) => idx === 0 ? it : { ...it, foto: '' });
+      localStorage.setItem(LOCAL_REGISTRATIONS_KEY, JSON.stringify(compactList));
+    } catch (e) {}
+  }
+
+  applyPublicacionesToDB(getCachedSheetsPublications());
+  return itemToSave;
+}
+
+function removeLocalRegistration(folioOrId) {
+  const list = getLocalRegistrations().filter(x => String(x.folio || x.id) !== String(folioOrId));
+  try {
+    localStorage.setItem(LOCAL_REGISTRATIONS_KEY, JSON.stringify(list));
+  } catch (e) {}
+  applyPublicacionesToDB(getCachedSheetsPublications());
+  return list;
+}
+
+function clearLocalRegistrations() {
+  try {
+    localStorage.removeItem(LOCAL_REGISTRATIONS_KEY);
+    localStorage.removeItem('raices_ultimo_registro');
+  } catch (e) {}
+  applyPublicacionesToDB(getCachedSheetsPublications());
+}
+
+/**
+ * Envía un registro a Google Sheets usando Content-Type: text/plain;charset=utf-8 (CORS-safe simple request)
+ * para poder verificar la respuesta JSON del servidor sin bloqueo por preflight OPTIONS.
+ */
+async function sendPayloadToGoogleSheets(payloadObj, customFetch) {
+  if (!GOOGLE_SHEETS_WEBAPP_URL) return { ok: true, mode: 'local-only' };
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    throw new Error('Sin conexión a internet');
+  }
+
+  const fetchFn = customFetch || (typeof fetch === 'function' ? fetch : null);
+  if (!fetchFn) return { ok: true, mode: 'no-fetch' };
+
+  const bodyStr = JSON.stringify(payloadObj);
+
+  try {
+    const res = await fetchFn(GOOGLE_SHEETS_WEBAPP_URL, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: bodyStr
+    });
+
+    if (res && res.type === 'opaque') {
+      return { ok: true, mode: 'opaque' };
+    }
+
+    if (res && typeof res.text === 'function') {
+      const text = await res.text();
+      if (text) {
+        let parsed = null;
+        try {
+          parsed = JSON.parse(text);
+        } catch (jsonErr) {
+          parsed = null;
+        }
+        if (parsed && parsed.ok === false) {
+          // Si el servidor falló al procesar una foto en Base64 (ej. permisos de DriveApp o límite de celda),
+          // reintentar automáticamente guardando los datos de texto en Google Sheets para no perder el registro.
+          if (payloadObj.foto && String(payloadObj.foto).startsWith('data:image')) {
+            const fallbackPayload = { ...payloadObj, foto: '' };
+            const retryRes = await fetchFn(GOOGLE_SHEETS_WEBAPP_URL, {
+              method: 'POST',
+              redirect: 'follow',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify(fallbackPayload)
+            });
+            if (retryRes && typeof retryRes.json === 'function') {
+              try {
+                const retryJson = await retryRes.json();
+                if (retryJson && retryJson.ok !== false) {
+                  return { ok: true, mode: 'sheets-text-fallback', warning: parsed.error };
+                }
+              } catch (e) {}
+            }
+          }
+          throw new Error(parsed.error || 'Error al guardar en Google Sheets');
+        }
+        if (parsed && parsed.ok === true) {
+          return { ok: true, mode: 'cors-json', data: parsed };
+        }
+      }
+    }
+    return { ok: true, mode: 'cors' };
+  } catch (err) {
+    // Si el error fue explícito del servidor de Google Sheets o falta de red, propagarlo
+    if (err && err.message && (err.message.includes('Sin conexión') || err.message.includes('Error al guardar'))) {
+      throw err;
+    }
+    // Fallback a mode: 'no-cors' con text/plain en caso de bloqueo de redirección CORS por el navegador
+    await fetchFn(GOOGLE_SHEETS_WEBAPP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: bodyStr
+    });
+    return { ok: true, mode: 'no-cors-fallback' };
+  }
+}
+
+/**
+ * Función integral de registro: valida, guarda localmente, actualiza DB y sincroniza con Google Sheets
+ */
+async function registrarPublicacion(rawPayload, options = {}) {
+  const validation = validateRegistrationPayload(rawPayload);
+  if (validation.honeypot) {
+    return { ok: true, honeypot: true, folio: null };
+  }
+  if (!validation.valid) {
+    return { ok: false, errors: validation.errors, payload: null };
+  }
+
+  const payload = validation.normalizedPayload;
+  const mpPlan = getMercadoPagoPlanForModalidad(payload.modalidad);
+  const rules = REGISTRO_REGLAS[payload.categoria];
+
+  let remoteResult = { ok: true, mode: 'skipped' };
+  if (options.sendToRemote !== false) {
+    remoteResult = await sendPayloadToGoogleSheets(payload, options.customFetch);
+  }
+
+  const savedItem = saveLocalRegistration(payload);
+  updateSponsorsTicker();
+
+  return {
+    ok: true,
+    folio: payload.folio,
+    payload: savedItem,
+    mpPlan: mpPlan,
+    sectionHref: rules ? rules.sectionHref : 'index.html',
+    sectionName: rules ? rules.sectionName : 'Portada',
+    remoteResult: remoteResult
+  };
+}
 
 function applyPublicacionesToDB(publicaciones) {
   DB.noticias = [...INITIAL_DATA.noticias];
@@ -345,16 +733,40 @@ function applyPublicacionesToDB(publicaciones) {
   DB.empleos = [...INITIAL_DATA.empleos];
   DB.tianguis = [...INITIAL_DATA.tianguis];
 
-  if (!Array.isArray(publicaciones)) return;
+  const remoteList = Array.isArray(publicaciones) ? publicaciones : [];
+  const localList = getLocalRegistrations();
 
-  publicaciones.forEach((pub, index) => {
+  // Combinar publicaciones de Google Sheets + registros locales sin duplicar folios/IDs
+  const seenIds = new Set();
+  const combined = [];
+
+  // Primero agregamos las remotas y luego las locales al frente (en orden cronológico)
+  remoteList.forEach(item => {
+    if (!item) return;
+    const key = String(item.id || item.folio || '').trim();
+    if (key) seenIds.add(key);
+    combined.push(item);
+  });
+
+  // Los registros locales que aún no vienen en remoteList se agregan al final de combined
+  // (como usamos unshift abajo, los últimos en combined quedan hasta arriba de cada sección)
+  for (let i = localList.length - 1; i >= 0; i--) {
+    const loc = localList[i];
+    if (!loc) continue;
+    const key = String(loc.id || loc.folio || '').trim();
+    if (key && seenIds.has(key)) continue;
+    if (key) seenIds.add(key);
+    combined.push(loc);
+  }
+
+  combined.forEach((pub, index) => {
     const cat = String(pub.categoria || '').trim().toUpperCase();
     const fotoOk = normalizePhotoUrl(pub.foto);
     const tituloOk = cleanDisplayField(pub.titulo, 'Publicación Vecinal');
     const subdatoOk = cleanDisplayField(pub.subdato, 'Col. Gabriel Ramos Millán');
     const detallesOk = cleanDisplayField(pub.detalles, '');
     const sectorOk = pub.sector || 'Bramadero';
-    const pubId = pub.id || `pub_${index}`;
+    const pubId = pub.id || pub.folio || `pub_${index}`;
 
     if (cat === 'NOTICIA') {
       DB.noticias.unshift({
@@ -404,12 +816,19 @@ function applyPublicacionesToDB(publicaciones) {
         whatsapp: pub.whatsapp || ADMIN_WHATSAPP
       });
     } else if (cat === 'EMPLEO') {
+      let negocioVal = subdatoOk;
+      let sueldoVal = cleanDisplayField(pub.sueldo, '');
+      if (!sueldoVal && subdatoOk.includes('•')) {
+        const parts = subdatoOk.split('•');
+        negocioVal = parts[0].trim() || subdatoOk;
+        sueldoVal = parts.slice(1).join('•').trim();
+      }
       DB.empleos.unshift({
         id: pubId,
         puesto: tituloOk,
         sector: sectorOk,
-        negocio: subdatoOk,
-        sueldo: pub.sueldo || 'Consultar en entrevista',
+        negocio: negocioVal,
+        sueldo: sueldoVal || 'Consultar en entrevista',
         requisitos: detallesOk,
         foto: fotoOk,
         whatsapp: pub.whatsapp || ADMIN_WHATSAPP
@@ -451,18 +870,12 @@ function applyPublicacionesToDB(publicaciones) {
   });
 }
 
-// Hidratación síncrona instantánea (0 ms) al abrir o cambiar de página
+// Hidratación síncrona instantánea (0 ms) al abrir o cambiar de página (incluye caché de Sheets y registros locales)
 (function hydrateFromLocalCacheImmediately() {
   try {
-    const raw = localStorage.getItem(SHEETS_CACHE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) {
-        applyPublicacionesToDB(parsed);
-      }
-    }
+    applyPublicacionesToDB(getCachedSheetsPublications());
   } catch (e) {
-    console.warn('No se pudo leer caché local:', e);
+    console.warn('No se pudo hidratar caché local:', e);
   }
 })();
 

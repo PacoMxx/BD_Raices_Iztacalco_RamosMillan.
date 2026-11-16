@@ -82,32 +82,41 @@ function doPost(e) {
 
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
 
-    // Si trae foto en Base64, la guardamos en la carpeta "Raices_Iztacalco_Fotos"
+    // Si trae foto en Base64, intentamos guardarla en Drive ("Raices_Iztacalco_Fotos").
+    // Si Drive no está autorizado aún, usamos fallback seguro en Base64 (< 49,000 caracteres por límite de celda en Sheets).
     let fotoUrl = "";
     if (data.foto && String(data.foto).startsWith("data:image")) {
-      fotoUrl = guardarFotoEnDrive(data.foto, `${data.categoria || "POST"}_${data.folio || ""}`);
+      try {
+        fotoUrl = guardarFotoEnDrive(data.foto, `${data.categoria || "POST"}_${data.folio || ""}`);
+      } catch (driveErr) {
+        const rawBase64 = String(data.foto);
+        fotoUrl = rawBase64.length <= 49000 ? rawBase64 : "";
+      }
     } else if (data.foto) {
-      fotoUrl = String(data.foto);
+      const rawFoto = String(data.foto);
+      fotoUrl = rawFoto.length <= 49000 ? rawFoto : "";
     }
 
     const fechaStr = Utilities.formatDate(new Date(), "America/Mexico_City", "dd/MM/yyyy HH:mm");
-    const idUnico = data.folio || ("ID-" + Date.now());
+    const idUnico = data.folio || data.id || ("ID-" + Date.now());
+    const safeCell = (val, maxLen) => String(val || "").replace(/^[=+\-@]/, "'").trim().slice(0, maxLen || 1000);
 
-    // Orden de columnas compatible con tu hoja actual (Ajusta si tu orden de columnas varía):
-    // [ID/Folio, Fecha, Estado, Categoria, Modalidad, Sector, Titulo, Subdato, Detalles, WhatsApp, FotoURL, Giro]
+    // Orden de columnas compatible con tu hoja actual:
+    // [ID/Folio, Fecha, Estado, Categoria, Modalidad, Sector, Titulo, Subdato, Detalles, WhatsApp, FotoURL, Giro, Sueldo]
     sheet.appendRow([
-      idUnico,
+      safeCell(idUnico, 60),
       fechaStr,
       "PENDIENTE",
-      data.categoria || "NOTICIA",
-      data.modalidad || "Gratis",
-      data.sector || "Bramadero",
-      data.titulo || "",
-      data.subdato || "",
-      data.detalles || "",
-      data.whatsapp || "",
+      safeCell(data.categoria || "NOTICIA", 40),
+      safeCell(data.modalidad || "Gratis", 60),
+      safeCell(data.sector || "Bramadero", 60),
+      safeCell(data.titulo, 150),
+      safeCell(data.subdato, 150),
+      safeCell(data.detalles, 1000),
+      safeCell(data.whatsapp, 25),
       fotoUrl,
-      data.giro || ""
+      safeCell(data.giro, 80),
+      safeCell(data.sueldo, 100)
     ]);
 
     // Limpiar caché para que cuando se apruebe se refleje rápido
@@ -171,7 +180,8 @@ function doGet(e) {
       detalles: rowObj.detalles || r[8] || "",
       whatsapp: rowObj.whatsapp || r[9] || "",
       foto: rowObj.foto || rowObj.fotourl || r[10] || "",
-      giro: rowObj.giro || r[11] || ""
+      giro: rowObj.giro || r[11] || "",
+      sueldo: rowObj.sueldo || r[12] || ""
     });
   }
 

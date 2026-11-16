@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suite de Pruebas de Registro | Raíces de Iztacalco</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#9B2C2C" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="app.js"></script>
+</head>
+<body data-page="tests" class="bg-papel text-tinta font-sans min-h-screen flex flex-col">
+
+  <div id="shared-header"></div>
+
+  <main class="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-6 pb-24 lg:pb-16">
+
+    <div class="bg-white rounded-2xl border-2 border-stone-900 p-5 sm:p-6 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-mono text-xs font-bold">
+            🧪 EJECUCIÓN AUTOMATIZADA DE PRUEBAS (QA)
+          </span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-2">
+            Verificación del Sistema de Registro y Publicación
+          </h2>
+          <p class="text-xs sm:text-sm text-grafito mt-1">
+            Valida las 7 categorías de registro, candados de seguridad, compresión de fotos, sincronización con Google Sheets y renderizado en secciones.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" onclick="runAllTests()" id="btn-run-tests" class="px-5 py-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 font-extrabold text-xs sm:text-sm shadow transition">
+            ▶️ Ejecutar Todas las Pruebas
+          </button>
+          <a href="anunciate.html" class="px-4 py-3 rounded-xl bg-crema hover:bg-stone-200 text-stone-900 font-bold text-xs sm:text-sm border border-borde transition">
+            ← Volver a Publicar
+          </a>
+        </div>
+      </div>
+
+      <!-- Resumen numérico -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+        <div class="p-3.5 rounded-xl bg-papel border border-borde text-center">
+          <span class="text-xs font-mono uppercase text-grafito block">Total Pruebas</span>
+          <strong id="stat-total" class="font-mono text-2xl font-extrabold text-stone-900">0</strong>
+        </div>
+        <div class="p-3.5 rounded-xl bg-green-50 border border-green-300 text-center">
+          <span class="text-xs font-mono uppercase text-chinampa block">Exitosas (PASS)</span>
+          <strong id="stat-passed" class="font-mono text-2xl font-extrabold text-chinampa">0</strong>
+        </div>
+        <div class="p-3.5 rounded-xl bg-red-50 border border-red-200 text-center">
+          <span class="text-xs font-mono uppercase text-red-800 block">Fallidas (FAIL)</span>
+          <strong id="stat-failed" class="font-mono text-2xl font-extrabold text-red-700">0</strong>
+        </div>
+        <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-center">
+          <span class="text-xs font-mono uppercase text-amber-900 block">Tiempo</span>
+          <strong id="stat-time" class="font-mono text-2xl font-extrabold text-amber-900">0 ms</strong>
+        </div>
+      </div>
+    </div>
+
+    <div id="test-results-container" class="space-y-3"></div>
+
+  </main>
+
+  <div id="shared-footer"></div>
+
+  <script>
+    const SAMPLE_PHOTO_BASE64 = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=';
+
+    function assert(condition, message) {
+      if (!condition) {
+        throw new Error(message || 'Falló la aserción');
+      }
+    }
+
+    function assertEqual(actual, expected, message) {
+      if (actual !== expected) {
+        throw new Error(`${message || 'Valor inesperado'}: esperado "${expected}", recibido "${actual}"`);
+      }
+    }
+
+    const TEST_SUITE = [
+      {
+        name: '1. Sanitización XSS y codificación segura de parámetros',
+        fn: async () => {
+          const dirty = `<script>alert("xss")<\/script>'Taquería "El Güero"'`;
+          const clean = sanitizeHTML(dirty);
+          assert(!clean.includes('<script>'), 'No debe contener etiquetas <script>');
+          assert(clean.includes('&quot;') && clean.includes('&#039;'), 'Debe escapar comillas simples y dobles');
+          const encoded = encodeDataParam(dirty);
+          const decoded = decodeDataParam(encoded);
+          assertEqual(decoded, dirty, 'decodeDataParam debe revertir encodeDataParam fielmente');
+        }
+      },
+      {
+        name: '2. Normalización de números telefónicos de 10 dígitos (normalizePhoneMX)',
+        fn: async () => {
+          assertEqual(normalizePhoneMX('55 1234 5678'), '5512345678', 'Debe limpiar espacios');
+          assertEqual(normalizePhoneMX('55-1234-5678'), '5512345678', 'Debe limpiar guiones');
+          assertEqual(normalizePhoneMX('+52 55 1234 5678'), '5512345678', 'Debe quitar prefijo +52');
+          assertEqual(normalizePhoneMX('+5215512345678'), '5512345678', 'Debe quitar prefijo +521');
+        }
+      },
+      {
+        name: '3. Normalización de URLs de fotografías (Google Drive, HTTPS y Base64)',
+        fn: async () => {
+          const driveLink = 'https://drive.google.com/file/d/1AbCdEfGhIjKlMnOpQrStUvWxYz123456/view?usp=sharing';
+          assertEqual(
+            normalizePhotoUrl(driveLink),
+            'https://lh3.googleusercontent.com/d/1AbCdEfGhIjKlMnOpQrStUvWxYz123456',
+            'Debe transformar link de Google Drive a CDN lh3'
+          );
+          assertEqual(normalizePhotoUrl(SAMPLE_PHOTO_BASE64), SAMPLE_PHOTO_BASE64, 'Debe preservar imágenes Base64 válidas');
+          assertEqual(normalizePhotoUrl('javascript:alert(1)'), '', 'Debe rechazar esquemas inseguros');
+        }
+      },
+      {
+        name: '4. Candado anti-bots Honeypot bloquea envíos automatizados',
+        fn: async () => {
+          const res = await registrarPublicacion({
+            website_url_trap: 'http://spam-bot.example.com',
+            categoria: 'NOTICIA',
+            sector: 'Bramadero',
+            titulo: 'Spam Bot Post',
+            subdato: 'Calle falsa',
+            detalles: 'Contenido generado por bot'
+          }, { sendToRemote: false });
+          assert(res.ok === true && res.honeypot === true, 'Debe detectar honeypot y no guardar registro');
+          assertEqual(res.folio, null, 'No debe asignar folio a bots');
+        }
+      },
+      {
+        name: '5. Validación de campos obligatorios, fotos requeridas y límite de 50,000 caracteres',
+        fn: async () => {
+          const sinTitulo = validateRegistrationPayload({
+            categoria: 'NOTICIA',
+            sector: 'Bramadero',
+            titulo: 'No',
+            subdato: 'Sur 157',
+            detalles: 'Detalles válidos para la prueba'
+          });
+          assert(!sinTitulo.valid, 'Debe rechazar título menor a 3 caracteres');
+
+          const mascotaSinFoto = validateRegistrationPayload({
+            categoria: 'MASCOTA',
+            sector: 'Bramadero',
+            titulo: 'Se busca perrito Canelo',
+            subdato: 'Sur 157',
+            detalles: 'Collar rojo, muy noble',
+            whatsapp: '5512345678',
+            foto: ''
+          });
+          assert(!mascotaSinFoto.valid, 'Debe exigir fotografía en MASCOTA');
+
+          const fotoExcesiva = 'data:image/jpeg;base64,' + 'A'.repeat(50000);
+          const conFotoExcesiva = validateRegistrationPayload({
+            categoria: 'MASCOTA',
+            sector: 'Bramadero',
+            titulo: 'Se busca perrito Canelo',
+            subdato: 'Sur 157',
+            detalles: 'Collar rojo, muy noble',
+            whatsapp: '5512345678',
+            foto: fotoExcesiva
+          });
+          assert(!conFotoExcesiva.valid, 'Debe rechazar fotos Base64 que excedan el límite de celda de Google Sheets');
+        }
+      },
+      {
+        name: '6. Registro completo de Categoría NOTICIA (Gratis) y aparición en DB.noticias',
+        fn: async () => {
+          const res = await registrarPublicacion({
+            categoria: 'NOTICIA',
+            modalidad: 'Gratis',
+            sector: 'Bramadero',
+            titulo: 'Jornada de poda en Sur 157',
+            subdato: 'Sur 157 esq. Oriente 104',
+            detalles: 'Vecinos reportan brigada de alumbrado y poda trabajando hoy por la mañana.',
+            whatsapp: '55 9876 5432'
+          }, { sendToRemote: false });
+
+          assert(res.ok && res.folio.startsWith('RI-'), 'Debe generar folio RI-XXXX');
+          assertEqual(res.mpPlan, null, 'Noticia debe ser gratuita sin plan MP');
+          assertEqual(res.sectionHref, 'noticias.html', 'Debe enlazar a noticias.html');
+          const enDB = DB.noticias.find(n => n.id === res.folio);
+          assert(Boolean(enDB), 'La noticia registrada debe aparecer inmediatamente en DB.noticias');
+          assertEqual(enDB.titulo, 'Jornada de poda en Sur 157', 'Título en DB.noticias debe coincidir');
+        }
+      },
+      {
+        name: '7. Registro completo de Categoría FOTO_HISTORIA y aparición en DB.cronicas',
+        fn: async () => {
+          const res = await registrarPublicacion({
+            categoria: 'FOTO_HISTORIA',
+            modalidad: 'Gratis',
+            sector: 'Tlacotal',
+            titulo: 'Mercado Tlacotal en 1975',
+            subdato: 'Familia Hernández',
+            detalles: 'Fotografía familiar tomada en la inauguración de los locales exteriores.',
+            foto: SAMPLE_PHOTO_BASE64
+          }, { sendToRemote: false });
+
+          assert(res.ok, 'Debe registrar FOTO_HISTORIA con foto válida');
+          const enDB = DB.cronicas.find(c => c.id === res.folio);
+          assert(Boolean(enDB), 'La crónica debe aparecer en DB.cronicas');
+          assertEqual(enDB.autor, 'Familia Hernández', 'El autor debe mapearse desde subdato');
+        }
+      },
+      {
+        name: '8. Registro de Categoría MASCOTA (Gratis y Boost $50) y aparición en DB.mascotas',
+        fn: async () => {
+          const resGratis = await registrarPublicacion({
+            categoria: 'MASCOTA',
+            modalidad: 'Gratis',
+            sector: 'Cuchilla',
+            titulo: 'Perrito mestizo encontrado',
+            subdato: 'Oriente 106 esq. Sur 159',
+            detalles: 'Tiene collar azul sin placa, resguardado por vecinos.',
+            whatsapp: '5511223344',
+            foto: SAMPLE_PHOTO_BASE64
+          }, { sendToRemote: false });
+          assert(resGratis.ok && resGratis.mpPlan === null, 'Mascota Gratis no requiere pago');
+
+          const resBoost = await registrarPublicacion({
+            categoria: 'MASCOTA',
+            modalidad: 'Boost $50',
+            sector: 'Bramadero',
+            titulo: 'Se busca a Michi urgente',
+            subdato: 'Sur 163 cerca del mercado',
+            detalles: 'Gatito atigrado, se ofrece recompensa.',
+            whatsapp: '5511223344',
+            foto: SAMPLE_PHOTO_BASE64
+          }, { sendToRemote: false });
+          assert(resBoost.ok && resBoost.mpPlan && resBoost.mpPlan.amount.includes('$50'), 'Mascota Boost debe activar plan de $50 MXN');
+          const enDB = DB.mascotas.find(m => m.id === resBoost.folio);
+          assert(Boolean(enDB) && enDB.destacado === true, 'Mascota Boost debe marcarse como destacada en DB.mascotas');
+        }
+      },
+      {
+        name: '9. Registro de Categoría TIANGUIS ($39 MXN) y aparición en DB.tianguis',
+        fn: async () => {
+          const res = await registrarPublicacion({
+            categoria: 'TIANGUIS',
+            modalidad: 'Destacado $39',
+            sector: 'Av. Té / Alcaldía',
+            titulo: 'Patines en línea talla 25 — $450',
+            subdato: 'Explanada Alcaldía Iztacalco',
+            detalles: 'En excelente estado, poco uso, llantas de gel.',
+            whatsapp: '5544332211',
+            foto: SAMPLE_PHOTO_BASE64
+          }, { sendToRemote: false });
+
+          assert(res.ok && res.mpPlan === MP_LINKS.TIANGUIS_39, 'Tianguis debe activar link de pago de $39');
+          const enDB = DB.tianguis.find(t => t.id === res.folio);
+          assert(Boolean(enDB), 'El artículo debe aparecer en DB.tianguis');
+          assertEqual(enDB.puntoEntrega, 'Explanada Alcaldía Iztacalco', 'Punto de entrega seguro debe coincidir');
+        }
+      },
+      {
+        name: '10. Registro de Categoría OFICIO ($50 MXN) y aparición en DB.oficios',
+        fn: async () => {
+          const res = await registrarPublicacion({
+            categoria: 'OFICIO',
+            modalidad: 'Oficio $50',
+            sector: 'Coyuya / Plutarco',
+            titulo: 'Cerrajería 24 Horas y Programación de Llaves',
+            subdato: 'Maestro Armando Ruiz',
+            detalles: 'Apertura de chapas sin dañar puerta, atención en 15 minutos en la colonia.',
+            whatsapp: '+52 55 6677 8899'
+          }, { sendToRemote: false });
+
+          assert(res.ok && res.mpPlan === MP_LINKS.OFICIO_50, 'Oficio debe activar link de pago de $50');
+          assertEqual(res.payload.whatsapp, '5566778899', 'WhatsApp debe normalizarse a 10 dígitos');
+          const enDB = DB.oficios.find(o => o.id === res.folio);
+          assert(Boolean(enDB) && enDB.nombre === 'Maestro Armando Ruiz', 'El oficio debe aparecer en DB.oficios con el nombre del maestro');
+        }
+      },
+      {
+        name: '11. Registro de Categoría EMPLEO ($100 MXN con sueldo) y aparición en DB.empleos',
+        fn: async () => {
+          const res = await registrarPublicacion({
+            categoria: 'EMPLEO',
+            modalidad: 'Vacante $100',
+            sector: 'Bramadero',
+            titulo: 'Cajero(a) de Medio Tiempo',
+            subdato: 'Cremería La Vaquita',
+            sueldo: '$2,100 semanales + bono',
+            detalles: 'Turno matutino de 8:00 a 15:00 h, descanso entre semana.',
+            whatsapp: '5599887766'
+          }, { sendToRemote: false });
+
+          assert(res.ok && res.mpPlan === MP_LINKS.VACANTE_100, 'Empleo debe activar link de pago de $100');
+          const enDB = DB.empleos.find(e => e.id === res.folio);
+          assert(Boolean(enDB), 'La vacante debe aparecer en DB.empleos');
+          assertEqual(enDB.sueldo, '$2,100 semanales + bono', 'El sueldo explícito debe conservarse en DB.empleos');
+        }
+      },
+      {
+        name: '12. Registro de Categoría NEGOCIO (Plan Pro $199) con Giro y Coordenadas en Mapa',
+        fn: async () => {
+          const res = await registrarPublicacion({
+            categoria: 'NEGOCIO',
+            modalidad: 'Plan Pro $199',
+            giro: 'Comida y Antojitos',
+            sector: 'Tlacotal',
+            titulo: 'Tacos y Pozole Doña Lupita',
+            subdato: 'Sur 125 esq. Oriente 100-A',
+            detalles: 'Agua fresca de medio litro gratis al mencionar Raíces de Iztacalco.',
+            whatsapp: '5522334455',
+            foto: SAMPLE_PHOTO_BASE64
+          }, { sendToRemote: false });
+
+          assert(res.ok && res.mpPlan === MP_LINKS.SUSCRIPCION_PRO_199, 'Negocio debe activar plan Pro $199');
+          const enDB = DB.negocios.find(n => n.id === res.folio);
+          assert(Boolean(enDB), 'El negocio debe aparecer en DB.negocios');
+          assertEqual(enDB.giro, 'Comida y Antojitos', 'El giro seleccionado debe conservarse');
+          assert(typeof enDB.lat === 'number' && typeof enDB.lng === 'number', 'Debe asignar coordenadas válidas para el mapa');
+        }
+      },
+      {
+        name: '13. Envío a Google Sheets con Content-Type text/plain y fallback automático ante error de Drive',
+        fn: async () => {
+          const calls = [];
+          const mockFetch = async (url, opts) => {
+            calls.push({ url, opts });
+            // En el primer intento simulamos un fallo de DriveApp con imagen Base64
+            if (calls.length === 1) {
+              return {
+                type: 'cors',
+                text: async () => JSON.stringify({ ok: false, error: 'DriveApp permission error' }),
+                json: async () => ({ ok: false, error: 'DriveApp permission error' })
+              };
+            }
+            // En el segundo intento (fallback de texto sin foto) responde ok: true
+            return {
+              type: 'cors',
+              text: async () => JSON.stringify({ ok: true, id: 'RI-TEST' }),
+              json: async () => ({ ok: true, id: 'RI-TEST' })
+            };
+          };
+
+          const result = await sendPayloadToGoogleSheets({
+            folio: 'RI-TEST',
+            categoria: 'MASCOTA',
+            titulo: 'Prueba Drive Fallback',
+            foto: SAMPLE_PHOTO_BASE64
+          }, mockFetch);
+
+          assertEqual(calls.length, 2, 'Debe reintentar automáticamente sin foto Base64 si DriveApp falla en el servidor');
+          assert(calls[0].opts.headers['Content-Type'].includes('text/plain'), 'Debe usar text/plain para evitar bloqueo por preflight OPTIONS');
+          assertEqual(result.ok, true, 'El resultado final con fallback debe ser exitoso');
+        }
+      },
+      {
+        name: '14. Deduplicación entre Google Sheets y almacenamiento local (applyPublicacionesToDB)',
+        fn: async () => {
+          const res = await registrarPublicacion({
+            folio: 'RI-DEDUP-99',
+            categoria: 'NOTICIA',
+            modalidad: 'Gratis',
+            sector: 'Bramadero',
+            titulo: 'Noticia Única Sin Duplicar',
+            subdato: 'Sur 157',
+            detalles: 'Verificando que al aprobarse en Google Sheets no aparezca dos veces.'
+          }, { sendToRemote: false });
+
+          // Simulamos que Google Sheets ya devuelve el mismo folio aprobado
+          applyPublicacionesToDB([{
+            id: 'RI-DEDUP-99',
+            categoria: 'NOTICIA',
+            sector: 'Bramadero',
+            titulo: 'Noticia Única Sin Duplicar',
+            subdato: 'Sur 157',
+            detalles: 'Verificando que al aprobarse en Google Sheets no aparezca dos veces.'
+          }]);
+
+          const matches = DB.noticias.filter(n => n.id === 'RI-DEDUP-99');
+          assertEqual(matches.length, 1, 'El folio RI-DEDUP-99 debe aparecer exactamente 1 vez en DB.noticias');
+        }
+      }
+    ];
+
+    async function runAllTests() {
+      const container = document.getElementById('test-results-container');
+      const totalEl = document.getElementById('stat-total');
+      const passedEl = document.getElementById('stat-passed');
+      const failedEl = document.getElementById('stat-failed');
+      const timeEl = document.getElementById('stat-time');
+
+      // Respaldar estado previo de localStorage para no alterar los registros reales del usuario
+      const backupLocalRegs = localStorage.getItem(LOCAL_REGISTRATIONS_KEY);
+      const backupLastReg = localStorage.getItem('raices_ultimo_registro');
+
+      container.innerHTML = '';
+      let passed = 0;
+      let failed = 0;
+      const startTime = performance.now();
+
+      try {
+        clearLocalRegistrations();
+
+        for (let i = 0; i < TEST_SUITE.length; i++) {
+          const test = TEST_SUITE[i];
+          const t0 = performance.now();
+          let ok = false;
+          let errMsg = '';
+
+          try {
+            await test.fn();
+            ok = true;
+            passed++;
+          } catch (err) {
+            ok = false;
+            failed++;
+            errMsg = err && err.message ? err.message : String(err);
+          }
+
+          const elapsed = Math.round(performance.now() - t0);
+          const card = document.createElement('div');
+          card.className = ok
+            ? 'p-4 rounded-xl bg-white border-l-4 border-chinampa border border-borde flex items-center justify-between gap-3 shadow-xs'
+            : 'p-4 rounded-xl bg-red-50 border-l-4 border-red-600 border border-red-300 flex flex-col gap-1 shadow-xs';
+
+          card.innerHTML = ok ? `
+            <div class="flex items-center gap-2.5">
+              <span class="px-2 py-0.5 rounded bg-chinampa text-white font-mono text-xs font-extrabold">PASS</span>
+              <span class="font-bold text-xs sm:text-sm text-stone-900">${sanitizeHTML(test.name)}</span>
+            </div>
+            <span class="font-mono text-xs text-stone-500 shrink-0">${elapsed} ms</span>
+          ` : `
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <span class="px-2 py-0.5 rounded bg-red-700 text-white font-mono text-xs font-extrabold">FAIL</span>
+                <span class="font-bold text-xs sm:text-sm text-red-950">${sanitizeHTML(test.name)}</span>
+              </div>
+              <span class="font-mono text-xs text-red-800 shrink-0">${elapsed} ms</span>
+            </div>
+            <p class="text-xs font-mono text-red-800 pl-14">${sanitizeHTML(errMsg)}</p>
+          `;
+          container.appendChild(card);
+        }
+      } finally {
+        // Restaurar estado original de localStorage
+        if (backupLocalRegs !== null) {
+          localStorage.setItem(LOCAL_REGISTRATIONS_KEY, backupLocalRegs);
+        } else {
+          localStorage.removeItem(LOCAL_REGISTRATIONS_KEY);
+        }
+        if (backupLastReg !== null) {
+          localStorage.setItem('raices_ultimo_registro', backupLastReg);
+        } else {
+          localStorage.removeItem('raices_ultimo_registro');
+        }
+        applyPublicacionesToDB(getCachedSheetsPublications());
+      }
+
+      const totalTime = Math.round(performance.now() - startTime);
+      totalEl.textContent = String(TEST_SUITE.length);
+      passedEl.textContent = String(passed);
+      failedEl.textContent = String(failed);
+      timeEl.textContent = `${totalTime} ms`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSharedLayout('tests', false);
+      runAllTests();
+    });
+  </script>
+</body>
+</html>

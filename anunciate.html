@@ -84,9 +84,14 @@
           <span id="form-badge" class="text-xs font-mono uppercase font-bold text-terracota">SECCIÓN</span>
           <h3 id="form-heading" class="font-serif text-xl sm:text-2xl font-bold text-tinta">Formulario</h3>
         </div>
-        <span class="text-xs font-mono bg-green-50 text-chinampa border border-green-200 px-2.5 py-1 rounded-md font-bold">
-          🛡️ Registro Protegido
-        </span>
+        <div class="flex items-center gap-2">
+          <a href="tests.html" class="text-xs font-mono bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 px-2.5 py-1 rounded-md font-bold transition">
+            🧪 Ejecutar Pruebas
+          </a>
+          <span class="text-xs font-mono bg-green-50 text-chinampa border border-green-200 px-2.5 py-1 rounded-md font-bold">
+            🛡️ Registro Protegido
+          </span>
+        </div>
       </div>
 
       <form id="dynamic-form" onsubmit="submitDynamicForm(event)" class="space-y-5 relative">
@@ -97,13 +102,15 @@
 
         <div id="dynamic-fields-container" class="space-y-4"></div>
 
+        <div id="form-error-box" class="hidden p-3.5 rounded-xl bg-red-50 border-2 border-red-600 text-red-950 text-xs sm:text-sm space-y-1"></div>
+
         <div id="photo-upload-section" class="p-4 rounded-2xl bg-papel border-2 border-dashed border-stone-300 hover:border-terracota transition space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <label id="photo-label" for="f-photo-input" class="block text-xs sm:text-sm font-bold uppercase font-mono text-tinta">
                 📸 Fotografía
               </label>
-              <p class="text-xs text-grafito">Formatos JPG o PNG optimizados en alta nitidez (850px).</p>
+              <p class="text-xs text-grafito">Formatos JPG, PNG o WebP optimizados automáticamente para carga rápida y compatible con Google Sheets.</p>
             </div>
             <label for="f-photo-input" class="cursor-pointer inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-tinta hover:bg-stone-800 text-white font-bold text-xs sm:text-sm shrink-0">
               <span>📁 Elegir o Tomar Foto</span>
@@ -116,7 +123,7 @@
           <div id="photo-preview-box" class="hidden pt-2 flex items-center gap-4">
             <img id="photo-preview-img" src="" alt="Vista previa" class="w-24 h-24 object-cover rounded-xl border border-borde shadow-sm" />
             <div class="text-xs sm:text-sm space-y-1">
-              <p class="font-bold text-chinampa">✓ Fotografía optimizada y lista</p>
+              <p id="photo-ready-label" class="font-bold text-chinampa">✓ Fotografía optimizada y lista</p>
               <button type="button" onclick="clearSelectedPhoto()" class="text-red-700 font-bold hover:underline">✕ Quitar foto</button>
             </div>
           </div>
@@ -133,6 +140,24 @@
       <div id="result-box" class="hidden mt-6 p-5 rounded-xl bg-chinampaLight border-2 border-chinampa text-tinta text-xs sm:text-sm space-y-3"></div>
     </div>
 
+    <!-- Panel de Seguimiento: Mis Publicaciones Registradas en este Dispositivo -->
+    <section id="mis-registros-section" class="hidden bg-white rounded-2xl border border-borde p-5 sm:p-6 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-borde pb-3">
+        <div>
+          <span class="text-xs font-mono font-bold text-chinampa bg-chinampaLight px-2.5 py-0.5 rounded-full">
+            📋 HISTORIAL DE REGISTROS EN ESTE DISPOSITIVO
+          </span>
+          <h3 class="font-serif text-lg sm:text-xl font-bold text-stone-900 mt-1">
+            Mis Publicaciones Registradas
+          </h3>
+        </div>
+        <button type="button" onclick="handleClearAllLocalRegistrations()" class="px-3 py-1.5 rounded-lg bg-crema hover:bg-red-100 text-stone-800 hover:text-red-900 text-xs font-bold border border-borde transition">
+          🗑️ Limpiar historial local
+        </button>
+      </div>
+      <div id="mis-registros-list" class="grid grid-cols-1 md:grid-cols-2 gap-3.5"></div>
+    </section>
+
   </main>
 
   <div id="shared-footer"></div>
@@ -141,6 +166,22 @@
     let currentCat = 'NOTICIA';
     let compressedPhotoBase64 = '';
     let lastSubmittedPayload = null;
+
+    function handlePhoneInput(inputEl) {
+      if (!inputEl) return;
+      inputEl.value = normalizePhoneMX(inputEl.value).slice(0, 10);
+    }
+
+    function onMascotaPlanChange(val) {
+      const modInput = document.getElementById('f-modalidad');
+      if (modInput) modInput.value = val;
+      const btn = document.getElementById('btn-submit-dynamic');
+      if (btn) {
+        btn.textContent = val.includes('Boost')
+          ? 'Registrar Alerta y Continuar al Pago ($50) →'
+          : 'Publicar Alerta de Mascota (Gratis) →';
+      }
+    }
 
     const CONFIG_CATEGORIAS = {
       NOTICIA: {
@@ -154,7 +195,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="f-titulo" class="block text-xs font-bold uppercase font-mono mb-1">1. Título de la Noticia *</label>
-              <input id="f-titulo" type="text" required maxlength="100" placeholder="Ej. Jornada de bacheo sobre Calle Sur 157" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-titulo" type="text" required minlength="3" maxlength="100" placeholder="Ej. Jornada de bacheo sobre Calle Sur 157" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
               <label for="f-sector" class="block text-xs font-bold uppercase font-mono mb-1">2. Sector *</label>
@@ -166,16 +207,16 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="f-subdato" class="block text-xs font-bold uppercase font-mono mb-1">3. Ubicación exacta *</label>
-              <input id="f-subdato" type="text" required maxlength="100" placeholder="Ej. Sur 157 esq. Oriente 104" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-subdato" type="text" required minlength="2" maxlength="100" placeholder="Ej. Sur 157 esq. Oriente 104" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
               <label for="f-wa" class="block text-xs font-bold uppercase font-mono mb-1">4. Tu WhatsApp (Opcional para seguimiento)</label>
-              <input id="f-wa" type="tel" pattern="[0-9]{10}" placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+              <input id="f-wa" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="14" oninput="handlePhoneInput(this)" placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
             </div>
           </div>
           <div>
             <label for="f-detalles" class="block text-xs font-bold uppercase font-mono mb-1">5. Redacción con respeto *</label>
-            <textarea id="f-detalles" rows="4" required maxlength="600" placeholder="Escribe los detalles de tu aviso o noticia para los vecinos..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+            <textarea id="f-detalles" rows="4" required minlength="5" maxlength="600" placeholder="Escribe los detalles de tu aviso o noticia para los vecinos..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
       },
@@ -190,7 +231,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="f-subdato" class="block text-xs font-bold uppercase font-mono mb-1">1. Autor o Familia *</label>
-              <input id="f-subdato" type="text" required maxlength="90" placeholder="Ej. Familia Martínez" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-subdato" type="text" required minlength="2" maxlength="90" placeholder="Ej. Familia Martínez" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
               <label for="f-sector" class="block text-xs font-bold uppercase font-mono mb-1">2. Sector *</label>
@@ -199,15 +240,20 @@
               </select>
             </div>
           </div>
-          <div>
-            <label for="f-titulo" class="block text-xs font-bold uppercase font-mono mb-1">3. Título de la foto o calle *</label>
-            <input id="f-titulo" type="text" required maxlength="100" placeholder="Ej. Calle Sur 157 en 1978" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="f-titulo" class="block text-xs font-bold uppercase font-mono mb-1">3. Título de la foto o calle *</label>
+              <input id="f-titulo" type="text" required minlength="3" maxlength="100" placeholder="Ej. Calle Sur 157 en 1978" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label for="f-wa" class="block text-xs font-bold uppercase font-mono mb-1">4. Tu WhatsApp (Opcional para seguimiento)</label>
+              <input id="f-wa" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="14" oninput="handlePhoneInput(this)" placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+            </div>
           </div>
           <div>
-            <label for="f-detalles" class="block text-xs font-bold uppercase font-mono mb-1">4. Historia o recuerdo *</label>
-            <textarea id="f-detalles" rows="3" required maxlength="600" placeholder="Cuéntanos la historia detrás de esta fotografía..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+            <label for="f-detalles" class="block text-xs font-bold uppercase font-mono mb-1">5. Historia o recuerdo *</label>
+            <textarea id="f-detalles" rows="3" required minlength="5" maxlength="600" placeholder="Cuéntanos la historia detrás de esta fotografía..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
-          <input type="hidden" id="f-wa" value="" />
         `
       },
       MASCOTA: {
@@ -215,17 +261,17 @@
         heading: '🐾 Reportar Mascota',
         photoLabel: '📸 Foto clara de la mascota *',
         photoRequired: true,
-        btnText: 'Publicar Alerta de Mascota →',
+        btnText: 'Publicar Alerta de Mascota (Gratis) →',
         renderFields: () => `
           <div>
             <span class="block text-xs font-bold uppercase font-mono mb-2">Modalidad de Alerta *</span>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <label class="p-3 rounded-xl border-2 border-borde bg-papel cursor-pointer flex items-center gap-2">
-                <input type="radio" name="m_plan" value="Gratis" checked onchange="document.getElementById('f-modalidad').value=this.value" />
+              <label for="m-plan-gratis" class="p-3 rounded-xl border-2 border-borde bg-papel cursor-pointer flex items-center gap-2">
+                <input id="m-plan-gratis" type="radio" name="m_plan" value="Gratis" checked onchange="onMascotaPlanChange(this.value)" />
                 <span class="text-xs sm:text-sm font-bold">Alerta Vecinal Gratis ($0)</span>
               </label>
-              <label class="p-3 rounded-xl border-2 border-red-300 bg-red-50 cursor-pointer flex items-center gap-2">
-                <input type="radio" name="m_plan" value="Boost $50" onchange="document.getElementById('f-modalidad').value=this.value" />
+              <label for="m-plan-boost" class="p-3 rounded-xl border-2 border-red-300 bg-red-50 cursor-pointer flex items-center gap-2">
+                <input id="m-plan-boost" type="radio" name="m_plan" value="Boost $50" onchange="onMascotaPlanChange(this.value)" />
                 <span class="text-xs sm:text-sm font-bold text-red-900">🔥 Boost Urgente ($50 MXN)</span>
               </label>
             </div>
@@ -234,7 +280,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="f-titulo" class="block text-xs font-bold uppercase font-mono mb-1">1. Nombre y Título *</label>
-              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Se busca a Canelo (Perrito French)" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-titulo" type="text" required minlength="3" maxlength="90" placeholder="Ej. Se busca a Canelo (Perrito French)" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
               <label for="f-sector" class="block text-xs font-bold uppercase font-mono mb-1">2. Sector *</label>
@@ -246,16 +292,16 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="f-subdato" class="block text-xs font-bold uppercase font-mono mb-1">3. Última calle vista *</label>
-              <input id="f-subdato" type="text" required maxlength="100" placeholder="Ej. Sur 159 esq. Ote 106" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-subdato" type="text" required minlength="2" maxlength="100" placeholder="Ej. Sur 159 esq. Ote 106" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
               <label for="f-wa" class="block text-xs font-bold uppercase font-mono mb-1">4. WhatsApp (10 dígitos) *</label>
-              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+              <input id="f-wa" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="14" required oninput="handlePhoneInput(this)" placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
             </div>
           </div>
           <div>
             <label for="f-detalles" class="block text-xs font-bold uppercase font-mono mb-1">5. Descripción y señas particulares *</label>
-            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Color de collar, tamaño, si ofrece recompensa o está en adopción..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+            <textarea id="f-detalles" rows="3" required minlength="5" maxlength="400" placeholder="Color de collar, tamaño, si ofrece recompensa o está en adopción..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
       },
@@ -273,7 +319,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="f-titulo" class="block text-xs font-bold uppercase font-mono mb-1">1. Producto y Precio *</label>
-              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Bicicleta R26 — $1,850" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-titulo" type="text" required minlength="3" maxlength="90" placeholder="Ej. Bicicleta R26 — $1,850" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
               <label for="f-subdato" class="block text-xs font-bold uppercase font-mono mb-1">2. Punto de Entrega Seguro *</label>
@@ -291,12 +337,12 @@
             </div>
             <div>
               <label for="f-wa" class="block text-xs font-bold uppercase font-mono mb-1">4. WhatsApp (10 dígitos) *</label>
-              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+              <input id="f-wa" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="14" required oninput="handlePhoneInput(this)" placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
             </div>
           </div>
           <div>
             <label for="f-detalles" class="block text-xs font-bold uppercase font-mono mb-1">5. Descripción y estado del artículo *</label>
-            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Condiciones, medidas o detalles importantes..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+            <textarea id="f-detalles" rows="3" required minlength="5" maxlength="400" placeholder="Condiciones, medidas o detalles importantes..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
       },
@@ -314,11 +360,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="f-titulo" class="block text-xs font-bold uppercase font-mono mb-1">1. Nombre del Oficio *</label>
-              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Plomero y Gasista a Domicilio" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-titulo" type="text" required minlength="3" maxlength="90" placeholder="Ej. Plomero y Gasista a Domicilio" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
               <label for="f-subdato" class="block text-xs font-bold uppercase font-mono mb-1">2. Nombre del Maestro o Técnico *</label>
-              <input id="f-subdato" type="text" required maxlength="90" placeholder="Ej. Maestro Juan Pérez" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-subdato" type="text" required minlength="2" maxlength="90" placeholder="Ej. Maestro Juan Pérez" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -330,12 +376,12 @@
             </div>
             <div>
               <label for="f-wa" class="block text-xs font-bold uppercase font-mono mb-1">4. Teléfono WhatsApp (10 dígitos) *</label>
-              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+              <input id="f-wa" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="14" required oninput="handlePhoneInput(this)" placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
             </div>
           </div>
           <div>
             <label for="f-detalles" class="block text-xs font-bold uppercase font-mono mb-1">5. Descripción de servicios y garantía *</label>
-            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Reparación de fugas, destapado con máquina, instalaciones eléctricas..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+            <textarea id="f-detalles" rows="3" required minlength="5" maxlength="400" placeholder="Reparación de fugas, destapado con máquina, instalaciones eléctricas..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
       },
@@ -350,28 +396,32 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="f-titulo" class="block text-xs font-bold uppercase font-mono mb-1">1. Puesto solicitado *</label>
-              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Ayudante de Mostrador" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-titulo" type="text" required minlength="3" maxlength="90" placeholder="Ej. Ayudante de Mostrador" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
-              <label for="f-subdato" class="block text-xs font-bold uppercase font-mono mb-1">2. Nombre del Negocio y Sueldo *</label>
-              <input id="f-subdato" type="text" required maxlength="100" placeholder="Ej. Panadería La Espiga • $1,900/sem" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <label for="f-subdato" class="block text-xs font-bold uppercase font-mono mb-1">2. Nombre del Negocio *</label>
+              <input id="f-subdato" type="text" required minlength="2" maxlength="100" placeholder="Ej. Panadería La Espiga (Sur 157)" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label for="f-sector" class="block text-xs font-bold uppercase font-mono mb-1">3. Sector *</label>
+              <label for="f-sueldo" class="block text-xs font-bold uppercase font-mono mb-1">3. Sueldo ofrecido</label>
+              <input id="f-sueldo" type="text" maxlength="80" placeholder="Ej. $1,900/sem + prestaciones" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+            </div>
+            <div>
+              <label for="f-sector" class="block text-xs font-bold uppercase font-mono mb-1">4. Sector *</label>
               <select id="f-sector" required class="w-full px-3.5 py-2.5 rounded-xl border border-borde bg-papel text-sm font-semibold">
                 <option value="Bramadero">Bramadero</option><option value="Tlacotal">Tlacotal</option><option value="Cuchilla">Cuchilla</option><option value="Av. Té / Alcaldía">Av. Té / Alcaldía</option><option value="Coyuya / Plutarco">Coyuya / Plutarco</option>
               </select>
             </div>
             <div>
-              <label for="f-wa" class="block text-xs font-bold uppercase font-mono mb-1">4. WhatsApp para entrevistas *</label>
-              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+              <label for="f-wa" class="block text-xs font-bold uppercase font-mono mb-1">5. WhatsApp para entrevistas *</label>
+              <input id="f-wa" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="14" required oninput="handlePhoneInput(this)" placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
             </div>
           </div>
           <div>
-            <label for="f-detalles" class="block text-xs font-bold uppercase font-mono mb-1">5. Horario, sueldo y requisitos *</label>
-            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Horario, días de trabajo, prestaciones y actividades..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+            <label for="f-detalles" class="block text-xs font-bold uppercase font-mono mb-1">6. Horario y requisitos *</label>
+            <textarea id="f-detalles" rows="3" required minlength="5" maxlength="400" placeholder="Horario, días de trabajo, prestaciones y actividades..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
       },
@@ -386,7 +436,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="f-titulo" class="block text-xs font-bold uppercase font-mono mb-1">1. Nombre del Negocio *</label>
-              <input id="f-titulo" type="text" required maxlength="90" placeholder="Ej. Carnitas El Patrón" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-titulo" type="text" required minlength="3" maxlength="90" placeholder="Ej. Carnitas El Patrón" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
               <label for="f-giro" class="block text-xs font-bold uppercase font-mono mb-1">2. Giro Comercial *</label>
@@ -401,7 +451,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label for="f-subdato" class="block text-xs font-bold uppercase font-mono mb-1">3. Calle exacta *</label>
-              <input id="f-subdato" type="text" required maxlength="100" placeholder="Ej. Sur 163 esq. Ote 108" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
+              <input id="f-subdato" type="text" required minlength="2" maxlength="100" placeholder="Ej. Sur 163 esq. Ote 108" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm" />
             </div>
             <div>
               <label for="f-sector" class="block text-xs font-bold uppercase font-mono mb-1">4. Sector *</label>
@@ -411,12 +461,12 @@
             </div>
             <div>
               <label for="f-wa" class="block text-xs font-bold uppercase font-mono mb-1">5. WhatsApp pedidos *</label>
-              <input id="f-wa" type="tel" pattern="[0-9]{10}" required placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
+              <input id="f-wa" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="14" required oninput="handlePhoneInput(this)" placeholder="5512345678" class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm font-mono" />
             </div>
           </div>
           <div>
             <label for="f-detalles" class="block text-xs font-bold uppercase font-mono mb-1">6. Promoción Vecinal y Productos *</label>
-            <textarea id="f-detalles" rows="3" required maxlength="400" placeholder="Ej. 10% de descuento o refresco gratis al mencionar Raíces de Iztacalco..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
+            <textarea id="f-detalles" rows="3" required minlength="5" maxlength="400" placeholder="Ej. 10% de descuento o refresco gratis al mencionar Raíces de Iztacalco..." class="w-full px-3.5 py-2.5 rounded-xl border border-borde text-sm"></textarea>
           </div>
         `
       }
@@ -437,6 +487,31 @@
       setFormCategory(catKey);
     }
 
+    function hideFormErrors() {
+      const errBox = document.getElementById('form-error-box');
+      if (errBox) {
+        errBox.classList.add('hidden');
+        errBox.innerHTML = '';
+      }
+      const errPhoto = document.getElementById('photo-error-msg');
+      if (errPhoto) errPhoto.classList.add('hidden');
+    }
+
+    function showFormErrors(errors) {
+      const errBox = document.getElementById('form-error-box');
+      if (!errBox || !Array.isArray(errors) || errors.length === 0) return;
+      errBox.classList.remove('hidden');
+      errBox.innerHTML = `
+        <p class="font-bold">⚠️ Por favor revisa los siguientes campos antes de continuar:</p>
+        <ul class="list-disc pl-5 space-y-0.5">
+          ${errors.map(e => `<li>${sanitizeHTML(e)}</li>`).join('')}
+        </ul>
+      `;
+      if (typeof errBox.scrollIntoView === 'function') {
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
     function setFormCategory(catKey) {
       currentCat = catKey;
       const cfg = CONFIG_CATEGORIAS[catKey] || CONFIG_CATEGORIAS.NOTICIA;
@@ -452,29 +527,71 @@
       document.getElementById('btn-submit-dynamic').textContent = cfg.btnText;
       document.getElementById('dynamic-fields-container').innerHTML = cfg.renderFields();
       document.getElementById('result-box').classList.add('hidden');
-      const errPhoto = document.getElementById('photo-error-msg');
-      if (errPhoto) errPhoto.classList.add('hidden');
+      hideFormErrors();
     }
 
-    // Compresión mejorada a 850px con calidad 0.74 para verse nítida en el Lightbox
+    /**
+     * Comprime la imagen adaptativamente garantizando buena nitidez Y que la cadena Base64
+     * nunca supere el límite de 47,000 caracteres por celda de Google Sheets.
+     */
+    function compressImageToSafeBase64(img, maxChars = MAX_SHEETS_CELL_CHARS) {
+      const steps = [
+        { maxW: 680, q: 0.72 },
+        { maxW: 600, q: 0.65 },
+        { maxW: 520, q: 0.58 },
+        { maxW: 440, q: 0.52 },
+        { maxW: 360, q: 0.48 }
+      ];
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      let result = '';
+
+      for (let i = 0; i < steps.length; i++) {
+        const { maxW, q } = steps[i];
+        const scale = Math.min(1, maxW / (img.width || maxW));
+        canvas.width = Math.max(1, Math.round((img.width || maxW) * scale));
+        canvas.height = Math.max(1, Math.round((img.height || maxW) * scale));
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        result = canvas.toDataURL('image/jpeg', q);
+        if (result.length <= maxChars) {
+          return result;
+        }
+      }
+      return result;
+    }
+
     function handlePhotoPreview(event) {
-      const file = event.target.files[0];
+      const file = event.target.files && event.target.files[0];
       if (!file) return;
       const errPhoto = document.getElementById('photo-error-msg');
       if (errPhoto) errPhoto.classList.add('hidden');
 
+      if (!file.type || !file.type.startsWith('image/')) {
+        if (errPhoto) {
+          errPhoto.textContent = '⚠️ El archivo seleccionado no es una imagen válida (usa JPG, PNG o WebP).';
+          errPhoto.classList.remove('hidden');
+        }
+        return;
+      }
+
       const reader = new FileReader();
+      reader.onerror = function() {
+        if (errPhoto) {
+          errPhoto.textContent = '⚠️ No se pudo leer el archivo de imagen. Intenta con otra fotografía.';
+          errPhoto.classList.remove('hidden');
+        }
+      };
       reader.onload = function(e) {
         const img = new Image();
+        img.onerror = function() {
+          if (errPhoto) {
+            errPhoto.textContent = '⚠️ El formato de imagen no pudo procesarse. Intenta con un archivo JPG o PNG.';
+            errPhoto.classList.remove('hidden');
+          }
+        };
         img.onload = function() {
-          const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 850;
-          const scale = Math.min(1, MAX_WIDTH / img.width);
-          canvas.width = Math.round(img.width * scale);
-          canvas.height = Math.round(img.height * scale);
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          compressedPhotoBase64 = canvas.toDataURL('image/jpeg', 0.74);
+          compressedPhotoBase64 = compressImageToSafeBase64(img);
           document.getElementById('photo-preview-img').src = compressedPhotoBase64;
           document.getElementById('photo-preview-box').classList.remove('hidden');
         };
@@ -485,27 +602,72 @@
 
     function clearSelectedPhoto() {
       compressedPhotoBase64 = '';
-      document.getElementById('f-photo-input').value = '';
-      document.getElementById('photo-preview-box').classList.add('hidden');
+      const input = document.getElementById('f-photo-input');
+      if (input) input.value = '';
+      const box = document.getElementById('photo-preview-box');
+      if (box) box.classList.add('hidden');
     }
 
-    async function sendPayloadToGoogleSheets(payloadObj) {
-      if (!GOOGLE_SHEETS_WEBAPP_URL) return true;
-      if (!navigator.onLine) {
-        throw new Error('Sin conexión a internet');
+    function renderMisRegistrosPanel() {
+      const sec = document.getElementById('mis-registros-section');
+      const listEl = document.getElementById('mis-registros-list');
+      if (!sec || !listEl || typeof getLocalRegistrations !== 'function') return;
+
+      const items = getLocalRegistrations();
+      if (items.length === 0) {
+        sec.classList.add('hidden');
+        listEl.innerHTML = '';
+        return;
       }
-      await fetch(GOOGLE_SHEETS_WEBAPP_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payloadObj)
-      });
-      return true;
+
+      sec.classList.remove('hidden');
+      listEl.innerHTML = items.map(item => {
+        const rules = (typeof REGISTRO_REGLAS !== 'undefined' && REGISTRO_REGLAS[item.categoria]) || {
+          label: item.categoria,
+          sectionHref: 'index.html',
+          sectionName: 'Portada'
+        };
+        const folio = item.folio || item.id || '';
+        return `
+          <div class="p-4 rounded-xl bg-papel border border-borde flex flex-col justify-between gap-3">
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between gap-2 text-xs font-mono">
+                <span class="px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold">${sanitizeHTML(folio)}</span>
+                <span class="text-terracota font-bold">${sanitizeHTML(rules.label)} • 📍 ${sanitizeHTML(item.sector)}</span>
+              </div>
+              <h4 class="font-serif font-bold text-base text-stone-900">${sanitizeHTML(item.titulo)}</h4>
+              <p class="text-xs text-stone-700 font-medium">${sanitizeHTML(item.subdato)}</p>
+              <p class="text-xs text-stone-600 line-clamp-2">${sanitizeHTML(item.detalles)}</p>
+            </div>
+            <div class="pt-2 border-t border-borde flex items-center justify-between gap-2 text-xs">
+              <a href="${sanitizeHTML(rules.sectionHref)}" class="px-3 py-1.5 rounded-lg bg-chinampa hover:bg-green-800 text-white font-bold transition">
+                👁️ Ver en ${sanitizeHTML(rules.sectionName)} →
+              </a>
+              <button type="button" onclick="handleRemoveSingleRegistration('${sanitizeHTML(folio)}')" class="text-red-700 hover:underline font-bold">
+                ✕ Quitar
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function handleRemoveSingleRegistration(folio) {
+      removeLocalRegistration(folio);
+      renderMisRegistrosPanel();
+    }
+
+    function handleClearAllLocalRegistrations() {
+      clearLocalRegistrations();
+      renderMisRegistrosPanel();
     }
 
     async function submitDynamicForm(e) {
       e.preventDefault();
-      if (document.getElementById('website_url_trap').value.trim() !== '') return;
+      hideFormErrors();
+
+      const trapEl = document.getElementById('website_url_trap');
+      if (trapEl && trapEl.value.trim() !== '') return;
 
       const cfg = CONFIG_CATEGORIAS[currentCat];
       const errPhoto = document.getElementById('photo-error-msg');
@@ -514,54 +676,45 @@
           errPhoto.textContent = '⚠️ Por favor selecciona una fotografía para tu publicación antes de continuar.';
           errPhoto.classList.remove('hidden');
         }
-        document.getElementById('photo-upload-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const photoSec = document.getElementById('photo-upload-section');
+        if (photoSec && typeof photoSec.scrollIntoView === 'function') {
+          photoSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         return;
       }
 
       const modalidadVal = document.getElementById('f-modalidad') ? document.getElementById('f-modalidad').value : 'Gratis';
-      const isBoost = modalidadVal.includes('Boost');
-      const isTianguisDestacado = modalidadVal.includes('Destacado');
-      const isOficio = modalidadVal.includes('Oficio');
-      const isVacante = modalidadVal.includes('Vacante');
-      const isPro = modalidadVal.includes('Pro');
-
-      let mpPlan = null;
-      if (isPro) mpPlan = MP_LINKS.SUSCRIPCION_PRO_199;
-      else if (isTianguisDestacado) mpPlan = MP_LINKS.TIANGUIS_39;
-      else if (isOficio) mpPlan = MP_LINKS.OFICIO_50;
-      else if (isVacante) mpPlan = MP_LINKS.VACANTE_100;
-      else if (isBoost) mpPlan = MP_LINKS.BOOST_50;
-
-      const folio = 'RI-' + String(Math.floor(1000 + Math.random() * 9000));
       const giroVal = document.getElementById('f-giro') ? document.getElementById('f-giro').value : '';
+      const sueldoVal = document.getElementById('f-sueldo') ? document.getElementById('f-sueldo').value.trim() : '';
 
-      const payload = {
+      const rawPayload = {
         website_url_trap: '',
-        folio: folio,
         categoria: currentCat,
         modalidad: modalidadVal,
         giro: giroVal,
-        sector: document.getElementById('f-sector').value,
-        titulo: document.getElementById('f-titulo').value.trim(),
-        subdato: document.getElementById('f-subdato').value.trim(),
-        detalles: document.getElementById('f-detalles').value.trim(),
+        sueldo: sueldoVal,
+        sector: document.getElementById('f-sector') ? document.getElementById('f-sector').value : 'Bramadero',
+        titulo: document.getElementById('f-titulo') ? document.getElementById('f-titulo').value.trim() : '',
+        subdato: document.getElementById('f-subdato') ? document.getElementById('f-subdato').value.trim() : '',
+        detalles: document.getElementById('f-detalles') ? document.getElementById('f-detalles').value.trim() : '',
         whatsapp: document.getElementById('f-wa') ? document.getElementById('f-wa').value.trim() : '',
         foto: compressedPhotoBase64 || ''
       };
 
-      lastSubmittedPayload = payload;
-      try {
-        localStorage.setItem('raices_ultimo_registro', JSON.stringify({ folio, titulo: payload.titulo, categoria: payload.categoria, fecha: new Date().toISOString() }));
-      } catch (err) {}
+      const validation = validateRegistrationPayload(rawPayload);
+      if (!validation.valid) {
+        showFormErrors(validation.errors);
+        return;
+      }
 
       const btn = document.getElementById('btn-submit-dynamic');
       const resBox = document.getElementById('result-box');
       btn.disabled = true;
       btn.textContent = 'Guardando registro...';
 
-      // Guardamos el registro desde el primer clic para que el usuario NUNCA pierda sus datos al ir a Mercado Pago
+      let regResult;
       try {
-        await sendPayloadToGoogleSheets(payload);
+        regResult = await registrarPublicacion(validation.normalizedPayload);
       } catch (networkErr) {
         btn.disabled = false;
         btn.textContent = cfg.btnText;
@@ -574,9 +727,33 @@
         return;
       }
 
+      if (!regResult || !regResult.ok) {
+        btn.disabled = false;
+        btn.textContent = cfg.btnText;
+        showFormErrors((regResult && regResult.errors) || ['No fue posible procesar el registro.']);
+        return;
+      }
+
+      const payload = regResult.payload;
+      const folio = regResult.folio;
+      const mpPlan = regResult.mpPlan;
+      lastSubmittedPayload = payload;
+
+      // Limpiamos los campos después de guardar para evitar reenvíos duplicados y falsas alertas al cambiar de pestaña
+      if (e.target && typeof e.target.reset === 'function') {
+        e.target.reset();
+      }
+      clearSelectedPhoto();
+      // Restaurar valor por defecto de modalidad si aplica
+      const modInput = document.getElementById('f-modalidad');
+      if (modInput && currentCat === 'MASCOTA') {
+        modInput.value = 'Gratis';
+      }
+
       btn.disabled = false;
       btn.textContent = cfg.btnText;
       resBox.classList.remove('hidden');
+      renderMisRegistrosPanel();
 
       if (mpPlan) {
         const waMsg = `Hola Administrador de Raíces de Iztacalco, registré mi anuncio con Folio *${folio}* (${payload.categoria}: "${payload.titulo}") y adjunto mi comprobante de pago de ${mpPlan.amount}:`;
@@ -596,20 +773,31 @@
             <button type="button" onclick="openWhatsAppDirectEncoded('${ADMIN_WHATSAPP}', '${encodeDataParam(waMsg)}')" class="px-5 py-3 rounded-xl bg-chinampa hover:bg-green-800 text-white font-extrabold text-xs sm:text-sm text-center shadow transition">
               📲 2. Enviar Comprobante por WhatsApp (Folio ${sanitizeHTML(folio)}) →
             </button>
+            <a href="${sanitizeHTML(regResult.sectionHref)}" class="px-4 py-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 font-bold text-xs sm:text-sm text-center shadow transition">
+              👁️ Ver en ${sanitizeHTML(regResult.sectionName)} →
+            </a>
           </div>
         `;
-        resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (typeof resBox.scrollIntoView === 'function') {
+          resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         return;
       }
 
-      resBox.className = 'mt-6 p-5 rounded-xl bg-chinampaLight border-2 border-chinampa text-tinta text-xs sm:text-sm space-y-2';
+      resBox.className = 'mt-6 p-5 rounded-xl bg-chinampaLight border-2 border-chinampa text-tinta text-xs sm:text-sm space-y-3';
       resBox.innerHTML = `
         <p class="font-bold text-sm sm:text-base text-chinampa">✅ ¡Enviado con éxito! (Folio ${sanitizeHTML(folio)})</p>
-        <p class="leading-relaxed">Tu publicación gratuita ha entrado a revisión comunitaria. En cuanto el administrador la valide en Google Sheets, aparecerá publicada en la página web.</p>
+        <p class="leading-relaxed">Tu publicación gratuita <strong>"${sanitizeHTML(payload.titulo)}"</strong> ha sido registrada correctamente y ya puede visualizarse en este dispositivo mientras se valida en Google Sheets.</p>
+        <div class="pt-1">
+          <a href="${sanitizeHTML(regResult.sectionHref)}" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 font-bold text-xs sm:text-sm shadow transition">
+            <span>👁️ Ver mi publicación en ${sanitizeHTML(regResult.sectionName)}</span>
+            <span>→</span>
+          </a>
+        </div>
       `;
-      e.target.reset();
-      clearSelectedPhoto();
-      resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (typeof resBox.scrollIntoView === 'function') {
+        resBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -624,6 +812,7 @@
       else if (tipo === 'empleo') setFormCategory('EMPLEO');
       else if (tipo === 'negocio') setFormCategory('NEGOCIO');
       else setFormCategory('NOTICIA');
+      renderMisRegistrosPanel();
     });
   </script>
 </body>
